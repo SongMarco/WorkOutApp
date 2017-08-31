@@ -64,6 +64,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     MemoAdaptor memoadapter;
 
     //주석 추가 커밋하기
+    //주석추가 커밋되었나?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
