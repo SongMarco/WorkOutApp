@@ -23,7 +23,9 @@ import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import static nova.workoutapp22.MotivationActivity.CROP_FROM_IMAGE;
 import static nova.workoutapp22.MotivationActivity.PICK_FROM_ALBUM;
@@ -40,7 +42,7 @@ public class AddMemoActivity extends AppCompatActivity {
 
     EditText editTextMemo;
     TextView strDate;
-    ImageView imageView;
+
     LinearLayout imageFrame;
     int mIDForTransport;
 
@@ -195,12 +197,7 @@ public class AddMemoActivity extends AppCompatActivity {
                     absolutePath = filePath;
                     break;
                 }
-                // 임시 파일 삭제
-                File f = new File(mImageCaptureUri.getPath());
-                if(f.exists())
-                {
-                    f.delete();
-                }
+
 
             }
         }
@@ -280,17 +277,59 @@ public class AddMemoActivity extends AppCompatActivity {
     public void saveAndSend() {
         clearMyPrefs();
         Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.",Toast.LENGTH_SHORT).show();
+
+
+
         Intent thirdintent = new Intent();
         thirdintent.putExtra("memo", editTextMemo.getText().toString());
         thirdintent.putExtra("mID", mIDForTransport);
-        //굳이 날짜시간은 주고받을 필요 없지. 단순히 시간취하면 되잖아?
 
-                    /*
-                    intent.putExtra("date", strDate.getText() );
-                   */
+
+        ////그림 추가 코드
+
+
+        /////////////일단 저장
+        saveImage();
+
+
+
+        ///////////////저장한걸 불러와
+
+        thirdintent.putExtra("imageUri", mImageCaptureUri.toString());
+        Log.v("urilog", mImageCaptureUri.toString());
+
 
         setResult(RESULT_OK, thirdintent);
     }
+
+    public void saveImage(){
+
+        FileOutputStream fOutStream = null;
+
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try{
+            fOutStream=new FileOutputStream(Environment.getExternalStorageDirectory().getPath()+"/tempImage.jpg");
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOutStream);
+        }
+        catch(FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+        // 임시 파일 삭제
+        File f = new File(mImageCaptureUri.getPath());
+        if(f.exists())
+        {
+            f.delete();
+        }
+    }
+
 
     ////////////////////// 아이템을 수정하여 담아주는 인텐트 :: 수정할 때에는 ID를 같이 보내주어야 교체가 가능해진다.
     public void processIntent(Intent intent) {
@@ -321,19 +360,7 @@ public class AddMemoActivity extends AppCompatActivity {
 
         // 사진에 대한 코드를 추가할것!!! photo.setImageintent.getStringExtra("resId");
 
-        /*
-        mMemoId = intent.getStringExtra(BasicInfo.KEY_MEMO_ID);
-        mMemoEdit.setText(intent.getStringExtra(BasicInfo.KEY_MEMO_TEXT));
-        mMediaPhotoId = intent.getStringExtra(BasicInfo.KEY_ID_PHOTO);
-        mMediaPhotoUri = intent.getStringExtra(BasicInfo.KEY_URI_PHOTO);
-        mMediaVideoId = intent.getStringExtra(BasicInfo.KEY_ID_VIDEO);
-        mMediaVideoUri = intent.getStringExtra(BasicInfo.KEY_URI_VIDEO);
-        mMediaVoiceId = intent.getStringExtra(BasicInfo.KEY_ID_VOICE);
-        mMediaVoiceUri = intent.getStringExtra(BasicInfo.KEY_URI_VOICE);
-        mMediaHandwritingId = intent.getStringExtra(BasicInfo.KEY_ID_HANDWRITING);
-        mMediaHandwritingUri = intent.getStringExtra(BasicInfo.KEY_URI_HANDWRITING);
 
-*/
 
 
     }

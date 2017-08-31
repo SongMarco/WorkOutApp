@@ -3,6 +3,7 @@ package nova.workoutapp22;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -52,8 +53,6 @@ import static nova.workoutapp22.timeController.getTime;
 
 public class WorkoutMemoActivity extends AppCompatActivity {
 
-
-
     EditText editText;
 
     ListView listView;
@@ -71,8 +70,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
 
         memoadapter = new MemoAdaptor();
-
-        memoadapter.addItem(new MemoItem("메모내용 예시", getTime(), R.drawable.singer));
+        Uri uri2 = Uri.parse("android.resource://nova.workoutapp22/drawable/god.gif");
+        memoadapter.addItem(new MemoItem("메모내용 예시", getTime(),  uri2));
 
 
         listView.setAdapter(memoadapter);
@@ -186,22 +185,32 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 String memo = data.getExtras().getString("memo");
                 String date = getTime();
 
-                memoadapter.addItem(new MemoItem(memo, date, R.drawable.singer) );
+                Uri uri = Uri.parse(data.getExtras().getString("imageUri"));
+
+
+                MemoItem newitem = new MemoItem(memo, date, uri);
+
+
+                memoadapter.addItem(newitem);
                 memoadapter.notifyDataSetChanged();
             }
         }
 
         ////////////////// 수정을 완료한 상태가 되었다!
 
-        else if(requestCode == REQ_VIEW_ACTIVITY){
+        else if(requestCode == REQ_VIEW_ACTIVITY ){
            // Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
             //        ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
 
             if(resultCode == RESULT_OK){
 
                 String memo = data.getExtras().getString("memo").toString();
+
                 String date = getTime();
+                Uri uri = Uri.parse(data.getExtras().getString("imageUri"));
+
                 int mmID = data.getExtras().getInt("mID");
+
 
                 ////////////////////////////
                 ////////////////////////////
@@ -210,11 +219,15 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 //////////////////////주의 주의 3시간 이상 삽질한 문제 : new 아이템 만들고 ID를 초기화 안함
                 // -> 계쏙해서 잘못된 mID를 전달하게 됨.
                 // 인텐트의 전달이 계속 잘못되면 인텐트 관련 메소드를 살피자. 이것도 인텐트 관련 메소드다.
-                MemoItem memoItemNew = new MemoItem(memo, date, R.drawable.singer);
+
+                MemoItem memoItemNew = new MemoItem(memo, date, uri);
                 memoItemNew.setmID(mmID); //////////////ㄹㅇ 정신나간 코드임;
 
-                memoadapter.setItem(mmID, memoItemNew);
 
+
+
+
+                memoadapter.setItem(mmID, memoItemNew);
                 memoadapter.notifyDataSetChanged();
 
 
@@ -239,7 +252,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
             items.add(item);
             item.mID = getCount()-1;
-            Log.v("mIDTag33", "mID" + item.mID);
+
         }
 ////////////////////////////////
 
@@ -283,7 +296,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
             MemoItem item = items.get(position);
             view.setMemo(item.getMemo());
             view.setDate(item.getDate());
-            view.setImage(item.getResId());
+
+            view.setImageWithUri(item.getUri());
 
             return view;
         }
