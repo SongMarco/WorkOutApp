@@ -12,49 +12,38 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_DIARY = 103;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-
-        Button motiveButton = (Button)findViewById(R.id.mainToMotiveButton);
-        Button workoutButton = (Button)findViewById(R.id.mainToWorkoutButton);
-        Button diaryButton = (Button)findViewById(R.id.mainToDiaryButton);
-
-        motiveButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Intent intent = new Intent(getApplicationContext(), MotivationActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_MOTIVE);
-            }
-        });
-
-
-        workoutButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Intent intent = new Intent(getApplicationContext(), WorkoutActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_WORKOUT);
-            }
-
-        });
-
-
-       diaryButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Intent intent = new Intent(getApplicationContext(), WorkoutDiary.class);
-                startActivityForResult(intent, REQUEST_CODE_DIARY);
-            }
-
-        });
+        findViewById(R.id.mainToMotiveButton).setOnClickListener(mClickListener);
+        findViewById(R.id.mainToWorkoutButton).setOnClickListener(mClickListener);
+        findViewById(R.id.mainToDiaryButton).setOnClickListener(mClickListener);
 
 
     }
+
+    Button.OnClickListener mClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent intent;
+            switch (v.getId()) {
+                case R.id.mainToMotiveButton:
+                    intent = new Intent(getApplicationContext(), MotivationActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_MOTIVE);
+                    break;
+                case R.id.mainToWorkoutButton:
+                    intent = new Intent(getApplicationContext(), WorkoutActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_WORKOUT);
+                    break;
+                case R.id.mainToDiaryButton:
+                    intent = new Intent(getApplicationContext(), WorkoutDiary.class);
+                    startActivityForResult(intent, REQUEST_CODE_DIARY);
+                    break;
+            }
+        }
+    };
 /*
     @Override
     protected void onStart(){
