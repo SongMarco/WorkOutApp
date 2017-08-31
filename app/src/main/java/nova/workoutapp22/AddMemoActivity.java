@@ -364,14 +364,9 @@ public class AddMemoActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 saveAndSend();
-
                 finish();
             }
         });
-
-
-        // 사진에 대한 코드를 추가할것!!! photo.setImageintent.getStringExtra("resId");
-
 
 
 
