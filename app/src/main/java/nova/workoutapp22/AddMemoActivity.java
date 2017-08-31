@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static nova.workoutapp22.timeController.getTimeCutSec;
 
@@ -61,16 +62,8 @@ public class AddMemoActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v){
 
-                    Intent intent = new Intent();
-                    intent.putExtra("memo", editTextMemo.getText().toString());
 
-
-                    //굳이 날짜시간은 주고받을 필요 없지. 단순히 시간취하면 되잖아?
-
-                    /*
-                    intent.putExtra("date", strDate.getText() );
-                   */
-                    setResult(RESULT_OK, intent);
+                    saveAndSend(intent);
 
                     finish();
                 }
@@ -78,12 +71,20 @@ public class AddMemoActivity extends AppCompatActivity {
 
         }
     }
-    @Override
-    protected void onStart(){
-        super.onStart();
-        editTextMemo.setText(getIntent().getExtras().getString("memo"));
 
+    public void saveAndSend(){
+        Intent intent = new Intent();
+        intent.putExtra("memo", editTextMemo.getText().toString());
+
+        Log.v("loglog","memo intent made" + intent.getExtras().getString("memo") );
+        //굳이 날짜시간은 주고받을 필요 없지. 단순히 시간취하면 되잖아?
+
+                    /*
+                    intent.putExtra("date", strDate.getText() );
+                   */
+        setResult(RESULT_OK, intent);
     }
+
 ////////////////////// 아이템을 수정하여 담아주는 인텐트 :: 수정할 때에는 ID를 같이 보내주어야 교체가 가능해진다.
     public void processIntent(Intent intent){
 
@@ -101,8 +102,6 @@ public class AddMemoActivity extends AppCompatActivity {
                 Intent secondIntent = new Intent();
                 secondIntent.putExtra("memo", editTextMemo.getText().toString());
 
-                secondIntent.putExtra("date", strDate.getText() );
-
                 secondIntent.putExtra("mID", mIDForTransport);
 
 
@@ -112,6 +111,7 @@ public class AddMemoActivity extends AppCompatActivity {
                 finish();
             }
         });
+
 
 
         // 사진에 대한 코드를 추가할것!!! photo.setImageintent.getStringExtra("resId");
@@ -141,16 +141,32 @@ public class AddMemoActivity extends AppCompatActivity {
     /////////////////////////////////////////생명주기 관련 파트////////
     ////////// onPause에서 입력하던 상태가 저장되며, onResume에서 입력하던 상태가 복원된다.
 
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        editTextMemo.setText(getIntent().getStringExtra("memo"));
+
+    }
+
+
     @Override
     protected void onPause(){
         super.onPause();
 
 
 
-       // Toast.makeText(this, "onPause called", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onPause called", Toast.LENGTH_SHORT).show();
        // saveState();
     }
 
+    @Override
+    protected void onStop(){
+        super.onStop();
+
+
+        Toast.makeText(this, "onStop called", Toast.LENGTH_SHORT).show();
+    }
     @Override
     protected void onResume(){
         super.onResume();
