@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,9 +38,6 @@ public class AddMemoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-
-        Log.v("tagaa", "editTextMemo.text = " + editTextMemo.getText());
-
         strMemoMode = intent.getStringExtra(BasicInfo.KEY_MEMO_MODE);
 
         //메모를 걍클릭 함(모드뷰), or 롱클릭 -> 수정누름 (MODE_MODIFY)
@@ -57,7 +54,7 @@ public class AddMemoActivity extends AppCompatActivity {
 
 
                     saveAndSend();
-                    clearMyPrefs();
+                    Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.",Toast.LENGTH_SHORT).show();
                     finish();
                 }
             });
@@ -66,17 +63,52 @@ public class AddMemoActivity extends AppCompatActivity {
 
     }
 
-    public void saveAndSend() {
-        Intent intent = new Intent();
-        intent.putExtra("memo", editTextMemo.getText().toString());
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        Log.v("loglog", "memo intent made" + intent.getExtras().getString("memo"));
+        if( event.getAction() == KeyEvent.ACTION_DOWN ){ //키 다운 액션 감지
+            if( keyCode == KeyEvent.KEYCODE_BACK ){ //BackKey 다운일 경우만 처리
+
+                if( editTextMemo.getText().toString().equals("") ){ //메모부분이 비어있으면 저장하지 마라
+
+                   // Toast.makeText(this, "editTextMemo.getText() = "+editTextMemo.getText(),Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(this, "입력한 내용이 없어 저장되지 않습니다.",Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+
+                else{
+                  //  Toast.makeText(this, "editTextMemo.getText() = "+editTextMemo.getText(),Toast.LENGTH_SHORT).show();
+                    saveAndSend();
+
+
+                    finish();
+
+                }
+
+
+
+                return true;
+            }
+        }
+        return super.onKeyDown( keyCode, event );
+    }
+
+
+
+    public void saveAndSend() {
+        clearMyPrefs();
+        Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.",Toast.LENGTH_SHORT).show();
+        Intent thirdintent = new Intent();
+        thirdintent.putExtra("memo", editTextMemo.getText().toString());
+        thirdintent.putExtra("mID", mIDForTransport);
         //굳이 날짜시간은 주고받을 필요 없지. 단순히 시간취하면 되잖아?
 
                     /*
                     intent.putExtra("date", strDate.getText() );
                    */
-        setResult(RESULT_OK, intent);
+
+        setResult(RESULT_OK, thirdintent);
     }
 
     ////////////////////// 아이템을 수정하여 담아주는 인텐트 :: 수정할 때에는 ID를 같이 보내주어야 교체가 가능해진다.
@@ -162,7 +194,7 @@ public class AddMemoActivity extends AppCompatActivity {
         super.onStop();
 
 
-        Toast.makeText(this, "onStop called", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onStop called", Toast.LENGTH_SHORT).show();
     }
 
     @Override
