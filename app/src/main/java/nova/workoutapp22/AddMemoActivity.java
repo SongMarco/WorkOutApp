@@ -63,6 +63,7 @@ public class AddMemoActivity extends AppCompatActivity {
 
 
 
+
         strDate.setText(getTimeCutSec());
 
         Intent intent = getIntent();
@@ -82,7 +83,8 @@ public class AddMemoActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
 
-                    saveAndSend();
+                   saveAndSend();
+
                     Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.",Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -275,10 +277,6 @@ public class AddMemoActivity extends AppCompatActivity {
 
 
     public void saveAndSend() {
-        clearMyPrefs();
-        Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.",Toast.LENGTH_SHORT).show();
-
-
 
         Intent thirdintent = new Intent();
         thirdintent.putExtra("memo", editTextMemo.getText().toString());
@@ -287,16 +285,23 @@ public class AddMemoActivity extends AppCompatActivity {
 
         ////그림 추가 코드
 
+        if(mImageCaptureUri.equals(null)){ //이미지를 넣지 않았을 경우
 
-        /////////////일단 저장
-        saveImage();
+            thirdintent.putExtra("imageUri", "android.resource://nova.workoutapp22/drawable/god");
+            saveImage();
+        }
+        else{
+            /////////////일단 저장
+            saveImage();
 
 
 
-        ///////////////저장한걸 불러와
+            ///////////////저장한걸 불러와
 
-        thirdintent.putExtra("imageUri", mImageCaptureUri.toString());
-        Log.v("urilog", mImageCaptureUri.toString());
+            thirdintent.putExtra("imageUri", mImageCaptureUri.toString());
+        }
+
+
 
 
         setResult(RESULT_OK, thirdintent);
@@ -307,10 +312,12 @@ public class AddMemoActivity extends AppCompatActivity {
         FileOutputStream fOutStream = null;
 
         Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(mImageCaptureUri!=null) {
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         try{
@@ -334,7 +341,18 @@ public class AddMemoActivity extends AppCompatActivity {
     ////////////////////// 아이템을 수정하여 담아주는 인텐트 :: 수정할 때에는 ID를 같이 보내주어야 교체가 가능해진다.
     public void processIntent(Intent intent) {
 
+        //메모를 담아주기
         editTextMemo.setText(intent.getStringExtra(BasicInfo.KEY_MEMO_TEXT));
+
+        //이미지를 담기
+        Uri uri = Uri.parse(intent.getStringExtra("imageUri"));
+        Log.v("uriLogg", "uri = "+uri.toString());
+
+        try {
+            iv_User_Photo.setImageBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), uri));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         strDate.setText(getTimeCutSec());
 
@@ -345,13 +363,7 @@ public class AddMemoActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Intent secondIntent = new Intent();
-                secondIntent.putExtra("memo", editTextMemo.getText().toString());
-
-                secondIntent.putExtra("mID", mIDForTransport);
-
-
-                setResult(RESULT_OK, secondIntent);
+                saveAndSend();
 
                 finish();
             }

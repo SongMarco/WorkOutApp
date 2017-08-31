@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -107,14 +106,14 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 // 수정 -- 메모 보기 액티비티 띄우기
                 Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
                 intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_VIEW);
+
+
+
                 intent.putExtra("mID", item.getmID());
-
-
-                Log.v("midlog1", "mID = "+item.getmID());
-
                 intent.putExtra("memo", item.getMemo());
                 intent.putExtra("date", item.getDate());
-                intent.putExtra("resId", item.getResId());
+                intent.putExtra("imageUri", item.getUri());
+
 
                 startActivityForResult(intent, REQ_VIEW_ACTIVITY);
                 //////////////////
