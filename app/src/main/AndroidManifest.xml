@@ -41,6 +41,15 @@
             >
         </activity>
 
+        <activity
+            android:name="nova.workoutapp22.WorkoutMemoActivity"
+            android:label="운동 일지22"
+
+            >
+
+        </activity>
+
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"

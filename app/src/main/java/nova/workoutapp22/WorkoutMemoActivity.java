@@ -49,10 +49,7 @@ import static nova.workoutapp22.timeController.getTime;
 
 
 
-
-
  */
-
 
 public class WorkoutMemoActivity extends AppCompatActivity {
 
@@ -63,7 +60,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     ListView listView;
     MemoAdaptor memoadapter;
 
-    int abadkjfnadsjkfnadsjkfakjsdfnakdjsfnasdkfnaksjdnnkjfd;
 
 
     @Override
@@ -71,7 +67,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_workoutmemo);
 
         listView = (ListView) findViewById(R.id.listView);
 

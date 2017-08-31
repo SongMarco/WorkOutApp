@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.mainToWorkoutButton).setOnClickListener(mClickListener);
         findViewById(R.id.mainToDiaryButton).setOnClickListener(mClickListener);
 
-
     }
 
     Button.OnClickListener mClickListener = new View.OnClickListener() {
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(intent, REQUEST_CODE_WORKOUT);
                     break;
                 case R.id.mainToDiaryButton:
-                    intent = new Intent(getApplicationContext(), WorkoutDiary.class);
+                    intent = new Intent(getApplicationContext(), WorkoutMemoActivity.class);
                     startActivityForResult(intent, REQUEST_CODE_DIARY);
                     break;
             }
