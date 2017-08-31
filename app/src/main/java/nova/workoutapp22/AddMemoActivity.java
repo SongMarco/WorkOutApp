@@ -27,56 +27,50 @@ public class AddMemoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        clearMyPrefs();
         setContentView(R.layout.activity_add_memo);
 
-        photo = (ImageView)findViewById(R.id.imageViewMemo);
+        photo = (ImageView) findViewById(R.id.imageViewMemo);
         editTextMemo = (EditText) findViewById(R.id.editTextMemo);
-        strDate = (TextView)findViewById(R.id.textViewDate);
+        strDate = (TextView) findViewById(R.id.textViewDate);
         strDate.setText(getTimeCutSec());
 
         Intent intent = getIntent();
 
 
-
-
-        Log.v("tagaa", "editTextMemo.text = "+editTextMemo.getText());
+        Log.v("tagaa", "editTextMemo.text = " + editTextMemo.getText());
 
         strMemoMode = intent.getStringExtra(BasicInfo.KEY_MEMO_MODE);
 
         //메모를 걍클릭 함(모드뷰), or 롱클릭 -> 수정누름 (MODE_MODIFY)
         // 기존 내용을 먼저 그려주고, 사용자의 입력을 저장해준다
-        if (strMemoMode.equals(BasicInfo.MODE_MODIFY) || strMemoMode.equals(BasicInfo.MODE_VIEW) ) {
-
+        if (strMemoMode.equals(BasicInfo.MODE_MODIFY) || strMemoMode.equals(BasicInfo.MODE_VIEW)) {
 
             processIntent(intent);
 
-
-
-        }
-
-
-        else { // 새로 메모를 하려는 경우. 화면을 새로 그려준다.
-
+        } else { // 새로 메모를 하려는 경우. 화면을 새로 그려준다.
 
             Button button = (Button) findViewById(R.id.buttonSaveMemo);
-            button.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v){
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
 
 
                     saveAndSend();
-
+                    clearMyPrefs();
                     finish();
                 }
             });
-
         }
+
+
     }
 
-    public void saveAndSend(){
+    public void saveAndSend() {
         Intent intent = new Intent();
         intent.putExtra("memo", editTextMemo.getText().toString());
 
-        Log.v("loglog","memo intent made" + intent.getExtras().getString("memo") );
+        Log.v("loglog", "memo intent made" + intent.getExtras().getString("memo"));
         //굳이 날짜시간은 주고받을 필요 없지. 단순히 시간취하면 되잖아?
 
                     /*
@@ -85,19 +79,19 @@ public class AddMemoActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent);
     }
 
-////////////////////// 아이템을 수정하여 담아주는 인텐트 :: 수정할 때에는 ID를 같이 보내주어야 교체가 가능해진다.
-    public void processIntent(Intent intent){
+    ////////////////////// 아이템을 수정하여 담아주는 인텐트 :: 수정할 때에는 ID를 같이 보내주어야 교체가 가능해진다.
+    public void processIntent(Intent intent) {
 
         editTextMemo.setText(intent.getStringExtra(BasicInfo.KEY_MEMO_TEXT));
 
         strDate.setText(getTimeCutSec());
 
-        mIDForTransport = intent.getIntExtra("mID",1);
+        mIDForTransport = intent.getIntExtra("mID", 1);
 
 
         Button button = (Button) findViewById(R.id.buttonSaveMemo);
-        button.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
                 Intent secondIntent = new Intent();
                 secondIntent.putExtra("memo", editTextMemo.getText().toString());
@@ -105,13 +99,11 @@ public class AddMemoActivity extends AppCompatActivity {
                 secondIntent.putExtra("mID", mIDForTransport);
 
 
-
                 setResult(RESULT_OK, secondIntent);
 
                 finish();
             }
         });
-
 
 
         // 사진에 대한 코드를 추가할것!!! photo.setImageintent.getStringExtra("resId");
@@ -131,11 +123,7 @@ public class AddMemoActivity extends AppCompatActivity {
 */
 
 
-
     }
-
-
-
 
 
     /////////////////////////////////////////생명주기 관련 파트////////
@@ -143,52 +131,66 @@ public class AddMemoActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         editTextMemo.setText(getIntent().getStringExtra("memo"));
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState); // 반드시 호출해 주세요.
+
+
+        // 추가로 자료를 저장하는 코드는 여기에 작성 하세요.
+    }
+
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
 
 
+        saveState();
 
         //Toast.makeText(this, "onPause called", Toast.LENGTH_SHORT).show();
-       // saveState();
+        // saveState();
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
 
 
         Toast.makeText(this, "onStop called", Toast.LENGTH_SHORT).show();
     }
+
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
 
-       // Toast.makeText(this, "onPause called", Toast.LENGTH_SHORT).show();
-       // restoreState();
+        restoreState();
+        // Toast.makeText(this, "onPause called", Toast.LENGTH_SHORT).show();
+
         //clearMyPrefs();
 
     }
 
     protected void restoreState() {
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
-        if ((pref != null) && (pref.contains("memo")) ){
+        if ((pref != null) && (pref.contains("memo"))) {
             String name = pref.getString("memo", "");
             editTextMemo.setText(name);
         }
+
     }
 
     protected void saveState() {
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString( "memo", editTextMemo.getText().toString() );
+
+        editor.putString("memo", editTextMemo.getText().toString());
+
         editor.commit();
     }
 
