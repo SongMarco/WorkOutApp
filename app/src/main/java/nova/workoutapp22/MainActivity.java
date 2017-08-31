@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_MOTIVE = 101;
@@ -20,10 +19,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(this, "onCreate called", Toast.LENGTH_LONG).show();
 
 
         Button motiveButton = (Button)findViewById(R.id.mainToMotiveButton);
+        Button workoutButton = (Button)findViewById(R.id.mainToWorkoutButton);
+        Button diaryButton = (Button)findViewById(R.id.mainToDiaryButton);
+
         motiveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button workoutButton = (Button)findViewById(R.id.mainToWorkoutButton);
+
         workoutButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        Button diaryButton = (Button)findViewById(R.id.mainToDiaryButton);
+
        diaryButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
