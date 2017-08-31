@@ -78,9 +78,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         listView.setAdapter(memoadapter);
 
-
-
-
 ////////////////////////////// 새로운 메모를 만든다.
         Button button = (Button) findViewById(R.id.buttonAddMemo);
         button.setOnClickListener(new View.OnClickListener() {
