@@ -340,24 +340,19 @@ public class AddMemoActivity extends AppCompatActivity {
 
     ////////////////////// 아이템을 수정하여 담아주는 인텐트 :: 수정할 때에는 ID를 같이 보내주어야 교체가 가능해진다.
     public void processIntent(Intent intent) {
-
+        Log.v("checkingPIntent", "0000");
         //메모를 담아주기
         editTextMemo.setText(intent.getStringExtra(BasicInfo.KEY_MEMO_TEXT));
+        Log.v("checkingPIntent", "1111");
 
-        //이미지를 담기
-        Uri uri = Uri.parse(intent.getStringExtra("imageUri"));
-        Log.v("uriLogg", "uri = "+uri.toString());
 
-        try {
-            iv_User_Photo.setImageBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), uri));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Log.v("checkingPIntent", "3333");
 
         strDate.setText(getTimeCutSec());
+        Log.v("checkingPIntent", "4444");
 
         mIDForTransport = intent.getIntExtra("mID", 1);
-
+        Log.v("checkingPIntent", "5555");
 
         Button button = (Button) findViewById(R.id.buttonSaveMemo);
         button.setOnClickListener(new View.OnClickListener() {
