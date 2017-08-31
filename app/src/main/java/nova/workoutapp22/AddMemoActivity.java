@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import static nova.workoutapp22.timeController.getTimeCutSec;
 
@@ -146,7 +145,9 @@ public class AddMemoActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
 
-        Toast.makeText(this, "onPause called", Toast.LENGTH_SHORT).show();
+
+
+       // Toast.makeText(this, "onPause called", Toast.LENGTH_SHORT).show();
        // saveState();
     }
 
@@ -154,7 +155,7 @@ public class AddMemoActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
 
-        Toast.makeText(this, "onPause called", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "onPause called", Toast.LENGTH_SHORT).show();
        // restoreState();
         //clearMyPrefs();
 

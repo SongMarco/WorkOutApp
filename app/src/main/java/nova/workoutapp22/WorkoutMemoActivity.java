@@ -14,7 +14,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -179,8 +178,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         //새로운 메모 작성이 완료되었다.
 
         if(requestCode == REQ_ADDMEMO_ACTIVITY){
-            Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
-                    ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
+              //      ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
 
             if(resultCode == RESULT_OK){
 
@@ -195,8 +194,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         ////////////////// 수정을 완료한 상태가 되었다!
 
         else if(requestCode == REQ_VIEW_ACTIVITY){
-            Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
-                    ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
+            //        ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
 
             if(resultCode == RESULT_OK){
 
