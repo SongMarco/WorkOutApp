@@ -63,6 +63,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     ListView listView;
     MemoAdaptor memoadapter;
 
+    //주석 추가 커밋하기
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
