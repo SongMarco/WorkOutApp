@@ -63,6 +63,9 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     ListView listView;
     MemoAdaptor memoadapter;
 
+    int abadkjfnadsjkfnadsjkfakjsdfnakdjsfnasdkfnaksjdnnkjfd;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
