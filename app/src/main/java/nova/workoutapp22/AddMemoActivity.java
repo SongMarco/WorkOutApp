@@ -22,7 +22,9 @@ import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import static nova.workoutapp22.MotivationActivity.CROP_FROM_IMAGE;
 import static nova.workoutapp22.MotivationActivity.PICK_FROM_ALBUM;
@@ -76,7 +78,7 @@ public class AddMemoActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
 
-                    saveAndSend();
+                    saveAndSetResult();
                     Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.",Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -115,6 +117,11 @@ public class AddMemoActivity extends AppCompatActivity {
                 .show();
 
     }
+
+
+
+
+
 
 
 
@@ -258,7 +265,7 @@ public class AddMemoActivity extends AppCompatActivity {
 
                 else{
                   //  Toast.makeText(this, "editTextMemo.getText() = "+editTextMemo.getText(),Toast.LENGTH_SHORT).show();
-                    saveAndSend();
+                    saveAndSetResult();
 
 
                     finish();
@@ -275,20 +282,86 @@ public class AddMemoActivity extends AppCompatActivity {
 
 
 
-    public void saveAndSend() {
+    public void saveAndSetResult() {
         clearMyPrefs();
+
         Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.",Toast.LENGTH_SHORT).show();
-        Intent thirdintent = new Intent();
-        thirdintent.putExtra("memo", editTextMemo.getText().toString());
-        thirdintent.putExtra("mID", mIDForTransport);
+
+        Intent intentForSave = new Intent();
+
+        saveImage();
+
+
+        intentForSave.putExtra("memo", editTextMemo.getText().toString());
+
+        intentForSave.putExtra("mID", mIDForTransport);
+        intentForSave.putExtra("imageUri", cropImageUri.toString());
         //굳이 날짜시간은 주고받을 필요 없지. 단순히 시간취하면 되잖아?
 
                     /*
                     intent.putExtra("date", strDate.getText() );
                    */
 
-        setResult(RESULT_OK, thirdintent);
+        setResult(RESULT_OK, intentForSave);
     }
+
+
+
+    public void saveImage(){
+
+        FileOutputStream fOutStream = null;
+
+        String resDrawableUri = "android.resource://"+getApplicationContext().getPackageName()+"/drawable/basicimage";
+
+
+        Bitmap bitmap = null;
+        try {
+            if(cropImageUri == null){
+
+                cropImageUri =  Uri.parse(resDrawableUri) ;
+            }
+
+            Log.v("logForCropUri", "cropUri = "+cropImageUri.toString());
+
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), cropImageUri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try{
+
+            if(cropImageUri.equals(Uri.parse(resDrawableUri) ) )
+            {
+                fOutStream=new FileOutputStream(resDrawableUri);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOutStream);
+
+
+            }
+            else {
+                fOutStream=new FileOutputStream(Environment.getExternalStorageDirectory().getPath()+"/tempImage.jpg");
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOutStream);
+            }
+
+        }
+        catch(FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+
+        // 임시 파일 삭제
+
+        if(mImageCaptureUri!=null){
+            File f = new File(mImageCaptureUri.getPath());
+            if(f.exists())
+            {
+                f.delete();
+            }
+        }
+
+    }
+
 
     ////////////////////// 아이템을 수정하여 담아주는 인텐트 :: 수정할 때에는 ID를 같이 보내주어야 교체가 가능해진다.
     public void processIntent(Intent intent) {
