@@ -31,9 +31,6 @@
         <activity
             android:name="nova.workoutapp22.WorkoutActivity"
             android:label="운동 프로그램" />
-        <activity
-            android:name="nova.workoutapp22.WorkoutDiary"
-            android:label="운동일지" />
 
         <activity
             android:name="nova.workoutapp22.sampleChooseImageActivity"
