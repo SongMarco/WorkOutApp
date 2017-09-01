@@ -1,8 +1,10 @@
 package nova.workoutapp22;
 
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -15,7 +17,12 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import static nova.workoutapp22.BasicInfo.REQ_ADDMEMO_ACTIVITY;
@@ -67,13 +74,13 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
+        clearMyPrefs();
+
         setContentView(R.layout.activity_workoutmemo);
 
         listView = (ListView) findViewById(R.id.listView);
 
-        memoadapter = new MemoAdaptor();
 
-        memoadapter.addItem(new MemoItem("메모내용 예시", getTime(), R.drawable.singer));
 
 
         listView.setAdapter(memoadapter);
@@ -109,10 +116,12 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 // 수정 -- 메모 보기 액티비티 띄우기
                 Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
                 intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_VIEW);
+
+
+
                 intent.putExtra("mID", item.getmID());
+                intent.putExtra("imageUri", item.getUri());
 
-
-                Log.v("midlog1", "mID = "+item.getmID());
 
                 intent.putExtra("memo", item.getMemo());
                 intent.putExtra("date", item.getDate());
@@ -236,7 +245,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
     class MemoAdaptor extends BaseAdapter {
-        ArrayList<MemoItem> items = new ArrayList<MemoItem>();
+        ArrayList<MemoItem> items = new ArrayList<>();
 
         @Override
         public int getCount() {
@@ -295,6 +304,75 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
             return view;
         }
+
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveState();
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        restoreState();
+    }
+
+
+    public void saveState(){
+
+        Toast.makeText(getApplicationContext(), "saveState Called", Toast.LENGTH_SHORT).show();
+
+        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        Gson gson = new Gson();
+        ArrayList<MemoItem> saveArray = memoadapter.items;
+
+        String json = gson.toJson(saveArray);
+
+        editor.putString("tagtag", json);
+        editor.commit();
+
+
+    }
+
+    public void restoreState(){
+        Toast.makeText(getApplicationContext(), "restorestate Called", Toast.LENGTH_SHORT).show();
+
+        memoadapter = new MemoAdaptor();
+
+        String resDrawableUri = "android.resource://"+getApplicationContext().getPackageName()+"/drawable/basicimage";
+        memoadapter.addItem(new MemoItem("메모내용 예시", getTime(), Uri.parse(resDrawableUri)) );
+
+
+        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = pref.getString("tagtag", null);
+
+        Type type = new TypeToken<ArrayList<MemoItem>>() {}.getType();
+
+        ArrayList<MemoItem> loadArray = gson.fromJson(json, type);
+
+        memoadapter.items = loadArray;
+
+    }
+
+
+
+    protected void clearMyPrefs() {
+        Toast.makeText(getApplicationContext(), "pref cleared", Toast.LENGTH_SHORT).show();
+
+        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
+        editor.commit();
+    }
+
+
+
 
 }

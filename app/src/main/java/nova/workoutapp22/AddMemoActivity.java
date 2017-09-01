@@ -29,6 +29,7 @@ import java.io.IOException;
 import static nova.workoutapp22.MotivationActivity.CROP_FROM_IMAGE;
 import static nova.workoutapp22.MotivationActivity.PICK_FROM_ALBUM;
 import static nova.workoutapp22.MotivationActivity.PICK_FROM_CAMERA;
+import static nova.workoutapp22.R.id.imageViewForAdd;
 import static nova.workoutapp22.timeController.getTimeCutSec;
 
 public class AddMemoActivity extends AppCompatActivity {
@@ -42,6 +43,7 @@ public class AddMemoActivity extends AppCompatActivity {
 
 
     Uri imageUri;
+    boolean editFlag = false;
 
     private Uri mImageCaptureUri;
     private Uri cropImageUri;
@@ -50,13 +52,17 @@ public class AddMemoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        editFlag = false;
+        Toast.makeText(getApplicationContext(),"editFlag = "+editFlag, Toast.LENGTH_SHORT);
 
         clearMyPrefs();
         setContentView(R.layout.activity_add_memo);
 
 
-        imgViewForAdd = (ImageView) findViewById(R.id.imageViewForAdd);
+        imgViewForAdd = (ImageView) findViewById(imageViewForAdd);
         editTextMemo = (EditText) findViewById(R.id.editTextMemo);
         strDate = (TextView) findViewById(R.id.textViewDate);
         strDate.setText(getTimeCutSec());
@@ -64,6 +70,7 @@ public class AddMemoActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         strMemoMode = intent.getStringExtra(BasicInfo.KEY_MEMO_MODE);
+
 
         //메모를 걍클릭 함(모드뷰), or 롱클릭 -> 수정누름 (MODE_MODIFY)
         // 기존 내용을 먼저 그려주고, 사용자의 입력을 저장해준다
@@ -115,6 +122,10 @@ public class AddMemoActivity extends AppCompatActivity {
                 .setNeutralButton("앨범선택", albumListener)
                 .setNegativeButton("취소", cancelListener)
                 .show();
+
+        editFlag = true;
+        Toast.makeText(getApplicationContext(), "edit Flag = "+editFlag, Toast.LENGTH_SHORT).show();
+
 
     }
 
@@ -255,7 +266,12 @@ public class AddMemoActivity extends AppCompatActivity {
         if( event.getAction() == KeyEvent.ACTION_DOWN ){ //키 다운 액션 감지
             if( keyCode == KeyEvent.KEYCODE_BACK ){ //BackKey 다운일 경우만 처리
 
-                if( editTextMemo.getText().toString().equals("") ){ //메모부분이 비어있으면 저장하지 마라
+                if ( !(editTextMemo.getText().toString().equals("")) )
+                    editFlag = true;
+
+
+
+                if( editFlag ==false){ //메모부분이 비어있으면 저장하지 마라
 
                    // Toast.makeText(this, "editTextMemo.getText() = "+editTextMemo.getText(),Toast.LENGTH_SHORT).show();
 
@@ -357,10 +373,13 @@ public class AddMemoActivity extends AppCompatActivity {
     }
 
 
-    ////////////////////// 아이템을 수정하여 담아주는 인텐트 :: 수정할 때에는 ID를 같이 보내주어야 교체가 가능해진다.
+    ////////////////////// 아이템을 수정하여 담아주는 인텐트 ::
+    /// //수정할 때 기존의 텍스트와 이미지를 담아준다.
+    /// /ID를 같이 보내주어야 교체가 가능해진다.
     public void processIntent(Intent intent) {
 
         editTextMemo.setText(intent.getStringExtra(BasicInfo.KEY_MEMO_TEXT));
+        imgViewForAdd.setImageURI( (Uri)intent.getExtras().get("imageUri") );
 
         strDate.setText(getTimeCutSec());
 
@@ -391,7 +410,20 @@ public class AddMemoActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         editTextMemo.setText(getIntent().getStringExtra("memo"));
+
+        /*
+        Uri iuri = Uri.parse( getIntent().getStringExtra("imageUri") );
+
+       // !(editTextMemo.getText().toString(). equals("")
+        if( !(iuri.toString().equals("") ) ){
+
+            imgViewForAdd.setImageURI(iuri);
+
+        }
+        */
+
 
     }
 
@@ -435,21 +467,38 @@ public class AddMemoActivity extends AppCompatActivity {
     }
 
     protected void restoreState() {
+
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
-        if ((pref != null) && (pref.contains("memo"))) {
+
+        if ((pref != null) && (pref.contains("memo"))   ) {
             String name = pref.getString("memo", "");
             editTextMemo.setText(name);
+        }
+
+        if ((pref != null) && (pref.contains("imageUri"))) {
+            String uriString = pref.getString("imageUri", "");
+
+            imageUri = Uri.parse(uriString);
+
+            imgViewForAdd.setImageURI(imageUri);
         }
 
     }
 
     protected void saveState() {
+        Toast.makeText(getApplicationContext(), "saveState Called", Toast.LENGTH_SHORT).show();
+
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
         editor.putString("memo", editTextMemo.getText().toString());
 
+        if(cropImageUri!=null){
+            editor.putString("imageUri", cropImageUri.toString());
+
+        }
         editor.commit();
+
     }
 
     protected void clearMyPrefs() {
