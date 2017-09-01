@@ -289,25 +289,19 @@ public class AddMemoActivity extends AppCompatActivity {
 
         Intent intentForSave = new Intent();
 
-        saveImage();
-
+        saveImageAndUri();
 
         intentForSave.putExtra("memo", editTextMemo.getText().toString());
-
         intentForSave.putExtra("mID", mIDForTransport);
         intentForSave.putExtra("imageUri", cropImageUri.toString());
-        //굳이 날짜시간은 주고받을 필요 없지. 단순히 시간취하면 되잖아?
 
-                    /*
-                    intent.putExtra("date", strDate.getText() );
-                   */
 
         setResult(RESULT_OK, intentForSave);
     }
 
 
 
-    public void saveImage(){
+    public void saveImageAndUri(){
 
         FileOutputStream fOutStream = null;
 

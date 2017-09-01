@@ -3,6 +3,7 @@ package nova.workoutapp22;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -184,9 +185,13 @@ public class WorkoutMemoActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
 
                 String memo = data.getExtras().getString("memo");
+
+                Uri uri=Uri.parse(data.getStringExtra("imageUri"));
+
                 String date = getTime();
 
-                memoadapter.addItem(new MemoItem(memo, date, R.drawable.singer) );
+                memoadapter.addItem( new MemoItem(memo, date, uri) );
+
                 memoadapter.notifyDataSetChanged();
             }
         }
@@ -283,7 +288,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
             MemoItem item = items.get(position);
             view.setMemo(item.getMemo());
             view.setDate(item.getDate());
-            view.setImage(item.getResId());
+            view.setImageWithUri(item.getUri());
 
             return view;
         }

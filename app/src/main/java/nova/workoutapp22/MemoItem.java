@@ -1,5 +1,7 @@
 package nova.workoutapp22;
 
+import android.net.Uri;
+
 /**
  * Created by user on 2016-08-10.
  */
@@ -9,6 +11,7 @@ public class MemoItem {
     String memo;
     String date;
     int resId;
+    Uri uri;
 
 
 
@@ -17,6 +20,18 @@ public class MemoItem {
         this.date = date;
         this.resId = resId;
     }
+
+    public MemoItem(String memo, String date, Uri uri) {
+        this.memo = memo;
+        this.date = date;
+        this.uri = uri;
+    }
+
+
+    public Uri getUri(){ return uri;}
+    public void setUri(Uri uri) {this.uri = uri;}
+
+
 
     public int getmID(){ return mID; }
 

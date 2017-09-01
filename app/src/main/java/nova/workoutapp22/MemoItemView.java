@@ -1,6 +1,7 @@
 package nova.workoutapp22;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -60,7 +61,11 @@ public class MemoItemView extends LinearLayout {
 
 
 
-    public void setImage(int resId) {
-        imageView.setImageResource(resId);
+    public void setImageWithUri(Uri uri) {
+
+        imageView.setImageURI(uri);
     }
+
+
+
 }
