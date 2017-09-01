@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -73,11 +74,19 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
 
+
+
+
+
         super.onCreate(savedInstanceState);
         clearMyPrefs();
 
         setContentView(R.layout.activity_workoutmemo);
 
+        memoadapter = new MemoAdaptor();
+
+        String resDrawableUri = "android.resource://"+getApplicationContext().getPackageName()+"/drawable/basicimage";
+        memoadapter.addItem(new MemoItem("메모내용 예시", getTime(), Uri.parse(resDrawableUri)) );
         listView = (ListView) findViewById(R.id.listView);
 
 
@@ -329,38 +338,66 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
 
         Gson gson = new Gson();
-        ArrayList<MemoItem> saveArray = memoadapter.items;
+        ArrayList<MemoItem> saveArray;
+        saveArray = (ArrayList<MemoItem>) memoadapter.items.clone();
 
         String json = gson.toJson(saveArray);
 
-        editor.putString("tagtag", json);
+        editor.putString("arrayList", json);
         editor.commit();
 
 
     }
 
     public void restoreState(){
-        Toast.makeText(getApplicationContext(), "restorestate Called", Toast.LENGTH_SHORT).show();
-
-        memoadapter = new MemoAdaptor();
-
-        String resDrawableUri = "android.resource://"+getApplicationContext().getPackageName()+"/drawable/basicimage";
-        memoadapter.addItem(new MemoItem("메모내용 예시", getTime(), Uri.parse(resDrawableUri)) );
-
 
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
 
-        Gson gson = new Gson();
-        String json = pref.getString("tagtag", null);
+        if ((pref != null) && (pref.contains("arrayList"))) {
 
-        Type type = new TypeToken<ArrayList<MemoItem>>() {}.getType();
+            Toast.makeText(getApplicationContext(), "restorestate Called", Toast.LENGTH_SHORT).show();
 
-        ArrayList<MemoItem> loadArray = gson.fromJson(json, type);
+            Gson gson = new Gson();
+            String json = pref.getString("arrayList", null);
 
-        memoadapter.items = loadArray;
+            Type token = new TypeToken < ArrayList<MemoItem> >() {}.getType();
+
+
+          //Type type = TypeToken.getParameterized( (ArrayList<MemoItem>) , ).getType();
+
+            ArrayList<MemoItem> loadArray  = null;
+
+            loadArray = gson.fromJson(json, new TypeToken<ArrayList<MemoItem>>(){}.getType());
+
+            memoadapter.items = (ArrayList<MemoItem>)loadArray.clone();
+        }
 
     }
+    private static class ListParameterizedType implements ParameterizedType {
 
+        private Type type;
+
+        private ListParameterizedType(Type type) {
+            this.type = type;
+        }
+
+        @Override
+        public Type[] getActualTypeArguments() {
+            return new Type[] {type};
+        }
+
+        @Override
+        public Type getRawType() {
+            return ArrayList.class;
+        }
+
+        @Override
+        public Type getOwnerType() {
+            return null;
+        }
+
+        // implement equals method too! (as per javadoc)
+    }
 
 
     protected void clearMyPrefs() {
