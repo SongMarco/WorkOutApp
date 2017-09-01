@@ -371,13 +371,7 @@ public class AddMemoActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Intent secondIntent = new Intent();
-                secondIntent.putExtra("memo", editTextMemo.getText().toString());
-
-                secondIntent.putExtra("mID", mIDForTransport);
-
-
-                setResult(RESULT_OK, secondIntent);
+                saveAndSetResult();
 
                 finish();
             }

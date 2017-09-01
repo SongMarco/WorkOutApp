@@ -184,13 +184,9 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
             if(resultCode == RESULT_OK){
 
-                String memo = data.getExtras().getString("memo");
+                MemoItem newmit = setItemFromIntent(data);
 
-                Uri uri=Uri.parse(data.getStringExtra("imageUri"));
-
-                String date = getTime();
-
-                memoadapter.addItem( new MemoItem(memo, date, uri) );
+                memoadapter.addItem( newmit );
 
                 memoadapter.notifyDataSetChanged();
             }
@@ -204,8 +200,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
             if(resultCode == RESULT_OK){
 
-                String memo = data.getExtras().getString("memo").toString();
-                String date = getTime();
+                MemoItem newmit = setItemFromIntent(data);
+
                 int mmID = data.getExtras().getInt("mID");
 
                 ////////////////////////////
@@ -215,21 +211,28 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 //////////////////////주의 주의 3시간 이상 삽질한 문제 : new 아이템 만들고 ID를 초기화 안함
                 // -> 계쏙해서 잘못된 mID를 전달하게 됨.
                 // 인텐트의 전달이 계속 잘못되면 인텐트 관련 메소드를 살피자. 이것도 인텐트 관련 메소드다.
-                MemoItem memoItemNew = new MemoItem(memo, date, R.drawable.singer);
-                memoItemNew.setmID(mmID); //////////////ㄹㅇ 정신나간 코드임;
 
-                memoadapter.setItem(mmID, memoItemNew);
+                newmit.setmID(mmID); //////////////ㄹㅇ 정신나간 코드임;
+
+                memoadapter.setItem(mmID, newmit);
 
                 memoadapter.notifyDataSetChanged();
-
-
             }
-
-
-
         }
     }
 
+
+    public MemoItem setItemFromIntent(Intent data){
+        String memo = data.getExtras().getString("memo");
+
+        Uri uri=Uri.parse(data.getStringExtra("imageUri"));
+
+        String date = getTime();
+
+
+        return new MemoItem(memo, date, uri);
+
+    }
 
 
     class MemoAdaptor extends BaseAdapter {
