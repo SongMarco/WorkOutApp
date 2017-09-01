@@ -20,9 +20,16 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -79,7 +86,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
-        clearMyPrefs();
+
 
         setContentView(R.layout.activity_workoutmemo);
 
@@ -337,12 +344,15 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Uri.class, new UriSerializer())
+                .create();
+
         ArrayList<MemoItem> saveArray;
         saveArray = (ArrayList<MemoItem>) memoadapter.items.clone();
 
-        String json = gson.toJson(saveArray);
 
+        String json = gson.toJson(saveArray);
         editor.putString("arrayList", json);
         editor.commit();
 
@@ -357,11 +367,12 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
             Toast.makeText(getApplicationContext(), "restorestate Called", Toast.LENGTH_SHORT).show();
 
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Uri.class, new UriDeserializer())
+                    .create();
+
+
             String json = pref.getString("arrayList", null);
-
-            Type token = new TypeToken < ArrayList<MemoItem> >() {}.getType();
-
 
           //Type type = TypeToken.getParameterized( (ArrayList<MemoItem>) , ).getType();
 
@@ -372,31 +383,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
             memoadapter.items = (ArrayList<MemoItem>)loadArray.clone();
         }
 
-    }
-    private static class ListParameterizedType implements ParameterizedType {
-
-        private Type type;
-
-        private ListParameterizedType(Type type) {
-            this.type = type;
-        }
-
-        @Override
-        public Type[] getActualTypeArguments() {
-            return new Type[] {type};
-        }
-
-        @Override
-        public Type getRawType() {
-            return ArrayList.class;
-        }
-
-        @Override
-        public Type getOwnerType() {
-            return null;
-        }
-
-        // implement equals method too! (as per javadoc)
     }
 
 
@@ -409,6 +395,19 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    public class UriSerializer implements JsonSerializer<Uri> {
+        public JsonElement serialize(Uri src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.toString());
+        }
+    }
+
+    public class UriDeserializer implements JsonDeserializer<Uri> {
+        @Override
+        public Uri deserialize(final JsonElement src, final Type srcType,
+                               final JsonDeserializationContext context) throws JsonParseException {
+            return Uri.parse(src.getAsString());
+        }
+    }
 
 
 
