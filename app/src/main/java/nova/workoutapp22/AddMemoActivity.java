@@ -328,12 +328,20 @@ public class AddMemoActivity extends AppCompatActivity {
 
         Bitmap bitmap = null;
         try {
-            if(cropImageUri == null){
+
+            // 처음 왔을 때도 널! 수정 하러 와서 안건드려도 널! 어떻게 구분하지?
+
+            //처음 왔을 때 -> getintent해서 건진 uri가 널이다!
+            if( (cropImageUri == null) && ( (Uri)getIntent().getExtras().get("imageUri")==null )  ){
 
                 cropImageUri =  Uri.parse(resDrawableUri) ;
             }
+            // 수정하러 와서 안건드렸을 때 -> 건져지는 uri가 있겠지!
+            else if( (cropImageUri == null) && ( (Uri)getIntent().getExtras().get("imageUri")!=null) ){
+                cropImageUri = (Uri)getIntent().getExtras().get("imageUri");
+            }
 
-            Log.v("logForCropUri", "cropUri = "+cropImageUri.toString());
+
 
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), cropImageUri);
         } catch (IOException e) {
@@ -343,6 +351,8 @@ public class AddMemoActivity extends AppCompatActivity {
 
         try{
 
+            //기본 그림일 경우
+
             if(cropImageUri.equals(Uri.parse(resDrawableUri) ) )
             {
                 fOutStream=new FileOutputStream(resDrawableUri);
@@ -350,6 +360,7 @@ public class AddMemoActivity extends AppCompatActivity {
 
 
             }
+            //기본 그림이 아니라 새로운 그림을 얹었을 경우
             else {
                 fOutStream=new FileOutputStream(Environment.getExternalStorageDirectory().getPath()+"/tempImage.jpg");
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOutStream);
