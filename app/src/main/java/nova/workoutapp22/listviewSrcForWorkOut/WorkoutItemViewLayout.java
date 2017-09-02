@@ -52,6 +52,16 @@ public class WorkoutItemViewLayout extends LinearLayout implements Checkable {
         checkBox = (CheckBox) findViewById(checkBoxId);
     }
 
+    public void hideCheckBox(){
+
+        checkBox.setVisibility(GONE);
+    }
+
+    public void showCheckBox(){
+
+        checkBox.setVisibility(VISIBLE);
+    }
+
 
     @Override
     public boolean isChecked() {

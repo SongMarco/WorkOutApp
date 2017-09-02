@@ -14,6 +14,7 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -95,7 +96,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         memoAdapter.addItem(new MemoItem("메모내용 예시2", getTime(), Uri.parse(resDrawableUri)));
         memoAdapter.addItem(new MemoItem("메모내용 예시3", getTime(), Uri.parse(resDrawableUri)));
 
-        listViewForMemo = (ListView) findViewById(R.id.listView);
+        listViewForMemo = (ListView) findViewById(R.id.listViewForMemo);
 
 
         listViewForMemo.setAdapter(memoAdapter);
@@ -223,23 +224,38 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case (R.id.buttonSwitchMode):
-                ListView listView = (ListView) findViewById(R.id.listView);
-                if (listView.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
+                ListView listViewforMem = (ListView) findViewById(R.id.listViewForMemo);
+                if (listViewforMem.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
                     Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
 
-                    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+                    listViewforMem.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+                    for(int i = 0; i != memoAdapter.items.size(); i++) {
+
+                        CheckBox mCheckBox = (CheckBox) listViewforMem.getChildAt(i).findViewById(R.id.checkBox);
+                        mCheckBox.setVisibility(View.GONE);
+                    }
+
+
 
                     setItemClick();
 
 
-                } else if (listView.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
+                } else if (listViewforMem.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
                     Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                    listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
+                    listViewforMem.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+                    for(int i = 0; i != memoAdapter.items.size(); i++) {
+
+                        CheckBox mCheckBox = (CheckBox) listViewforMem.getChildAt(i).findViewById(R.id.checkBox);
+                        mCheckBox.setVisibility(View.VISIBLE);
+                    }
 
                     //아이템클릭리스너를 무효화한다.
-                    listView.setOnItemClickListener(null);
+                    listViewforMem.setOnItemClickListener(null);
 
 
                 }

@@ -13,6 +13,7 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -61,8 +62,14 @@ public class WorkoutActivity extends AppCompatActivity {
         workoutAdapter.addItem(new WorkoutItem("팔굽혀 펴기", "20개", "5세트", "스톱워치 사용"));
         workoutAdapter.addItem(new WorkoutItem("스쿼트", "100개", "2세트", "사용 안함"));
 
+        workoutAdapter.notifyDataSetChanged();
+
 
         setItemClick();
+
+        if (listViewForWorkout.getChildAt(0) != null) {
+            visualizeBox();
+        }
 
 
         // delete button에 대한 이벤트 처리.
@@ -78,8 +85,6 @@ public class WorkoutActivity extends AppCompatActivity {
                     }
                 }
 
-                // 모든 선택 상태 초기화.
-                listViewForWorkout.clearChoices();
 
                 workoutAdapter.notifyDataSetChanged();
             }
@@ -97,21 +102,30 @@ public class WorkoutActivity extends AppCompatActivity {
                     listViewForWorkout.setItemChecked(i, true);
                 }
 
+                visualizeBox();
+
+                workoutAdapter.notifyDataSetChanged();
+
+
             }
         });
 
-        // selectAll button에 대한 이벤트 처리.
+        // 선택 해제에 대한 처리
         Button clearButton = (Button) findViewById(R.id.buttonWoCancelSelect);
         clearButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
 
-                listViewForWorkout.clearChoices();
-                workoutAdapter.notifyDataSetChanged();
+
+                for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
+
+                    listViewForWorkout.setItemChecked(i, false);
+
+                }
+
             }
+
+
         });
-
-
-
 
 
 /////////////////////////////// 메모아이템을 수정한다.
@@ -134,22 +148,18 @@ public class WorkoutActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         findViewById(R.id.buttonAddWO).setOnClickListener(mClickListener);
 
 
+    }
 
+    public void visualizeBox() {
+
+        for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
+
+            CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
+            mCheckBox.setVisibility(View.VISIBLE);
+        }
 
 
     }
@@ -214,12 +224,25 @@ public class WorkoutActivity extends AppCompatActivity {
 
                     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
+                    for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
+
+                        CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
+                        mCheckBox.setVisibility(View.GONE);
+                    }
+
+
                     setItemClick();
 
 
                 } else if (listView.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
                     Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
                     listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+                    for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
+
+                        CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
+                        mCheckBox.setVisibility(View.VISIBLE);
+                    }
 
 
                     //아이템클릭리스너를 무효화한다.
@@ -315,7 +338,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
                 workoutAdapter.notifyDataSetChanged();
 
-               saveState();
+                saveState();
 
             }
 
@@ -348,7 +371,10 @@ public class WorkoutActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
+
         super.onResume();
+
+
         restoreState();
         Log.v("순서추적", "restore done");
     }
