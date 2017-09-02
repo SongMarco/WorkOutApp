@@ -54,7 +54,7 @@
             android:id="@+id/mainToWorkoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="운동하러 가자"
+            android:text="운동 세팅하기"
             android:textSize="20sp"
             android:onClick="onClick"
 
