@@ -123,32 +123,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
 /////////////////////////////// 메모아이템을 수정한다.
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-
-                MemoItem item = (MemoItem) memoadapter.getItem(position);
-
-                // 수정 -- 메모 보기 액티비티 띄우기
-                Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
-                intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_VIEW);
-
-
-
-                intent.putExtra("mID", item.getmID());
-                intent.putExtra("imageUri", item.getUri());
-
-
-                intent.putExtra("memo", item.getMemo());
-                intent.putExtra("date", item.getDate());
-                intent.putExtra("resId", item.getResId());
-
-                startActivityForResult(intent, REQ_VIEW_ACTIVITY);
-                //////////////////
-
-            }
-        });
 
 
         ///////////////롱클릭을 통한 수정 / 삭제 메뉴를 추가해야 한다.
@@ -166,6 +141,9 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
+
     }
     public void showMessage(final MemoItem item){
 
@@ -196,6 +174,56 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         dialog.show();
 
     }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case (R.id.buttonSwitchMode):
+                ListView listView = (ListView) findViewById(R.id.listView);
+                if (listView.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
+                    Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+
+
+                    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+
+                            MemoItem item = (MemoItem) memoadapter.getItem(position);
+
+                            // 수정 -- 메모 보기 액티비티 띄우기
+                            Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
+                            intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_VIEW);
+
+
+
+                            intent.putExtra("mID", item.getmID());
+                            intent.putExtra("imageUri", item.getUri());
+
+
+                            intent.putExtra("memo", item.getMemo());
+                            intent.putExtra("date", item.getDate());
+                            intent.putExtra("resId", item.getResId());
+
+                            startActivityForResult(intent, REQ_VIEW_ACTIVITY);
+                            //////////////////
+
+                        }
+                    });
+
+                } else if (listView.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
+                    Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                    listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+
+
+
+                }
+                break;
+        }
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -246,6 +274,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
 
     public MemoItem setItemFromIntent(Intent data){
