@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.CheckBox;
+import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,7 +15,7 @@ import nova.workoutapp22.R;
 /**
  * Created by user on 2016-08-10.
  */
-public class MemoItemView extends LinearLayout {
+public class MemoItemViewLinearLayout extends LinearLayout implements Checkable {
 
     TextView textView2;
 
@@ -25,13 +26,13 @@ public class MemoItemView extends LinearLayout {
 
     ImageView imageView;
 
-    public MemoItemView(Context context) {
+    public MemoItemViewLinearLayout(Context context) {
         super(context);
 
         init(context);
     }
 
-    public MemoItemView(Context context, AttributeSet attrs) {
+    public MemoItemViewLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         init(context);
@@ -42,11 +43,35 @@ public class MemoItemView extends LinearLayout {
         inflater.inflate(R.layout.memo_item, this, true);
 
         textView2 = (TextView) findViewById(R.id.textView2);
-
         textViewDate = (TextView) findViewById(R.id.textViewDate);
         textViewMemo = (TextView) findViewById(R.id.textViewMemo);
-        checkBox = (CheckBox) findViewById(R.id.checkBox);
         imageView = (ImageView) findViewById(R.id.imageView);
+    }
+
+    @Override
+    public boolean isChecked() {
+        CheckBox cb = (CheckBox) findViewById(R.id.checkBox) ;
+
+        return cb.isChecked() ;
+        // return mIsChecked ;
+    }
+
+    @Override
+    public void toggle() {
+        CheckBox cb = (CheckBox) findViewById(R.id.checkBox) ;
+
+        setChecked(!cb.isChecked()) ;
+        // setChecked(mIsChecked ? false : true) ;
+    }
+    @Override
+    public void setChecked(boolean checked) {
+        CheckBox cb = (CheckBox) findViewById(R.id.checkBox) ;
+
+        if (cb.isChecked() != checked) {
+            cb.setChecked(checked) ;
+        }
+
+        // CheckBox 가 아닌 View의 상태 변경.
     }
 
 

@@ -1,4 +1,4 @@
-package nova.workoutapp22;
+package nova.workoutapp22.listviewSrcForMemo;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -6,8 +6,6 @@ import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
 
-import nova.workoutapp22.listviewSrcForMemo.MemoItem;
-import nova.workoutapp22.listviewSrcForMemo.MemoItemView;
 import nova.workoutapp22.subSources.MyApplication;
 
 /**
@@ -17,11 +15,10 @@ import nova.workoutapp22.subSources.MyApplication;
 
 public class MemoAdapter extends BaseAdapter {
 
-    public void MemoAdapter(){
+    public void MemoAdapter(){   }
 
-    }
 
-    ArrayList<MemoItem> items = new ArrayList<>();
+    public ArrayList<MemoItem> items = new ArrayList<>();
 
     @Override
     public int getCount() {
@@ -71,7 +68,7 @@ public class MemoAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
-        MemoItemView view = new MemoItemView(MyApplication.getAppContext());
+        MemoItemViewLinearLayout view = new MemoItemViewLinearLayout(MyApplication.getAppContext());
 
         MemoItem item = items.get(position);
         view.setMemo(item.getMemo());

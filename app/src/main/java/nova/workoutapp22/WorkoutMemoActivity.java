@@ -30,6 +30,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import nova.workoutapp22.listviewSrcForMemo.MemoAdapter;
 import nova.workoutapp22.listviewSrcForMemo.MemoItem;
 import nova.workoutapp22.subSources.BasicInfo;
 
