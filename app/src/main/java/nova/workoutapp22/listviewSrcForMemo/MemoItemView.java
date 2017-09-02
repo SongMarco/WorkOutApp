@@ -1,4 +1,4 @@
-package nova.workoutapp22;
+package nova.workoutapp22.listviewSrcForMemo;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import nova.workoutapp22.R;
 
 /**
  * Created by user on 2016-08-10.

@@ -33,12 +33,6 @@
             android:label="운동 프로그램" />
 
         <activity
-            android:name="nova.workoutapp22.sampleChooseImageActivity"
-            android:theme="@style/Base.Theme.AppCompat.Dialog"
-            >
-        </activity>
-
-        <activity
             android:name="nova.workoutapp22.WorkoutMemoActivity"
             android:label="운동 일지22">
 

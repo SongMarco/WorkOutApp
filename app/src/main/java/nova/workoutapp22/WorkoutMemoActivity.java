@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -33,9 +32,13 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import static nova.workoutapp22.BasicInfo.REQ_ADDMEMO_ACTIVITY;
-import static nova.workoutapp22.BasicInfo.REQ_VIEW_ACTIVITY;
-import static nova.workoutapp22.timeController.getTime;
+import nova.workoutapp22.listviewSrcForMemo.MemoItem;
+import nova.workoutapp22.listviewSrcForMemo.MemoItemView;
+import nova.workoutapp22.subSources.BasicInfo;
+
+import static nova.workoutapp22.subSources.BasicInfo.REQ_ADDMEMO_ACTIVITY;
+import static nova.workoutapp22.subSources.BasicInfo.REQ_VIEW_ACTIVITY;
+import static nova.workoutapp22.subSources.timeController.getTime;
 
 
 /////////////////////
@@ -272,7 +275,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
             items.add(item);
             item.mID = getCount()-1;
-            Log.v("mIDTag33", "mID" + item.mID);
+
         }
 ////////////////////////////////
 

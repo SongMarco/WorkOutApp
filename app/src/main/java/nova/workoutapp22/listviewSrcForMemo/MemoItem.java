@@ -1,4 +1,4 @@
-package nova.workoutapp22;
+package nova.workoutapp22.listviewSrcForMemo;
 
 import android.net.Uri;
 
@@ -7,7 +7,7 @@ import android.net.Uri;
  */
 public class MemoItem {
 
-    int mID;
+    public int mID;
     String memo;
     String date;
     int resId;
