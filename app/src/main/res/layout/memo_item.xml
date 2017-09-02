@@ -78,7 +78,7 @@
         android:layout_toRightOf="@+id/textView2"
         android:gravity="right"
         android:layout_gravity="center"
-
+        android:visibility="gone"
 
         android:focusable="false"
         android:focusableInTouchMode="false"

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
@@ -71,20 +72,14 @@ import static nova.workoutapp22.subSources.timeController.getTime;
 public class WorkoutMemoActivity extends AppCompatActivity {
 
 
-
     EditText editText;
 
     ListView listViewForMemo;
     MemoAdapter memoAdapter;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
-
 
 
         super.onCreate(savedInstanceState);
@@ -95,14 +90,12 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         memoAdapter = new MemoAdapter();
 
-        String resDrawableUri = "android.resource://"+getApplicationContext().getPackageName()+"/drawable/basicimage";
-        memoAdapter.addItem(new MemoItem("메모내용 예시1", getTime(), Uri.parse(resDrawableUri)) );
-        memoAdapter.addItem(new MemoItem("메모내용 예시2", getTime(), Uri.parse(resDrawableUri)) );
-        memoAdapter.addItem(new MemoItem("메모내용 예시3", getTime(), Uri.parse(resDrawableUri)) );
+        String resDrawableUri = "android.resource://" + getApplicationContext().getPackageName() + "/drawable/basicimage";
+        memoAdapter.addItem(new MemoItem("메모내용 예시1", getTime(), Uri.parse(resDrawableUri)));
+        memoAdapter.addItem(new MemoItem("메모내용 예시2", getTime(), Uri.parse(resDrawableUri)));
+        memoAdapter.addItem(new MemoItem("메모내용 예시3", getTime(), Uri.parse(resDrawableUri)));
 
         listViewForMemo = (ListView) findViewById(R.id.listView);
-
-
 
 
         listViewForMemo.setAdapter(memoAdapter);
@@ -131,31 +124,28 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
         // selectAll button에 대한 이벤트 처리.
-        Button selectAllButton = (Button)findViewById(R.id.buttonSelectAll) ;
+        Button selectAllButton = (Button) findViewById(R.id.buttonSelectAll);
         selectAllButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
 
-                int count = memoAdapter.getCount() ;
+                int count = memoAdapter.getCount();
 
-                for (int i=0; i<count; i++) {
-                    listViewForMemo.setItemChecked(i, true) ;
+                for (int i = 0; i < count; i++) {
+                    listViewForMemo.setItemChecked(i, true);
                 }
 
             }
-        }) ;
+        });
 
         // selectAll button에 대한 이벤트 처리.
-        Button clearButton = (Button)findViewById(R.id.buttonClearSelection) ;
+        Button clearButton = (Button) findViewById(R.id.buttonClearSelection);
         clearButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
 
                 listViewForMemo.clearChoices();
                 memoAdapter.notifyDataSetChanged();
             }
-        }) ;
-
-
-
+        });
 
 
 ////////////////////////////// 새로운 메모를 만든다.
@@ -181,7 +171,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 /////////////////////////////// 메모아이템을 수정한다.
 
 
-
         ///////////////롱클릭을 통한 수정 / 삭제 메뉴를 추가해야 한다.
         //////*
         listViewForMemo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -199,17 +188,15 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         });
 
 
-
-
-
     }
-    public void showMessage(final MemoItem item){
+
+    public void showMessage(final MemoItem item) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("삭제");
         builder.setMessage("삭제하시겠습니까?");
         builder.setIcon(android.R.drawable.ic_dialog_alert);
-        builder.setPositiveButton("예", new DialogInterface.OnClickListener(){
+        builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -220,9 +207,9 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         });
 
-        builder.setNeutralButton("취소", new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int which){
-            dialog.dismiss();
+        builder.setNeutralButton("취소", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
 
         });
@@ -246,7 +233,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                     setItemClick();
 
 
-
                 } else if (listView.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
                     Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
                     listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -256,14 +242,12 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                     listView.setOnItemClickListener(null);
 
 
-
-
                 }
                 break;
         }
     }
 
-    public void setItemClick(){
+    public void setItemClick() {
         listViewForMemo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -276,14 +260,12 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_VIEW);
 
 
-
                 intent.putExtra("mID", item.getmID());
                 intent.putExtra("imageUri", item.getUri());
 
 
                 intent.putExtra("memo", item.getMemo());
                 intent.putExtra("date", item.getDate());
-
 
 
                 // 모든 선택 상태 초기화.
@@ -305,15 +287,15 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         //새로운 메모 작성이 완료되었다.
 
-        if(requestCode == REQ_ADD_MEMO){
+        if (requestCode == REQ_ADD_MEMO) {
             //Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
-              //      ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
+            //      ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
 
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
 
                 MemoItem newmit = setItemFromIntent(data);
 
-                memoAdapter.addItem( newmit );
+                memoAdapter.addItem(newmit);
 
                 memoAdapter.notifyDataSetChanged();
             }
@@ -321,11 +303,11 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         ////////////////// 수정을 완료한 상태가 되었다!
 
-        else if(requestCode == REQ_MODIFY_MEMO){
-           // Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
+        else if (requestCode == REQ_MODIFY_MEMO) {
+            // Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
             //        ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
 
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
 
                 MemoItem newmit = setItemFromIntent(data);
 
@@ -344,17 +326,16 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 memoAdapter.setItem(mmID, newmit);
 
                 memoAdapter.notifyDataSetChanged();
+                Log.v("순서추적", "데이타 변경 완료");
             }
         }
     }
 
 
-
-
-    public MemoItem setItemFromIntent(Intent data){
+    public MemoItem setItemFromIntent(Intent data) {
         String memo = data.getExtras().getString("memo");
 
-        Uri uri=Uri.parse(data.getStringExtra("imageUri"));
+        Uri uri = Uri.parse(data.getStringExtra("imageUri"));
 
         String date = getTime();
 
@@ -364,7 +345,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -372,14 +352,15 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     }
 
     @Override
-        protected void onResume() {
+    protected void onResume() {
 
         super.onResume();
         restoreState();
+        Log.v("순서추적", "restore진행됨");
     }
 
 
-    public void saveState(){
+    public void saveState() {
 
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
@@ -399,14 +380,14 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
     }
 
-    public void restoreState(){
+    public void restoreState() {
+        Toast.makeText(getApplicationContext(), "restore Called", Toast.LENGTH_SHORT).show();
 
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
 
         if ((pref != null) && (pref.contains("arrayList"))) {
 
-            Toast.makeText(getApplicationContext(), "restorestate Called", Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(getApplicationContext(), "restore executed", Toast.LENGTH_SHORT).show();
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Uri.class, new UriDeserializer())
                     .create();
@@ -414,13 +395,14 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
             String json = pref.getString("arrayList", null);
 
-          //Type type = TypeToken.getParameterized( (ArrayList<MemoItem>) , ).getType();
+            //Type type = TypeToken.getParameterized( (ArrayList<MemoItem>) , ).getType();
 
-            ArrayList<MemoItem> loadArray  = null;
+            ArrayList<MemoItem> loadArray = null;
 
-            loadArray = gson.fromJson(json, new TypeToken<ArrayList<MemoItem>>(){}.getType());
+            loadArray = gson.fromJson(json, new TypeToken<ArrayList<MemoItem>>() {
+            }.getType());
 
-            memoAdapter.items = (ArrayList<MemoItem>)loadArray.clone();
+            memoAdapter.items = (ArrayList<MemoItem>) loadArray.clone();
         }
 
     }
@@ -448,7 +430,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
             return Uri.parse(src.getAsString());
         }
     }
-
 
 
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -55,14 +56,13 @@ public class AddWorkoutActivity extends AppCompatActivity {
         // 기존 내용을 먼저 그려주고, 사용자의 입력을 저장해준다
         if (strAddWoMode.equals(BasicInfo.MODE_MODIFY) || strAddWoMode.equals(BasicInfo.MODE_VIEW)) {
 
-            processIntent(intent);
+            processIntent(getIntent());
 
         } else { // 새로 메모를 하려는 경우. 화면을 새로 그려준다.
 
-            clearMyPrefs();
 
-            Button saveMemoButton = (Button) findViewById(R.id.buttonSaveMemo);
-            saveMemoButton.setOnClickListener(new View.OnClickListener() {
+            Button saveWoButton = (Button) findViewById(R.id.buttonSaveWo);
+            saveWoButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
 
@@ -77,10 +77,9 @@ public class AddWorkoutActivity extends AppCompatActivity {
 
 
 
-        (findViewById(R.id.buttonSaveWo)).setOnClickListener(mClickListener);
     }
 
-
+/*
     Button.OnClickListener mClickListener = new View.OnClickListener() {
         public void onClick(View v) {
 
@@ -93,6 +92,7 @@ public class AddWorkoutActivity extends AppCompatActivity {
             }
         }
     };
+  */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -137,19 +137,19 @@ public class AddWorkoutActivity extends AppCompatActivity {
         workoutSet.setText(intent.getExtras().getString("workoutSet"));
 
 
-        Toast.makeText(getApplicationContext(), "수정 - 로드 완료",Toast.LENGTH_SHORT).show();
-
         //TODO 타이머 정보 스피너로 만들어서 전달하기
 
 
         mIDForTransport = intent.getIntExtra("mID", 1);
-
+        Log.v("mIDTrak", "mID = "+mIDForTransport);
 
         Button button = (Button) findViewById(R.id.buttonSaveWo);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 saveAndSetResult();
+
+
 
                 finish();
             }
@@ -165,14 +165,18 @@ public class AddWorkoutActivity extends AppCompatActivity {
 
         Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.",Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent();
+        Intent intentForSave = new Intent();
 
-        intent.putExtra("workoutName", workoutName.getText().toString() );
-        intent.putExtra("workoutNum", workoutNum.getText().toString() );
-        intent.putExtra("workoutSet", workoutSet.getText().toString() );
-        intent.putExtra("timerSetting", "스톱워치 사용" );
+        ///////////////////////////주의!!!! 반드시 mID를 돌려줘라!!
 
-        setResult(RESULT_OK, intent);
+        intentForSave.putExtra("mID", mIDForTransport);
+
+        intentForSave.putExtra("workoutName", workoutName.getText().toString() );
+        intentForSave.putExtra("workoutNum", workoutNum.getText().toString() );
+        intentForSave.putExtra("workoutSet", workoutSet.getText().toString() );
+        intentForSave.putExtra("timerSetting", "스톱워치 사용" );
+
+        setResult(RESULT_OK, intentForSave);
     }
 
     /////////////////////////////////////////생명주기 관련 파트////////
