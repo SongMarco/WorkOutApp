@@ -10,9 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -33,7 +31,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import nova.workoutapp22.listviewSrcForMemo.MemoItem;
-import nova.workoutapp22.listviewSrcForMemo.MemoItemView;
 import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.subSources.BasicInfo.REQ_ADDMEMO_ACTIVITY;
@@ -76,7 +73,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     EditText editText;
 
     ListView listView;
-    MemoAdaptor memoadapter;
+    MemoAdapter memoadapter;
 
 
 
@@ -93,7 +90,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_workoutmemo);
 
-        memoadapter = new MemoAdaptor();
+        memoadapter = new MemoAdapter();
 
         String resDrawableUri = "android.resource://"+getApplicationContext().getPackageName()+"/drawable/basicimage";
         memoadapter.addItem(new MemoItem("메모내용 예시", getTime(), Uri.parse(resDrawableUri)) );
@@ -263,68 +260,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     }
 
 
-    class MemoAdaptor extends BaseAdapter {
-        ArrayList<MemoItem> items = new ArrayList<>();
-
-        @Override
-        public int getCount() {
-            return items.size();
-        }
-////////////////////////////////////////////////////////////
-        public void addItem(MemoItem item) {
-
-            items.add(item);
-            item.mID = getCount()-1;
-
-        }
-////////////////////////////////
-
-        public void setItem(int mID, MemoItem item) {
-
-
-
-            items.set(mID, item);
-
-        }
-
-        public void removeItem(MemoItem item){ ///////리무브 코드 에러날 가능성 크다.
-
-            /////// 1, 2, 3, 4, 5에서 3을 지우면 1, 2, 4, 5가 된다. -> 추후 어레이리스트 관리에 문제 발생
-            /// 끝자락이 아니라면 무조건 mID를 재정렬해주어야 한다...
-            items.remove(item);
-            if(item.mID != getCount() ){ // 3은 끝자락이 아니다. (4가 아님)
-                //처음부터 끝(0부터 3까지 재정렬 해주면되겠네 .
-                for(int i = 0; i < getCount(); i++){
-                    ((MemoItem)getItem(i)).mID = i;
-                }
-            }
-
-        }
-
-
-        @Override
-        public Object getItem(int position) {
-            return items.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup viewGroup) {
-            MemoItemView view = new MemoItemView(getApplicationContext());
-
-            MemoItem item = items.get(position);
-            view.setMemo(item.getMemo());
-            view.setDate(item.getDate());
-            view.setImageWithUri(item.getUri());
-
-            return view;
-        }
-
-    }
 
     @Override
     protected void onPause() {

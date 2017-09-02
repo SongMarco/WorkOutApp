@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ public class MemoItemView extends LinearLayout {
 
     TextView textViewMemo;
     TextView textViewDate;
-
+    CheckBox checkBox;
 
     ImageView imageView;
 
@@ -44,7 +45,7 @@ public class MemoItemView extends LinearLayout {
 
         textViewDate = (TextView) findViewById(R.id.textViewDate);
         textViewMemo = (TextView) findViewById(R.id.textViewMemo);
-
+        checkBox = (CheckBox) findViewById(R.id.checkBox);
         imageView = (ImageView) findViewById(R.id.imageView);
     }
 
