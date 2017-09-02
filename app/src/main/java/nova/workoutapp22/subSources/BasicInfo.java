@@ -10,6 +10,8 @@ public class BasicInfo {
     //========== 인텐트 부가정보 전달을 위한 키값 ==========//
     public static final String KEY_MEMO_MODE = "MEMO_MODE";
     public static final String KEY_MEMO_TEXT = "MEMO_TEXT";
+    public static final String KEY_ADDWO_MODE = "ADDWO_MODE";
+
     public static final String KEY_MEMO_ID = "MEMO_ID";
     public static final String KEY_MEMO_DATE = "MEMO_DATE";
     public static final String KEY_ID_PHOTO = "ID_PHOTO";

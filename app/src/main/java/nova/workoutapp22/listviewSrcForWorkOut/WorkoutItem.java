@@ -58,4 +58,9 @@ public class WorkoutItem {
     public void setTimerSetting(String timerSetting) {
         this.timerSetting = timerSetting;
     }
+
+    public int getmID(){ return mID; }
+
+    public void setmID(int mID){ this.mID = mID;}
+
 }

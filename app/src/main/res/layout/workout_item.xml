@@ -41,7 +41,8 @@
 
                 android:text="numbb"
 
-                android:textSize="15sp" />
+                android:textColor="@color/colorHBlue"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textViewWoSet"
@@ -53,7 +54,8 @@
                 android:layout_toEndOf="@+id/textViewWoNum"
 
                 android:text="sets"
-                android:textSize="15sp" />
+                android:textColor="@color/colorHBlue"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textViewTimerSetting"
@@ -67,15 +69,21 @@
                 android:layout_alignParentTop="true"
                 android:layout_gravity="end"
                 android:text="timer"
-                android:textSize="15sp" />
+                android:textColor="@color/colorHBlue"
+                android:textSize="20sp" />
         </RelativeLayout>
 
     </LinearLayout>
 
     <CheckBox
         android:id="@+id/checkBoxForWo"
+        android:button="@drawable/customdrawablecheckbox"
+
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+
 
         />
 

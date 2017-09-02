@@ -288,6 +288,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
                 // 모든 선택 상태 초기화.
                 listViewForMemo.clearChoices();
+                memoAdapter.notifyDataSetChanged();
+
                 startActivityForResult(intent, REQ_MODIFY_MEMO);
                 //////////////////
 

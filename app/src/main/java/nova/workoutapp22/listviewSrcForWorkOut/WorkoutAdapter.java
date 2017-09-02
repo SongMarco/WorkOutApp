@@ -6,8 +6,6 @@ import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
 
-import nova.workoutapp22.listviewSrcForMemo.MemoItem;
-import nova.workoutapp22.listviewSrcForMemo.MemoItemViewLinearLayout;
 import nova.workoutapp22.subSources.MyApplication;
 
 /**
@@ -73,9 +71,10 @@ public class WorkoutAdapter extends BaseAdapter {
         WorkoutItemViewLayout view = new WorkoutItemViewLayout(MyApplication.getAppContext());
 
         WorkoutItem item = woItems.get(position);
-        view.setN(item.getMemo());
-        view.setDate(item.getDate());
-        view.setImageWithUri(item.getUri());
+        view.setWoNameInLayout( item.getWoName() );
+        view.setWoNumInLayout( item.getWoNum() );
+        view.setWoSetInLayout( item.getWoSet() );
+        view.setTimerSettingInLayout( item.getTimerSetting() );
 
         return view;
     }

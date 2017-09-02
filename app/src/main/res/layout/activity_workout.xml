@@ -6,71 +6,60 @@
     android:layout_height="match_parent"
 
     android:orientation="vertical"
-    tools:context="nova.workoutapp22.WorkoutActivity">
+    tools:context="nova.workoutapp22.WorkoutActivity"
+    android:weightSum="1">
 
-    <Button
-        android:id="@+id/AphroButton"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="아프로디테 : 코어, 하체"
-        android:onClick="onAphroClicked"/>
-
-    <Button
-        android:id="@+id/button10"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="신디 : 전신운동" />
-
-    <Button
-        android:id="@+id/button18"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="운동 프로그램..." />
-
-    <Button
-        android:id="@+id/button38"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="운동 프로그램..." />
-
-    <Button
-        android:id="@+id/button37"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="운동 프로그램..." />
-
-    <Button
-        android:id="@+id/button36"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="운동 프로그램..." />
-
-    <Button
-        android:id="@+id/button35"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="운동 프로그램..." />
-
-    <Button
-        android:id="@+id/button34"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="운동 프로그램..." />
-
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="71dp"
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <Button
             android:id="@+id/buttonAddWO"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginLeft="16dp"
+
+
             android:onClick="onClick"
-            android:text="나만의 운동 만들기"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent" />
-    </android.support.constraint.ConstraintLayout>
+            android:text="나만의 운동 만들기" />
+
+        <Button
+            android:id="@+id/buttonWoSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:text="단일/다중" />
+
+        <Button
+            android:id="@+id/buttonWoSelectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="전체선택" />
+
+        <Button
+            android:id="@+id/buttonWoCancelSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="선택해제" />
+
+        <Button
+            android:id="@+id/buttonWoDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="삭제" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listViewForWorkout"
+        android:layout_width="match_parent"
+        android:layout_height="423dp"
+        android:layout_weight="0.76"
+        android:choiceMode="singleChoice" />
 
 </LinearLayout>

@@ -426,28 +426,7 @@ public class AddMemoActivity extends AppCompatActivity {
 
         editTextMemo.setText(getIntent().getStringExtra("memo"));
 
-        /*
-        Uri iuri = Uri.parse( getIntent().getStringExtra("imageUri") );
-
-       // !(editTextMemo.getText().toString(). equals("")
-        if( !(iuri.toString().equals("") ) ){
-
-            imgViewForAdd.setImageURI(iuri);
-
-        }
-        */
-
-
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState); // 반드시 호출해 주세요.
-
-
-        // 추가로 자료를 저장하는 코드는 여기에 작성 하세요.
-    }
-
 
     @Override
     protected void onPause() {
