@@ -74,7 +74,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
     EditText editText;
 
-    ListView listView;
+    ListView listViewForMemo;
     MemoAdapter memoAdapter;
 
 
@@ -96,13 +96,16 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         memoAdapter = new MemoAdapter();
 
         String resDrawableUri = "android.resource://"+getApplicationContext().getPackageName()+"/drawable/basicimage";
-        memoAdapter.addItem(new MemoItem("메모내용 예시", getTime(), Uri.parse(resDrawableUri)) );
-        listView = (ListView) findViewById(R.id.listView);
+        memoAdapter.addItem(new MemoItem("메모내용 예시1", getTime(), Uri.parse(resDrawableUri)) );
+        memoAdapter.addItem(new MemoItem("메모내용 예시2", getTime(), Uri.parse(resDrawableUri)) );
+        memoAdapter.addItem(new MemoItem("메모내용 예시3", getTime(), Uri.parse(resDrawableUri)) );
+
+        listViewForMemo = (ListView) findViewById(R.id.listView);
 
 
 
 
-        listView.setAdapter(memoAdapter);
+        listViewForMemo.setAdapter(memoAdapter);
         setItemClick();
 
 
@@ -110,7 +113,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         Button deleteButton = (Button) findViewById(R.id.buttonDelete);
         deleteButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
+                SparseBooleanArray checkedItems = listViewForMemo.getCheckedItemPositions();
                 int count = memoAdapter.getCount();
 
                 for (int i = count - 1; i >= 0; i--) {
@@ -120,7 +123,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 }
 
                 // 모든 선택 상태 초기화.
-                listView.clearChoices();
+                listViewForMemo.clearChoices();
 
                 memoAdapter.notifyDataSetChanged();
             }
@@ -131,14 +134,28 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         Button selectAllButton = (Button)findViewById(R.id.buttonSelectAll) ;
         selectAllButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                int count = 0 ;
-                count = memoAdapter.getCount() ;
+
+                int count = memoAdapter.getCount() ;
 
                 for (int i=0; i<count; i++) {
-                    listView.setItemChecked(i, true) ;
+                    listViewForMemo.setItemChecked(i, true) ;
                 }
+
             }
         }) ;
+
+
+        // selectAll button에 대한 이벤트 처리.
+        Button clearButton = (Button)findViewById(R.id.buttonClearSelection) ;
+        clearButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+
+                listViewForMemo.clearChoices();
+                memoAdapter.notifyDataSetChanged();
+            }
+        }) ;
+
+
 
 
 
@@ -168,7 +185,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         ///////////////롱클릭을 통한 수정 / 삭제 메뉴를 추가해야 한다.
         //////*
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listViewForMemo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -226,13 +243,20 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
                     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
                     setItemClick();
+
+
 
                 } else if (listView.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
                     Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
                     listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
+
+                    //아이템클릭리스너를 무효화한다.
                     listView.setOnItemClickListener(null);
+
+
 
 
                 }
@@ -241,7 +265,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     }
 
     public void setItemClick(){
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewForMemo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
@@ -260,8 +284,11 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
                 intent.putExtra("memo", item.getMemo());
                 intent.putExtra("date", item.getDate());
-                intent.putExtra("resId", item.getResId());
 
+
+
+                // 모든 선택 상태 초기화.
+                listViewForMemo.clearChoices();
                 startActivityForResult(intent, REQ_VIEW_ACTIVITY);
                 //////////////////
 

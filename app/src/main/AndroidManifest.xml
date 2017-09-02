@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="nova.workoutapp22">
 
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -42,6 +43,7 @@
         <activity
             android:name="nova.workoutapp22.AddMemoActivity"
             android:label="일기 추가하기">
+
 
         </activity>
 

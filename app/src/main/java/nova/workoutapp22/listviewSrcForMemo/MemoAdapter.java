@@ -33,6 +33,8 @@ public class MemoAdapter extends BaseAdapter {
     }
 ////////////////////////////////
 
+
+
     public void setItem(int mID, MemoItem item) {
 
 

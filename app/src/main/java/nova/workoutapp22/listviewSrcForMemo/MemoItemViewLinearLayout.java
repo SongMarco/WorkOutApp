@@ -46,6 +46,7 @@ public class MemoItemViewLinearLayout extends LinearLayout implements Checkable 
         textViewDate = (TextView) findViewById(R.id.textViewDate);
         textViewMemo = (TextView) findViewById(R.id.textViewMemo);
         imageView = (ImageView) findViewById(R.id.imageView);
+        checkBox = (CheckBox) findViewById(R.id.checkBox);
     }
 
     @Override
@@ -63,6 +64,7 @@ public class MemoItemViewLinearLayout extends LinearLayout implements Checkable 
         setChecked(!cb.isChecked()) ;
         // setChecked(mIsChecked ? false : true) ;
     }
+
     @Override
     public void setChecked(boolean checked) {
         CheckBox cb = (CheckBox) findViewById(R.id.checkBox) ;
