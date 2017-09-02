@@ -35,8 +35,8 @@ import nova.workoutapp22.listviewSrcForMemo.MemoAdapter;
 import nova.workoutapp22.listviewSrcForMemo.MemoItem;
 import nova.workoutapp22.subSources.BasicInfo;
 
-import static nova.workoutapp22.subSources.BasicInfo.REQ_ADDMEMO_ACTIVITY;
-import static nova.workoutapp22.subSources.BasicInfo.REQ_VIEW_ACTIVITY;
+import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_MEMO;
+import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY;
 import static nova.workoutapp22.subSources.timeController.getTime;
 
 
@@ -166,7 +166,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
                 intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_ADD);
-                startActivityForResult(intent, REQ_ADDMEMO_ACTIVITY);
+                startActivityForResult(intent, REQ_ADD_MEMO);
 
 
 
@@ -288,7 +288,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
                 // 모든 선택 상태 초기화.
                 listViewForMemo.clearChoices();
-                startActivityForResult(intent, REQ_VIEW_ACTIVITY);
+                startActivityForResult(intent, REQ_MODIFY);
                 //////////////////
 
             }
@@ -303,7 +303,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         //새로운 메모 작성이 완료되었다.
 
-        if(requestCode == REQ_ADDMEMO_ACTIVITY){
+        if(requestCode == REQ_ADD_MEMO){
             //Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
               //      ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
 
@@ -319,7 +319,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         ////////////////// 수정을 완료한 상태가 되었다!
 
-        else if(requestCode == REQ_VIEW_ACTIVITY){
+        else if(requestCode == REQ_MODIFY){
            // Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
             //        ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
 

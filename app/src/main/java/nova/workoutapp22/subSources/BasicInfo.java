@@ -29,8 +29,10 @@ public class BasicInfo {
 
 
     //========== 액티비티 요청 코드  ==========//
-    public static final int REQ_VIEW_ACTIVITY = 1001;
-    public static final int REQ_ADDMEMO_ACTIVITY = 1002;
+    public static final int REQ_MODIFY = 1001;
+    public static final int REQ_ADD_MEMO = 1002;
+
+    public static final int REQ_ADD_WORKOUT = 2001;
     public static final int REQ_PHOTO_CAPTURE_ACTIVITY = 1501;
     public static final int REQ_PHOTO_SELECTION_ACTIVITY = 1502;
 }

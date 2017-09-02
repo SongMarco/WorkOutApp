@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="nova.workoutapp22">
 
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -16,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="nova.workoutapp22.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,40 +23,34 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="nova.workoutapp22.MotivationActivity"
+            android:name=".MotivationActivity"
             android:label="동기부여 자료" />
         <activity
-            android:name="nova.workoutapp22.WorkoutAphroActivity"
+            android:name=".WorkoutAphroActivity"
             android:label="아프로디테"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
-            android:name="nova.workoutapp22.WorkoutActivity"
+            android:name=".WorkoutActivity"
             android:label="운동 프로그램" />
-
         <activity
-            android:name="nova.workoutapp22.WorkoutMemoActivity"
-            android:label="운동 일지22">
-
-        </activity>
-
+            android:name=".WorkoutMemoActivity"
+            android:label="운동 일지22"></activity>
         <activity
-            android:name="nova.workoutapp22.AddMemoActivity"
-            android:label="일기 추가하기">
-
-
-        </activity>
-
-
+            android:name=".AddMemoActivity"
+            android:label="일기 추가하기"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="nova.workoutapp22.provider"
             android:exported="false"
             android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/provider_paths" />
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity android:name=".AddWorkoutActivity"
+            android:label="운동 추가하기"></activity>
     </application>
 
 </manifest>
