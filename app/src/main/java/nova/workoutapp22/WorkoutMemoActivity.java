@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -74,7 +75,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     EditText editText;
 
     ListView listView;
-    MemoAdapter memoadapter;
+    MemoAdapter memoAdapter;
 
 
 
@@ -91,16 +92,56 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_workoutmemo);
 
-        memoadapter = new MemoAdapter();
+
+        memoAdapter = new MemoAdapter();
 
         String resDrawableUri = "android.resource://"+getApplicationContext().getPackageName()+"/drawable/basicimage";
-        memoadapter.addItem(new MemoItem("메모내용 예시", getTime(), Uri.parse(resDrawableUri)) );
+        memoAdapter.addItem(new MemoItem("메모내용 예시", getTime(), Uri.parse(resDrawableUri)) );
         listView = (ListView) findViewById(R.id.listView);
 
 
 
 
-        listView.setAdapter(memoadapter);
+        listView.setAdapter(memoAdapter);
+
+
+        setItemClick();
+
+        // delete button에 대한 이벤트 처리.
+        Button deleteButton = (Button) findViewById(R.id.buttonDelete);
+        deleteButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
+                int count = memoAdapter.getCount();
+
+                for (int i = count - 1; i >= 0; i--) {
+                    if (checkedItems.get(i)) {
+                        memoAdapter.items.remove(i);
+                    }
+                }
+
+                // 모든 선택 상태 초기화.
+                listView.clearChoices();
+
+                memoAdapter.notifyDataSetChanged();
+            }
+        });
+
+
+        // selectAll button에 대한 이벤트 처리.
+        Button selectAllButton = (Button)findViewById(R.id.buttonSelectAll) ;
+        selectAllButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                int count = 0 ;
+                count = memoAdapter.getCount() ;
+
+                for (int i=0; i<count; i++) {
+                    listView.setItemChecked(i, true) ;
+                }
+            }
+        }) ;
+
+
 
 ////////////////////////////// 새로운 메모를 만든다.
         Button button = (Button) findViewById(R.id.buttonAddMemo);
@@ -115,8 +156,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
                 /*
-                adapter.addItem(new MemoItem(name, mobile, age, R.drawable.singer3));
-                adapter.notifyDataSetChanged();
+                memoAdapter.addItem(new MemoItem(name, mobile, age, R.drawable.singer3));
+                memoAdapter.notifyDataSetChanged();
                 */
             }
         });
@@ -133,7 +174,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                MemoItem item = (MemoItem) memoadapter.getItem(position);
+                MemoItem item = (MemoItem) memoAdapter.getItem(position);
 
                 showMessage(item);
 
@@ -141,6 +182,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
 
 
 
@@ -155,9 +198,9 @@ public class WorkoutMemoActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                memoadapter.removeItem(item);
+                memoAdapter.removeItem(item);
 
-                memoadapter.notifyDataSetChanged();
+                memoAdapter.notifyDataSetChanged();
             }
 
         });
@@ -184,32 +227,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
                     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-
-                            MemoItem item = (MemoItem) memoadapter.getItem(position);
-
-                            // 수정 -- 메모 보기 액티비티 띄우기
-                            Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
-                            intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_VIEW);
-
-
-
-                            intent.putExtra("mID", item.getmID());
-                            intent.putExtra("imageUri", item.getUri());
-
-
-                            intent.putExtra("memo", item.getMemo());
-                            intent.putExtra("date", item.getDate());
-                            intent.putExtra("resId", item.getResId());
-
-                            startActivityForResult(intent, REQ_VIEW_ACTIVITY);
-                            //////////////////
-
-                        }
-                    });
+                    setItemClick();
 
                 } else if (listView.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
                     Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
@@ -223,6 +241,34 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         }
     }
 
+    public void setItemClick(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+
+                MemoItem item = (MemoItem) memoAdapter.getItem(position);
+
+                // 수정 -- 메모 보기 액티비티 띄우기
+                Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
+                intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_VIEW);
+
+
+
+                intent.putExtra("mID", item.getmID());
+                intent.putExtra("imageUri", item.getUri());
+
+
+                intent.putExtra("memo", item.getMemo());
+                intent.putExtra("date", item.getDate());
+                intent.putExtra("resId", item.getResId());
+
+                startActivityForResult(intent, REQ_VIEW_ACTIVITY);
+                //////////////////
+
+            }
+        });
+    }
 
 
     @Override
@@ -240,9 +286,9 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
                 MemoItem newmit = setItemFromIntent(data);
 
-                memoadapter.addItem( newmit );
+                memoAdapter.addItem( newmit );
 
-                memoadapter.notifyDataSetChanged();
+                memoAdapter.notifyDataSetChanged();
             }
         }
 
@@ -268,9 +314,9 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
                 newmit.setmID(mmID); //////////////ㄹㅇ 정신나간 코드임;
 
-                memoadapter.setItem(mmID, newmit);
+                memoAdapter.setItem(mmID, newmit);
 
-                memoadapter.notifyDataSetChanged();
+                memoAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -308,8 +354,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
     public void saveState(){
 
-        Toast.makeText(getApplicationContext(), "saveState Called", Toast.LENGTH_SHORT).show();
-
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
@@ -318,7 +362,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 .create();
 
         ArrayList<MemoItem> saveArray;
-        saveArray = (ArrayList<MemoItem>) memoadapter.items.clone();
+        saveArray = (ArrayList<MemoItem>) memoAdapter.items.clone();
 
 
         String json = gson.toJson(saveArray);
@@ -349,7 +393,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
             loadArray = gson.fromJson(json, new TypeToken<ArrayList<MemoItem>>(){}.getType());
 
-            memoadapter.items = (ArrayList<MemoItem>)loadArray.clone();
+            memoAdapter.items = (ArrayList<MemoItem>)loadArray.clone();
         }
 
     }

@@ -499,7 +499,7 @@ public class AddMemoActivity extends AppCompatActivity {
     }
 
     protected void saveState() {
-        Toast.makeText(getApplicationContext(), "saveState Called", Toast.LENGTH_SHORT).show();
+
 
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
