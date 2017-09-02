@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        >
+
+        <TextView
+            android:id="@+id/textViewWoName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="WoName"
+            android:textAlignment="center"
+            android:textColor="@color/colorMBlue"
+            android:textSize="25sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+
+            >
+
+            <TextView
+                android:id="@+id/textViewWoNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+
+                android:layout_gravity="left"
+                android:layout_marginRight="5dp"
+
+                android:text="numbb"
+
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/textViewWoSet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/textViewWoNum"
+
+                android:text="sets"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/textViewTimerSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_alignParentEnd="true"
+
+
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="end"
+                android:text="timer"
+                android:textSize="15sp" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/checkBoxForWo"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+
+        />
+
+</LinearLayout>

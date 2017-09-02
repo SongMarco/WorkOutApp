@@ -36,7 +36,7 @@ import nova.workoutapp22.listviewSrcForMemo.MemoItem;
 import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_MEMO;
-import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY;
+import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_MEMO;
 import static nova.workoutapp22.subSources.timeController.getTime;
 
 
@@ -288,7 +288,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
                 // 모든 선택 상태 초기화.
                 listViewForMemo.clearChoices();
-                startActivityForResult(intent, REQ_MODIFY);
+                startActivityForResult(intent, REQ_MODIFY_MEMO);
                 //////////////////
 
             }
@@ -319,7 +319,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         ////////////////// 수정을 완료한 상태가 되었다!
 
-        else if(requestCode == REQ_MODIFY){
+        else if(requestCode == REQ_MODIFY_MEMO){
            // Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
             //        ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
 

@@ -1,4 +1,4 @@
-package nova.workoutapp22.listviewSrcForMemo;
+package nova.workoutapp22.listviewSrcForWorkOut;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -6,6 +6,8 @@ import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
 
+import nova.workoutapp22.listviewSrcForMemo.MemoItem;
+import nova.workoutapp22.listviewSrcForMemo.MemoItemViewLinearLayout;
 import nova.workoutapp22.subSources.MyApplication;
 
 /**
@@ -13,21 +15,21 @@ import nova.workoutapp22.subSources.MyApplication;
  */
 
 
-public class MemoAdapter extends BaseAdapter {
+public class WorkoutAdapter extends BaseAdapter {
 
-    public void MemoAdapter(){   }
+    public void WorkoutAdapter(){   }
 
 
-    public ArrayList<MemoItem> items = new ArrayList<>();
+    public ArrayList<WorkoutItem> woItems = new ArrayList<>();
 
     @Override
     public int getCount() {
-        return items.size();
+        return woItems.size();
     }
     ////////////////////////////////////////////////////////////
-    public void addItem(MemoItem item) {
+    public void addItem(WorkoutItem item) {
 
-        items.add(item);
+        woItems.add(item);
         item.mID = getCount()-1;
 
     }
@@ -35,23 +37,21 @@ public class MemoAdapter extends BaseAdapter {
 
 
 
-    public void setItem(int mID, MemoItem item) {
+    public void setItem(int mID, WorkoutItem item) {
 
-
-
-        items.set(mID, item);
+        woItems.set(mID, item);
 
     }
 
-    public void removeItem(MemoItem item){ ///////리무브 코드 에러날 가능성 크다.
+    public void removeItem(WorkoutItem item){ ///////리무브 코드 에러날 가능성 크다.
 
         /////// 1, 2, 3, 4, 5에서 3을 지우면 1, 2, 4, 5가 된다. -> 추후 어레이리스트 관리에 문제 발생
         /// 끝자락이 아니라면 무조건 mID를 재정렬해주어야 한다...
-        items.remove(item);
+        woItems.remove(item);
         if(item.mID != getCount() ){ // 3은 끝자락이 아니다. (4가 아님)
             //처음부터 끝(0부터 3까지 재정렬 해주면되겠네 .
             for(int i = 0; i < getCount(); i++){
-                ((MemoItem)getItem(i)).mID = i;
+                ((WorkoutItem)getItem(i)).mID = i;
             }
         }
 
@@ -60,7 +60,7 @@ public class MemoAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return items.get(position);
+        return woItems.get(position);
     }
 
     @Override
@@ -70,11 +70,11 @@ public class MemoAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
-        MemoItemViewLinearLayout view = new MemoItemViewLinearLayout(MyApplication.getAppContext());
+        WorkoutItemViewLayout view = new WorkoutItemViewLayout(MyApplication.getAppContext());
 
-        MemoItem item = items.get(position);
-        view.setMemoInLayout(item.getMemo());
-        view.SetDateInLayout(item.getDate());
+        WorkoutItem item = woItems.get(position);
+        view.setN(item.getMemo());
+        view.setDate(item.getDate());
         view.setImageWithUri(item.getUri());
 
         return view;

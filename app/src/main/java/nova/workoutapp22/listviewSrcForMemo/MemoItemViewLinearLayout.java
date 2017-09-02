@@ -81,11 +81,9 @@ public class MemoItemViewLinearLayout extends LinearLayout implements Checkable 
 
 
 
-    public void setMemo(String memo){ textViewMemo.setText(memo); }
+    public void setMemoInLayout(String memo){ textViewMemo.setText(memo); }
 
-    public void setDate(String date){ textViewDate.setText(date); }
-
-
+    public void SetDateInLayout(String date){ textViewDate.setText(date); }
 
     ///////////////////////// 구버전 set메소드들
 
@@ -95,7 +93,5 @@ public class MemoItemViewLinearLayout extends LinearLayout implements Checkable 
 
         imageView.setImageURI(uri);
     }
-
-
 
 }
