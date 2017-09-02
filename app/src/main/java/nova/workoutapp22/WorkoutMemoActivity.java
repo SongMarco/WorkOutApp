@@ -103,9 +103,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
         listView.setAdapter(memoAdapter);
-
-
         setItemClick();
+
 
         // delete button에 대한 이벤트 처리.
         Button deleteButton = (Button) findViewById(R.id.buttonDelete);
@@ -233,7 +232,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
                     listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-
+                    listView.setOnItemClickListener(null);
 
 
                 }
@@ -345,7 +344,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+        protected void onResume() {
 
         super.onResume();
         restoreState();
