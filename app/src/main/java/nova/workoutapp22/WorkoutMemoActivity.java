@@ -144,7 +144,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
             }
         }) ;
 
-
         // selectAll button에 대한 이벤트 처리.
         Button clearButton = (Button)findViewById(R.id.buttonClearSelection) ;
         clearButton.setOnClickListener(new Button.OnClickListener() {

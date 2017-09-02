@@ -14,7 +14,8 @@
         <Button
 
             android:id="@+id/buttonAddMemo"
-            android:layout_width="wrap_content"
+
+            android:layout_width="55dp"
             android:layout_height="wrap_content"
             android:text="추가"
             android:textSize="14sp" />
@@ -24,22 +25,22 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="7.96"
+
             android:onClick="onClick"
-            android:text="선택모드" />
+            android:text="단일/다중" />
 
         <Button
             android:id="@+id/buttonSelectAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+
             android:text="전체선택" />
 
         <Button
             android:id="@+id/buttonClearSelection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+
             android:text="선택해제" />
 
         <Button
