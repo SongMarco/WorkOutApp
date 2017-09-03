@@ -215,9 +215,32 @@ public class WorkoutActivity extends AppCompatActivity {
     };
 
 
-    public void setSingle(ListView lv){
+
+    /////////////////////////////단일 선택 / 다중 선택을 선택하는 모드.!!
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case (R.id.buttonWoSwitch):
+
+                if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
+
+
+                setSingleChoice(listViewForWorkout);
+
+                } else if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
+
+                setMultipleChoice(listViewForWorkout);
+
+                }
+
+        }
+    }
+
+
+    public void setSingleChoice(ListView lv){
         Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
+        lv.clearChoices();
 
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
@@ -231,35 +254,22 @@ public class WorkoutActivity extends AppCompatActivity {
         setItemClicker();
     }
 
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case (R.id.buttonWoSwitch):
-                ListView listView = (ListView) findViewById(R.id.listViewForWorkout);
-                if (listView.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
+    public void setMultipleChoice(ListView lv){
+        Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
 
-                setSingle(listView);
+        lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-                } else if (listView.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
+        for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
 
-                    Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
-
-
-                    listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-                    for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
-
-                        CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
-                        mCheckBox.setVisibility(View.VISIBLE);
-                    }
-
-
-                    //아이템클릭리스너를 무효화한다.
-                    listView.setOnItemClickListener(null);
-
-                }
-                break;
+            CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
+            mCheckBox.setVisibility(View.VISIBLE);
         }
+
+
+
+        //아이템클릭리스너를 무효화한다.
+        lv.setOnItemClickListener(null);
     }
 
     // 아이템 클릭 리스너를 활성화해준다.
