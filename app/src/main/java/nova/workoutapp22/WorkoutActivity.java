@@ -65,7 +65,7 @@ public class WorkoutActivity extends AppCompatActivity {
         workoutAdapter.notifyDataSetChanged();
 
 
-        setItemClick();
+        setItemClicker();
 
         if (listViewForWorkout.getChildAt(0) != null) {
             visualizeBox();
@@ -151,6 +151,8 @@ public class WorkoutActivity extends AppCompatActivity {
         findViewById(R.id.buttonAddWO).setOnClickListener(mClickListener);
 
 
+
+
     }
 
     public void visualizeBox() {
@@ -213,29 +215,36 @@ public class WorkoutActivity extends AppCompatActivity {
     };
 
 
+    public void setSingle(ListView lv){
+        Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+
+
+        lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
+
+            CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
+            mCheckBox.setVisibility(View.GONE);
+        }
+
+
+        setItemClicker();
+    }
+
     public void onClick(View v) {
         switch (v.getId()) {
             case (R.id.buttonWoSwitch):
                 ListView listView = (ListView) findViewById(R.id.listViewForWorkout);
                 if (listView.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
 
-                    Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
-
-                    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-                    for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
-
-                        CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
-                        mCheckBox.setVisibility(View.GONE);
-                    }
-
-
-                    setItemClick();
-
+                setSingle(listView);
 
                 } else if (listView.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
+
                     Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+
+
                     listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
                     for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
@@ -253,8 +262,9 @@ public class WorkoutActivity extends AppCompatActivity {
         }
     }
 
+    // 아이템 클릭 리스너를 활성화해준다.
 
-    public void setItemClick() {
+    public void setItemClicker() {
         listViewForWorkout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -424,7 +434,17 @@ public class WorkoutActivity extends AppCompatActivity {
             }.getType());
 
             workoutAdapter.woItems = (ArrayList<WorkoutItem>) loadArray.clone();
+
+
+
+
+            // mID를 세팅해줘야 아이템클릭(수정에 사용)이 제대로된다.
+            for(int i = 0; i < workoutAdapter.getCount(); i++){
+                ((WorkoutItem)workoutAdapter.getItem(i)).mID = i;
+            }
         }
+
+
 
     }
 
