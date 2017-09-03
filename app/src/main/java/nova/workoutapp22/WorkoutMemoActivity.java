@@ -419,6 +419,11 @@ public class WorkoutMemoActivity extends AppCompatActivity {
             }.getType());
 
             memoAdapter.items = (ArrayList<MemoItem>) loadArray.clone();
+
+            // mID를 세팅해줘야 아이템클릭(수정에 사용)이 제대로된다.
+            for(int i = 0; i < memoAdapter.getCount(); i++){
+                ((MemoItem)memoAdapter.getItem(i)).mID = i;
+            }
         }
 
     }
