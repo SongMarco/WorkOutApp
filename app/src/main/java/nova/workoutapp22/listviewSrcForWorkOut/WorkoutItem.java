@@ -27,6 +27,16 @@ public class WorkoutItem {
         this.timerSetting = timerSetting;
     }
 
+    public WorkoutItem(int mID, String woName, String woNum, String woSet, String timerSetting) {
+        this.mID = mID;
+        this.woName = woName;
+        this.woNum = woNum;
+        this.woSet = woSet;
+        this.timerSetting = timerSetting;
+    }
+
+
+
     public String getWoName() {
         return woName;
     }

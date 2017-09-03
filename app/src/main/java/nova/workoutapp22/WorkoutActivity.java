@@ -58,9 +58,9 @@ public class WorkoutActivity extends AppCompatActivity {
         listViewForWorkout = (ListView) findViewById(R.id.listViewForWorkout);
         listViewForWorkout.setAdapter(workoutAdapter);
 
-        workoutAdapter.addItem(new WorkoutItem("벤치 프레스", "50개", "3세트", "타이머 사용"));
-        workoutAdapter.addItem(new WorkoutItem("팔굽혀 펴기", "20개", "5세트", "스톱워치 사용"));
-        workoutAdapter.addItem(new WorkoutItem("스쿼트", "100개", "2세트", "사용 안함"));
+        workoutAdapter.addItem(new WorkoutItem(0,"벤치 프레스", "50개", "3세트", "타이머 사용"));
+        workoutAdapter.addItem(new WorkoutItem(1, "팔굽혀 펴기", "20개", "5세트", "스톱워치 사용"));
+        workoutAdapter.addItem(new WorkoutItem(2, "스쿼트", "100개", "2세트", "사용 안함"));
 
         workoutAdapter.notifyDataSetChanged();
 
@@ -84,8 +84,8 @@ public class WorkoutActivity extends AppCompatActivity {
                         workoutAdapter.woItems.remove(i);
                     }
                 }
-
-
+// 모든 선택 상태 초기화.
+                listViewForWorkout.clearChoices();
                 workoutAdapter.notifyDataSetChanged();
             }
         });
