@@ -145,7 +145,7 @@ public class WorkoutActivity extends AppCompatActivity {
                     workoutAdapter.notifyDataSetChanged();
                     break;
 
-
+// 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
                 case R.id.buttonWoSelectAll:
                     Toast.makeText(getApplicationContext(), "전체선택 시작됨", Toast.LENGTH_SHORT).show();
                     count = workoutAdapter.getCount();
@@ -153,8 +153,10 @@ public class WorkoutActivity extends AppCompatActivity {
                     for (int i = 0; i < count; i++) {
                         listViewForWorkout.setItemChecked(i, true);
                     }
+                    workoutAdapter.setCheckBoxState(true);
 
-                    workoutAdapter.notifyDataSetChanged();
+
+
 
                     break;
                 case R.id.buttonWoCancelSelect:
@@ -219,7 +221,7 @@ public class WorkoutActivity extends AppCompatActivity {
     public void setSingleChoice(ListView lv){
       //  Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
-        lv.clearChoices();
+       lv.clearChoices();
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         setCheckboxGone();
@@ -265,6 +267,7 @@ public class WorkoutActivity extends AppCompatActivity {
         listViewForWorkout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
 
 
                 WorkoutItem item = (WorkoutItem) workoutAdapter.getItem(position);

@@ -1,11 +1,14 @@
 package nova.workoutapp22.listviewSrcForWorkOut;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 
 import java.util.ArrayList;
 
+import nova.workoutapp22.R;
 import nova.workoutapp22.subSources.MyApplication;
 
 /**
@@ -15,8 +18,19 @@ import nova.workoutapp22.subSources.MyApplication;
 
 public class WorkoutAdapter extends BaseAdapter {
 
+    boolean visibleBox = true;
+    boolean goneBox = false;
+
     public void WorkoutAdapter(){   }
 
+
+
+    private boolean mCheckBoxState = goneBox;
+
+    public void setCheckBoxState(boolean pState){
+        mCheckBoxState = pState;
+        notifyDataSetChanged();
+    }
 
     public ArrayList<WorkoutItem> woItems = new ArrayList<>();
 
@@ -66,6 +80,11 @@ public class WorkoutAdapter extends BaseAdapter {
         return position;
     }
 
+
+
+    //getView()는 Adapter 가 가지고 있는 data 를 어떻게 보여줄 것인가를 정의하는데 쓰인다.
+    // ListView 를 예를 들면 하나의 list item 의 모양을 결정하는 역할을 하는 것이다.
+
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         WorkoutItemViewLayout view = new WorkoutItemViewLayout(MyApplication.getAppContext());
@@ -75,6 +94,18 @@ public class WorkoutAdapter extends BaseAdapter {
         view.setWoNumInLayout( item.getWoNum() );
         view.setWoSetInLayout( item.getWoSet() );
         view.setTimerSettingInLayout( item.getTimerSetting() );
+
+        CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkBoxForWo);
+        Log.wtf("wtf", "view set");
+        // 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
+        if (mCheckBoxState == goneBox) {
+            Log.wtf("wtf", "gone called");
+            checkBox.setVisibility(View.GONE);
+        }
+        else {
+            checkBox.setVisibility(View.VISIBLE);
+            Log.wtf("wtf", "visible called");
+        }
 
         return view;
     }
