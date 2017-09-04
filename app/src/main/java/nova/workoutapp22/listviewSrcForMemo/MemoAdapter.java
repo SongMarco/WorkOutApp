@@ -1,6 +1,5 @@
 package nova.workoutapp22.listviewSrcForMemo;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -95,7 +94,7 @@ public class MemoAdapter extends BaseAdapter {
         view.SetDateInLayout(item.getDate());
         view.setImageWithUri(item.getUri());
 
-        CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkBoxForWo);
+        CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkBox);
 
         // 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
         if (mCheckBoxState == goneBox) {

@@ -71,7 +71,7 @@ public class AddMemoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        strMemoMode = intent.getStringExtra(BasicInfo.KEY_MEMO_MODE);
+        strMemoMode = intent.getStringExtra(BasicInfo.KEY_ADDMEMO_MODE);
 
 
         //메모를 걍클릭 함(모드뷰), or 롱클릭 -> 수정누름 (MODE_MODIFY)

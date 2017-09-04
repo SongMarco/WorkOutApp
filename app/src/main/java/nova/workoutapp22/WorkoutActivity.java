@@ -13,7 +13,6 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -40,10 +39,6 @@ import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_WORKOUT;
 
 
 public class WorkoutActivity extends AppCompatActivity {
-
-
-    public static final int REQUEST_CODE_APHRODITE = 201;
-
 
     ListView listViewForWorkout;
     WorkoutAdapter workoutAdapter;
@@ -237,24 +232,6 @@ public class WorkoutActivity extends AppCompatActivity {
 
         //아이템클릭리스너를 무효화한다.
         lv.setOnItemClickListener(null);
-    }
-
-    public void setCheckboxGone(){
-        for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
-            Log.v("Buttonloop is going", ""+i);
-            Log.v("Buttonloop is going", ""+listViewForWorkout.getChildAt(i));
-            CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
-            mCheckBox.setVisibility(View.GONE);
-        }
-
-    }
-
-    public void setCheckboxVisible(){
-        for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
-
-            CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
-            mCheckBox.setVisibility(View.VISIBLE);
-        }
     }
 
     // 아이템 클릭 리스너를 활성화해준다.

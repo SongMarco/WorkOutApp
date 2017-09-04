@@ -14,8 +14,6 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -72,9 +70,6 @@ import static nova.workoutapp22.subSources.timeController.getTime;
 
 public class WorkoutMemoActivity extends AppCompatActivity {
 
-
-    EditText editText;
-
     ListView listViewForMemo;
     MemoAdapter memoAdapter;
 
@@ -102,71 +97,11 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         listViewForMemo.setAdapter(memoAdapter);
         setItemClick();
 
-
-        // delete button에 대한 이벤트 처리.
-        Button deleteButton = (Button) findViewById(R.id.buttonDelete);
-        deleteButton.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                SparseBooleanArray checkedItems = listViewForMemo.getCheckedItemPositions();
-                int count = memoAdapter.getCount();
-
-                for (int i = count - 1; i >= 0; i--) {
-                    if (checkedItems.get(i)) {
-                        memoAdapter.items.remove(i);
-                    }
-                }
-
-                // 모든 선택 상태 초기화.
-                listViewForMemo.clearChoices();
-
-                memoAdapter.notifyDataSetChanged();
-            }
-        });
-
-
-        // selectAll button에 대한 이벤트 처리.
-        Button selectAllButton = (Button) findViewById(R.id.buttonSelectAll);
-        selectAllButton.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-
-                int count = memoAdapter.getCount();
-
-                for (int i = 0; i < count; i++) {
-                    listViewForMemo.setItemChecked(i, true);
-                }
-
-            }
-        });
-
-        // selectAll button에 대한 이벤트 처리.
-        Button clearButton = (Button) findViewById(R.id.buttonClearSelection);
-        clearButton.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-
-                listViewForMemo.clearChoices();
-                memoAdapter.notifyDataSetChanged();
-            }
-        });
-
-
-////////////////////////////// 새로운 메모를 만든다.
-        Button button = (Button) findViewById(R.id.buttonAddMemo);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
-                intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_ADD);
-                startActivityForResult(intent, REQ_ADD_MEMO);
-
-
-
-                /*
-                memoAdapter.addItem(new MemoItem(name, mobile, age, R.drawable.singer3));
-                memoAdapter.notifyDataSetChanged();
-                */
-            }
-        });
+        findViewById(R.id.buttonAddMemo).setOnClickListener(mClickListener);
+        findViewById(R.id.buttonDelete).setOnClickListener(mClickListener);
+        findViewById(R.id.buttonSelectAll).setOnClickListener(mClickListener);
+        findViewById(R.id.buttonClearSelection).setOnClickListener(mClickListener);
+        findViewById(R.id.buttonSwitchMode).setOnClickListener(mClickListener);
 
 
 /////////////////////////////// 메모아이템을 수정한다.
@@ -181,7 +116,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
                 MemoItem item = (MemoItem) memoAdapter.getItem(position);
 
-                showMessage(item);
+                showDeleteMessage(item);
 
 
                 return true;
@@ -191,7 +126,106 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
     }
 
-    public void showMessage(final MemoItem item) {
+
+    Button.OnClickListener mClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent intent;
+            int count;
+            switch (v.getId()) {
+                case R.id.buttonAddMemo:
+                    intent = new Intent(getApplicationContext(), AddMemoActivity.class);
+                    intent.putExtra(BasicInfo.KEY_ADDMEMO_MODE, BasicInfo.MODE_ADD);
+
+                    startActivityForResult(intent, BasicInfo.REQ_ADD_MEMO);
+
+                    break;
+
+                case (R.id.buttonSwitchMode):
+
+                    if (listViewForMemo.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
+
+                        setSingleChoice(listViewForMemo);
+
+                    }
+                    else {
+
+                        setMultipleChoice(listViewForMemo);
+
+                    }
+                    break;
+
+
+                case R.id.buttonWoDelete:
+                    SparseBooleanArray checkedItems = listViewForMemo.getCheckedItemPositions();
+                    count = memoAdapter.getCount();
+
+                    for (int i = count - 1; i >= 0; i--) {
+
+                        //int i = count - 1;  0<=i; i--
+                        if (checkedItems.get(i)) {
+                            memoAdapter.items.remove(i);
+                        }
+                    }
+                    // 모든 선택 상태 초기화.
+                    listViewForMemo.clearChoices();
+                    memoAdapter.notifyDataSetChanged();
+                    memoAdapter.setCheckBoxState(false);
+                    setSingleChoice(listViewForMemo);
+                    break;
+
+
+                case R.id.buttonSelectAll:
+                    Toast.makeText(getApplicationContext(), "전체선택 시작됨", Toast.LENGTH_SHORT).show();
+                    count = memoAdapter.getCount();
+
+                    for (int i = 0; i < count; i++) {
+                        listViewForMemo.setItemChecked(i, true);
+                    }
+                    memoAdapter.setCheckBoxState(true);
+
+
+
+
+                    break;
+                case R.id.buttonClearSelection:
+                    count = memoAdapter.getCount();
+                    for (int i = 0; i < count; i++) {
+
+                        listViewForMemo.setItemChecked(i, false);
+
+                    }
+                    break;
+
+            }
+        }
+    };
+
+    public void setSingleChoice(ListView lv){
+
+        //  Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+
+        lv.clearChoices();
+        lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        memoAdapter.setCheckBoxState(false);
+
+        setItemClick();
+    }
+
+    public void setMultipleChoice(ListView lv){
+        // Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+
+
+        lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        memoAdapter.setCheckBoxState(true);
+
+
+        //아이템클릭리스너를 무효화한다.
+        lv.setOnItemClickListener(null);
+    }
+
+    public void showDeleteMessage(final MemoItem item) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("삭제");
@@ -221,48 +255,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
     }
 
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case (R.id.buttonSwitchMode):
-                ListView listViewforMem = (ListView) findViewById(R.id.listViewForMemo);
-                if (listViewforMem.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
-                    Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
-
-
-
-                    listViewforMem.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-                    for(int i = 0; i != memoAdapter.items.size(); i++) {
-
-                        CheckBox mCheckBox = (CheckBox) listViewforMem.getChildAt(i).findViewById(R.id.checkBox);
-                        mCheckBox.setVisibility(View.GONE);
-                    }
-
-
-
-                    setItemClick();
-
-
-                } else if (listViewforMem.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
-                    Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
-
-                    listViewforMem.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-                    for(int i = 0; i != memoAdapter.items.size(); i++) {
-
-                        CheckBox mCheckBox = (CheckBox) listViewforMem.getChildAt(i).findViewById(R.id.checkBox);
-                        mCheckBox.setVisibility(View.VISIBLE);
-                    }
-
-                    //아이템클릭리스너를 무효화한다.
-                    listViewforMem.setOnItemClickListener(null);
-
-
-                }
-                break;
-        }
-    }
-
     public void setItemClick() {
         listViewForMemo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -273,7 +265,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
                 // 수정 -- 메모 보기 액티비티 띄우기
                 Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
-                intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_VIEW);
+                intent.putExtra(BasicInfo.KEY_ADDMEMO_MODE, BasicInfo.MODE_VIEW);
 
 
                 intent.putExtra("mID", item.getmID());
