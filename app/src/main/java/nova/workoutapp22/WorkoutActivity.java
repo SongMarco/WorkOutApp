@@ -68,63 +68,14 @@ public class WorkoutActivity extends AppCompatActivity {
 
         setItemClicker();
 
+        findViewById(R.id.buttonAddWO).setOnClickListener(mClickListener);
+        findViewById(R.id.buttonWoDelete).setOnClickListener(mClickListener);
+        findViewById(R.id.buttonWoSelectAll).setOnClickListener(mClickListener);
+        findViewById(R.id.buttonWoCancelSelect).setOnClickListener(mClickListener);
+        findViewById(R.id.buttonWoSwitch).setOnClickListener(mClickListener);
 
+        //setSingleChoice(listViewForWorkout);
 
-
-        // delete button에 대한 이벤트 처리.
-        Button deleteButton = (Button) findViewById(R.id.buttonWoDelete);
-        deleteButton.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                SparseBooleanArray checkedItems = listViewForWorkout.getCheckedItemPositions();
-                int count = workoutAdapter.getCount();
-
-                for (int i = count - 1; i >= 0; i--) {
-                    if (checkedItems.get(i)) {
-                        workoutAdapter.woItems.remove(i);
-                    }
-                }
-// 모든 선택 상태 초기화.
-                listViewForWorkout.clearChoices();
-                workoutAdapter.notifyDataSetChanged();
-            }
-        });
-
-
-        // selectAll button에 대한 이벤트 처리.
-        Button selectAllButton = (Button) findViewById(R.id.buttonWoSelectAll);
-        selectAllButton.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-
-                int count = workoutAdapter.getCount();
-
-                for (int i = 0; i < count; i++) {
-                    listViewForWorkout.setItemChecked(i, true);
-                }
-
-                visualizeBox();
-
-                workoutAdapter.notifyDataSetChanged();
-
-
-            }
-        });
-
-        // 선택 해제에 대한 처리
-        Button clearButton = (Button) findViewById(R.id.buttonWoCancelSelect);
-        clearButton.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-
-
-                for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
-
-                    listViewForWorkout.setItemChecked(i, false);
-
-                }
-
-            }
-
-
-        });
 
 
 /////////////////////////////// 메모아이템을 수정한다.
@@ -142,17 +93,81 @@ public class WorkoutActivity extends AppCompatActivity {
                 showMessage(item);
 
 
+                listViewForWorkout.clearChoices();
                 return true;
             }
         });
 
 
-        findViewById(R.id.buttonAddWO).setOnClickListener(mClickListener);
-
-
-
-
     }
+
+    Button.OnClickListener mClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent intent;
+            int count;
+            switch (v.getId()) {
+                case R.id.buttonAddWO:
+                    intent = new Intent(getApplicationContext(), AddWorkoutActivity.class);
+                    intent.putExtra(BasicInfo.KEY_ADDWO_MODE, BasicInfo.MODE_MODIFY);
+
+                    startActivityForResult(intent, BasicInfo.REQ_ADD_WORKOUT);
+
+                    break;
+
+                case (R.id.buttonWoSwitch):
+
+                    if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
+
+                        setSingleChoice(listViewForWorkout);
+
+                    } else if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
+
+                        setMultipleChoice(listViewForWorkout);
+
+                    }
+                    break;
+
+
+                case R.id.buttonWoDelete:
+                    SparseBooleanArray checkedItems = listViewForWorkout.getCheckedItemPositions();
+                    count = workoutAdapter.getCount();
+
+                    for (int i = count - 1; i >= 0; i--) {
+
+                        //int i = count - 1;  0<=i; i--
+                        if (checkedItems.get(i)) {
+                            workoutAdapter.woItems.remove(i);
+                        }
+                    }
+                    // 모든 선택 상태 초기화.
+                    listViewForWorkout.clearChoices();
+                    workoutAdapter.notifyDataSetChanged();
+                    break;
+
+
+                case R.id.buttonWoSelectAll:
+                    Toast.makeText(getApplicationContext(), "전체선택 시작됨", Toast.LENGTH_SHORT).show();
+                    count = workoutAdapter.getCount();
+
+                    for (int i = 0; i < count; i++) {
+                        listViewForWorkout.setItemChecked(i, true);
+                    }
+
+                    workoutAdapter.notifyDataSetChanged();
+
+                    break;
+                case R.id.buttonWoCancelSelect:
+                    count = workoutAdapter.getCount();
+                    for (int i = 0; i < count; i++) {
+
+                        listViewForWorkout.setItemChecked(i, false);
+
+                    }
+                    break;
+
+            }
+        }
+    };
 
     public void visualizeBox() {
 
@@ -161,7 +176,6 @@ public class WorkoutActivity extends AppCompatActivity {
             CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
             mCheckBox.setVisibility(View.VISIBLE);
         }
-
 
     }
 
@@ -196,44 +210,9 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
 
-    ////////////////////////////////////////////새로운 메모를 만든다.
-
-    Button.OnClickListener mClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            Intent intent;
-            switch (v.getId()) {
-                case R.id.buttonAddWO:
-                    intent = new Intent(getApplicationContext(), AddWorkoutActivity.class);
-                    intent.putExtra(BasicInfo.KEY_ADDWO_MODE, BasicInfo.MODE_MODIFY);
-
-                    startActivityForResult(intent, BasicInfo.REQ_ADD_WORKOUT);
-                    break;
-
-            }
-        }
-    };
-
-
 
     /////////////////////////////단일 선택 / 다중 선택을 선택하는 모드.!!
 
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case (R.id.buttonWoSwitch):
-
-                if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
-
-
-                setSingleChoice(listViewForWorkout);
-
-                } else if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
-
-                setMultipleChoice(listViewForWorkout);
-
-                }
-
-        }
-    }
 
 
     public void setSingleChoice(ListView lv){
@@ -277,7 +256,6 @@ public class WorkoutActivity extends AppCompatActivity {
             CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
             mCheckBox.setVisibility(View.VISIBLE);
         }
-
     }
 
     // 아이템 클릭 리스너를 활성화해준다.
