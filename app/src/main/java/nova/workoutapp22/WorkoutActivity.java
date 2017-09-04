@@ -120,7 +120,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
                         setSingleChoice(listViewForWorkout);
 
-                    } else if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_SINGLE) {
+                    }
+                    else {
 
                         setMultipleChoice(listViewForWorkout);
 
@@ -382,22 +383,15 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
         restoreState();
+
         Log.v("loop is going", ""+listViewForWorkout.getLastVisiblePosition());
         Log.v("loop is going", ""+listViewForWorkout.getFirstVisiblePosition());
         Log.v("loop is going", ""+workoutAdapter.getCount());
 
-        for (int i = 0; i < workoutAdapter.getCount(); i++) {
 
-            Log.v("firstloop is going", ""+i);
-            Log.v("firstloop is going", ""+listViewForWorkout.getChildAt(i));
-           // Log.v("firstloop is going", ""+listViewForWorkout.getAdapter().getView(0,null,listViewForWorkout));
-
-            CheckBox mCheckBox = (CheckBox) listViewForWorkout.getAdapter().getView(i,null,listViewForWorkout).findViewById(R.id.checkBoxForWo);
-            mCheckBox.setVisibility(View.GONE);
-
-        }
         Log.v("순서추적", "restore done");
     }
+
 
 
 
