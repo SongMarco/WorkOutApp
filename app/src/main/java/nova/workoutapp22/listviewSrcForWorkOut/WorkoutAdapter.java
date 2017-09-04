@@ -18,12 +18,13 @@ import nova.workoutapp22.subSources.MyApplication;
 
 public class WorkoutAdapter extends BaseAdapter {
 
-    boolean visibleBox = true;
-    boolean goneBox = false;
+
 
     public void WorkoutAdapter(){   }
 
 
+    boolean visibleBox = true;
+    boolean goneBox = false;
 
     private boolean mCheckBoxState = goneBox;
 
@@ -96,15 +97,15 @@ public class WorkoutAdapter extends BaseAdapter {
         view.setTimerSettingInLayout( item.getTimerSetting() );
 
         CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkBoxForWo);
-        Log.wtf("wtf", "view set");
+
         // 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
         if (mCheckBoxState == goneBox) {
-            Log.wtf("wtf", "gone called");
+
             checkBox.setVisibility(View.GONE);
         }
         else {
             checkBox.setVisibility(View.VISIBLE);
-            Log.wtf("wtf", "visible called");
+
         }
 
         return view;

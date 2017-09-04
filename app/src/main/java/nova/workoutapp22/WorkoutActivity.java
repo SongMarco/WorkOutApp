@@ -65,6 +65,8 @@ public class WorkoutActivity extends AppCompatActivity {
         workoutAdapter.notifyDataSetChanged();
 
 
+// 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
+        workoutAdapter.setCheckBoxState(false);
 
         setItemClicker();
 
@@ -143,9 +145,11 @@ public class WorkoutActivity extends AppCompatActivity {
                     // 모든 선택 상태 초기화.
                     listViewForWorkout.clearChoices();
                     workoutAdapter.notifyDataSetChanged();
+                    workoutAdapter.setCheckBoxState(false);
+                    setSingleChoice(listViewForWorkout);
                     break;
 
-// 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
+
                 case R.id.buttonWoSelectAll:
                     Toast.makeText(getApplicationContext(), "전체선택 시작됨", Toast.LENGTH_SHORT).show();
                     count = workoutAdapter.getCount();
@@ -172,15 +176,7 @@ public class WorkoutActivity extends AppCompatActivity {
         }
     };
 
-    public void visualizeBox() {
 
-        for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
-
-            CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
-            mCheckBox.setVisibility(View.VISIBLE);
-        }
-
-    }
 
     public void showMessage(final WorkoutItem item) {
 
@@ -219,14 +215,13 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
     public void setSingleChoice(ListView lv){
+
       //  Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
        lv.clearChoices();
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        setCheckboxGone();
-
-
+        workoutAdapter.setCheckBoxState(false);
 
         setItemClicker();
     }
@@ -237,7 +232,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        setCheckboxVisible();
+        workoutAdapter.setCheckBoxState(true);
+
 
         //아이템클릭리스너를 무효화한다.
         lv.setOnItemClickListener(null);

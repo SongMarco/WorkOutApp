@@ -46,6 +46,7 @@ public class MemoItemViewLinearLayout extends LinearLayout implements Checkable 
         textViewDate = (TextView) findViewById(R.id.textViewDate);
         textViewMemo = (TextView) findViewById(R.id.textViewMemo);
         imageView = (ImageView) findViewById(R.id.imageView);
+
         checkBox = (CheckBox) findViewById(R.id.checkBox);
     }
 

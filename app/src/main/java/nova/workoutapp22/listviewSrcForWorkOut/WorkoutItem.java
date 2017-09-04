@@ -4,8 +4,6 @@ package nova.workoutapp22.listviewSrcForWorkOut;
  * Created by Administrator on 2017-09-02.
  */
 
-import android.net.Uri;
-
 /**
  * Created by user on 2016-08-10.
  */
@@ -15,10 +13,6 @@ public class WorkoutItem {
 
 
     public int mID;
-    String memo;
-    String date;
-    int resId;
-    Uri uri;
 
     public WorkoutItem(String woName, String woNum, String woSet, String timerSetting) {
         this.woName = woName;

@@ -50,16 +50,7 @@ public class WorkoutItemViewLayout extends LinearLayout implements Checkable {
         timerSetting = (TextView)findViewById(textViewTimerSetting);
 
         checkBox = (CheckBox) findViewById(checkBoxId);
-    }
 
-    public void hideCheckBox(){
-
-        checkBox.setVisibility(GONE);
-    }
-
-    public void showCheckBox(){
-
-        checkBox.setVisibility(VISIBLE);
     }
 
 
