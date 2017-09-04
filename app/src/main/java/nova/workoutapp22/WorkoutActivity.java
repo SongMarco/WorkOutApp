@@ -65,11 +65,10 @@ public class WorkoutActivity extends AppCompatActivity {
         workoutAdapter.notifyDataSetChanged();
 
 
+
         setItemClicker();
 
-        if (listViewForWorkout.getChildAt(0) != null) {
-            visualizeBox();
-        }
+
 
 
         // delete button에 대한 이벤트 처리.
@@ -238,38 +237,47 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
     public void setSingleChoice(ListView lv){
-        Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
         lv.clearChoices();
-
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
+        setCheckboxGone();
 
-            CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
-            mCheckBox.setVisibility(View.GONE);
-        }
 
 
         setItemClicker();
     }
 
     public void setMultipleChoice(ListView lv){
-        Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
 
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
+        setCheckboxVisible();
+
+        //아이템클릭리스너를 무효화한다.
+        lv.setOnItemClickListener(null);
+    }
+
+    public void setCheckboxGone(){
+        for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
+            Log.v("Buttonloop is going", ""+i);
+            Log.v("Buttonloop is going", ""+listViewForWorkout.getChildAt(i));
+            CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
+            mCheckBox.setVisibility(View.GONE);
+        }
+
+    }
+
+    public void setCheckboxVisible(){
         for (int i = 0; i != workoutAdapter.woItems.size(); i++) {
 
             CheckBox mCheckBox = (CheckBox) listViewForWorkout.getChildAt(i).findViewById(R.id.checkBoxForWo);
             mCheckBox.setVisibility(View.VISIBLE);
         }
 
-
-
-        //아이템클릭리스너를 무효화한다.
-        lv.setOnItemClickListener(null);
     }
 
     // 아이템 클릭 리스너를 활성화해준다.
@@ -396,8 +404,24 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
         restoreState();
+        Log.v("loop is going", ""+listViewForWorkout.getLastVisiblePosition());
+        Log.v("loop is going", ""+listViewForWorkout.getFirstVisiblePosition());
+        Log.v("loop is going", ""+workoutAdapter.getCount());
+
+        for (int i = 0; i < workoutAdapter.getCount(); i++) {
+
+            Log.v("firstloop is going", ""+i);
+            Log.v("firstloop is going", ""+listViewForWorkout.getChildAt(i));
+           // Log.v("firstloop is going", ""+listViewForWorkout.getAdapter().getView(0,null,listViewForWorkout));
+
+            CheckBox mCheckBox = (CheckBox) listViewForWorkout.getAdapter().getView(i,null,listViewForWorkout).findViewById(R.id.checkBoxForWo);
+            mCheckBox.setVisibility(View.GONE);
+
+        }
         Log.v("순서추적", "restore done");
     }
+
+
 
 
     public void saveState() {
