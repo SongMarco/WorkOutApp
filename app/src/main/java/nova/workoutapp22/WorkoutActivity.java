@@ -249,7 +249,7 @@ public class WorkoutActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), AddWorkoutActivity.class);
 
                 // intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_VIEW);
-                intent.putExtra(BasicInfo.KEY_ADDWO_MODE, BasicInfo.MODE_ADD);
+                intent.putExtra(BasicInfo.KEY_ADDWO_MODE, BasicInfo.MODE_MODIFY);
 
 
                 intent.putExtra("mID", item.getmID());
