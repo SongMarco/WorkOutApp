@@ -359,13 +359,13 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
     public void saveState() {
-       // saveStateWithGson();
+        //saveStateWithGson();
         saveStateWithJson();
     }
 
     public void restoreState() {
 
-       // restoreStateWithGson();
+        // restoreStateWithGson();
         restoreStateWithJson();
     }
 
@@ -405,7 +405,7 @@ public class WorkoutActivity extends AppCompatActivity {
     public void restoreStateWithJson() {
         SharedPreferences prefForWo = getSharedPreferences("prefForWoWithJson", Activity.MODE_PRIVATE);
 
-        String jsonString = prefForWo.getString("arrayListItem", "Err:item not transferred");
+        String jsonString = prefForWo.getString("arrayListItem", null);
 
         // jsonString = jsonString.replaceAll("\\\\","");
         Log.wtf("saved jsonArray : ", "jsonString = " + jsonString);
@@ -422,21 +422,23 @@ public class WorkoutActivity extends AppCompatActivity {
                     //      Log.wtf("loaded2233",""+joLoaded );
 
                     Log.wtf("TagForJson = ", joLoaded.getString("woName"));
-                    WorkoutItem tempItem = new WorkoutItem("", "", "", "");
+                    WorkoutItem tempItem = new WorkoutItem(i, "", "", "", "");
 
 
                     tempItem.setWoName(joLoaded.getString("woName"));
-                    Log.wtf("TagForJson", "set" + joLoaded.getString("woName"));
+
                     tempItem.setWoNum(joLoaded.getString("woNum"));
                     tempItem.setWoSet(joLoaded.getString("woSet"));
                     tempItem.setTimerSetting(joLoaded.getString("timerSetting"));
 
-                    Log.wtf("TagForJson", tempItem.getWoName());
+                    Log.wtf("TagForJson", "temp Item describtion" +
+                            "\twoName = " + tempItem.getWoName() +
+                            "\twoNum = " + tempItem.getWoNum() +
+                            "\twoSet = " + tempItem.getWoSet() +
+                            "\ttimerSet = " + tempItem.getTimerSetting());
 
                     loadArray.add(tempItem);
-
                 }
-
 
                     /*
                 for (int i = 0; i < recs.length(); ++i) {
@@ -449,15 +451,15 @@ public class WorkoutActivity extends AppCompatActivity {
                 Log.wtf("err comes", "ERRERR");
                 e.printStackTrace();
             }
+            workoutAdapter.woItems = (ArrayList<WorkoutItem>) loadArray.clone();
+
+
+            // mID를 세팅해줘야 아이템클릭(수정에 사용)이 제대로된다.
+            for (int i = 0; i < workoutAdapter.getCount(); i++) {
+                ((WorkoutItem) workoutAdapter.getItem(i)).mID = i;
+            }
         }
 
-        workoutAdapter.woItems = (ArrayList<WorkoutItem>) loadArray.clone();
-
-
-        // mID를 세팅해줘야 아이템클릭(수정에 사용)이 제대로된다.
-        for (int i = 0; i < workoutAdapter.getCount(); i++) {
-            ((WorkoutItem) workoutAdapter.getItem(i)).mID = i;
-        }
         workoutAdapter.notifyDataSetChanged();
     }
 
@@ -512,6 +514,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
             loadArray = gson.fromJson(json, new TypeToken<ArrayList<WorkoutItem>>() {
             }.getType());
+
 
             workoutAdapter.woItems = (ArrayList<WorkoutItem>) loadArray.clone();
 

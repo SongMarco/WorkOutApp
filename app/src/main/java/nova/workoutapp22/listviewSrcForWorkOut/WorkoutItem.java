@@ -62,7 +62,7 @@ public class WorkoutItem {
     }
 
     public void setWoNum(String woNum) {
-        this.woName = woNum;
+        this.woNum = woNum;
     }
 
     public String getWoSet() {
