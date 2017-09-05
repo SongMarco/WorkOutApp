@@ -27,6 +27,10 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -53,7 +57,7 @@ public class WorkoutActivity extends AppCompatActivity {
         listViewForWorkout = (ListView) findViewById(R.id.listViewForWorkout);
         listViewForWorkout.setAdapter(workoutAdapter);
 
-        workoutAdapter.addItem(new WorkoutItem(0,"벤치 프레스", "50개", "3세트", "타이머 사용"));
+        workoutAdapter.addItem(new WorkoutItem(0, "벤치 프레스", "50개", "3세트", "타이머 사용"));
         workoutAdapter.addItem(new WorkoutItem(1, "팔굽혀 펴기", "20개", "5세트", "스톱워치 사용"));
         workoutAdapter.addItem(new WorkoutItem(2, "스쿼트", "100개", "2세트", "사용 안함"));
 
@@ -72,7 +76,6 @@ public class WorkoutActivity extends AppCompatActivity {
         findViewById(R.id.buttonWoSwitch).setOnClickListener(mClickListener);
 
         //setSingleChoice(listViewForWorkout);
-
 
 
 /////////////////////////////// 메모아이템을 수정한다.
@@ -117,8 +120,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
                         setSingleChoice(listViewForWorkout);
 
-                    }
-                    else {
+                    } else {
 
                         setMultipleChoice(listViewForWorkout);
 
@@ -155,8 +157,6 @@ public class WorkoutActivity extends AppCompatActivity {
                     workoutAdapter.setCheckBoxState(true);
 
 
-
-
                     break;
                 case R.id.buttonWoCancelSelect:
                     count = workoutAdapter.getCount();
@@ -170,7 +170,6 @@ public class WorkoutActivity extends AppCompatActivity {
             }
         }
     };
-
 
 
     public void showMessage(final WorkoutItem item) {
@@ -204,16 +203,14 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
 
-
     /////////////////////////////단일 선택 / 다중 선택을 선택하는 모드.!!
 
 
+    public void setSingleChoice(ListView lv) {
 
-    public void setSingleChoice(ListView lv){
+        //  Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
-      //  Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
-
-       lv.clearChoices();
+        lv.clearChoices();
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         workoutAdapter.setCheckBoxState(false);
@@ -221,8 +218,8 @@ public class WorkoutActivity extends AppCompatActivity {
         setItemClicker();
     }
 
-    public void setMultipleChoice(ListView lv){
-       // Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+    public void setMultipleChoice(ListView lv) {
+        // Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
 
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -240,7 +237,6 @@ public class WorkoutActivity extends AppCompatActivity {
         listViewForWorkout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
 
 
                 WorkoutItem item = (WorkoutItem) workoutAdapter.getItem(position);
@@ -291,7 +287,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
                 workoutAdapter.notifyDataSetChanged();
 
-                saveState();
+                 //  saveStateWithGson();
+                saveStateWithJson();
 
             }
         }
@@ -321,7 +318,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
                 workoutAdapter.notifyDataSetChanged();
 
-                saveState();
+               //      saveStateWithGson();
+                saveStateWithJson();
 
             }
 
@@ -348,7 +346,9 @@ public class WorkoutActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        saveState();
+      //  saveStateWithGson();
+        saveStateWithJson();
+
     }
 
     @Override
@@ -356,23 +356,95 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
         super.onResume();
-
-
-        restoreState();
-
-        Log.v("loop is going", ""+listViewForWorkout.getLastVisiblePosition());
-        Log.v("loop is going", ""+listViewForWorkout.getFirstVisiblePosition());
-        Log.v("loop is going", ""+workoutAdapter.getCount());
-
-
-        Log.v("순서추적", "restore done");
+        // restoreStateWithGson();
+       restoreStateWithJson();
     }
 
 
+    public void saveStateWithJson() {
+        SharedPreferences prefForWo = getSharedPreferences("prefForWoWithJson", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefForWo.edit();
+        int a;
+////
+        ArrayList<WorkoutItem> saveArray;
+        WorkoutItem tempItem;
+        saveArray = (ArrayList<WorkoutItem>) workoutAdapter.woItems.clone();
+
+        JSONArray jsonArray = new JSONArray();
+
+        for (int i = 0; i < saveArray.size(); i++) {
+            tempItem = saveArray.get(i);
+
+            jsonArray.put( tempItem.toJSON() );
+            Log.wtf("saved", "saved Item : " + tempItem.toJSON());
+
+        }
+
+        if (!saveArray.isEmpty()) {
+
+            editor.putString("arrayListItem", jsonArray.toString());
+            Log.wtf("saved jsonArray : ", "saved Item : " + jsonArray.toString());
+        } else {
+            editor.putString("arrayListItem", null);
+        }
+
+        editor.apply();
+
+    }
+
+    public void restoreStateWithJson() {
+        SharedPreferences prefForWo = getSharedPreferences("prefForWoWithJson", Activity.MODE_PRIVATE);
+
+        String jsonString = prefForWo.getString("arrayListItem", "Err:item not transferred");
+
+        ArrayList<WorkoutItem> loadArray = new ArrayList<>();
+
+        if (jsonString != null) {
+            try {
+                JSONArray jsonArray = new JSONArray(jsonString);
+                Log.wtf("saved jsonArray : ", "loaded Item : " + jsonArray.toString());
 
 
+                for (int i = 0; i < jsonArray.length(); i++) {
 
-    public void saveState() {
+                    JSONObject joLoaded = jsonArray.getJSONObject(i);
+
+                    Log.wtf("loaded", "loaded Item : " + joLoaded.toString());
+
+                    WorkoutItem tempItem = new WorkoutItem();
+                    tempItem.setWoName( joLoaded.getString("woName")    );
+                    tempItem.setWoNum( joLoaded.getString("woNum")    );
+                    tempItem.setWoSet( joLoaded.getString("woSet")    );
+                    tempItem.setTimerSetting( joLoaded.getString("timerSetting")    );
+
+                    loadArray.add(tempItem);
+                    }
+
+
+                    /*
+                for (int i = 0; i < recs.length(); ++i) {
+                    JSONObject rec = recs.getJSONObject(i);
+                    int id = rec.getInt("id");
+                    String loc = rec.getString("loc");
+                    // ...
+                }*/
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        workoutAdapter.woItems = (ArrayList<WorkoutItem>) loadArray.clone();
+
+
+        // mID를 세팅해줘야 아이템클릭(수정에 사용)이 제대로된다.
+        for (int i = 0; i < workoutAdapter.getCount(); i++) {
+            ((WorkoutItem) workoutAdapter.getItem(i)).mID = i;
+        }
+        workoutAdapter.notifyDataSetChanged();
+    }
+
+
+    public void saveStateWithGson() {
 
         SharedPreferences prefForWo = getSharedPreferences("prefForWo", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefForWo.edit();
@@ -386,13 +458,21 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
         String json = gson.toJson(saveArray);
-        editor.putString("arrayList", json);
-        editor.commit();
 
+        Log.wtf("wtf",json);
+        editor.putString("arrayList", json);
+        //apply vs commit
+
+        //void apply () : API 9(2.3) 에서 추가. 호출만 하고 다음코드를 실행하므로 스레드가 block 되지 않는다. 함수가 곧바로 실행되지 않고 비동기 처리된다.
+        // boolean commit () : 호출시 스레드는 block 되고 함수 종료시 처리결과를 true/false 로 반환한다.
+        // 굳이 결과값이 필요 없다면 비동기로 처리하는 apply 를 사용하는게 반응성면에서 좋다.
+
+        editor.apply();
 
     }
 
-    public void restoreState() {
+
+    public void restoreStateWithGson() {
         Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
 
         SharedPreferences prefForWo = getSharedPreferences("prefForWo", Activity.MODE_PRIVATE);
@@ -418,14 +498,11 @@ public class WorkoutActivity extends AppCompatActivity {
             workoutAdapter.woItems = (ArrayList<WorkoutItem>) loadArray.clone();
 
 
-
-
             // mID를 세팅해줘야 아이템클릭(수정에 사용)이 제대로된다.
-            for(int i = 0; i < workoutAdapter.getCount(); i++){
-                ((WorkoutItem)workoutAdapter.getItem(i)).mID = i;
+            for (int i = 0; i < workoutAdapter.getCount(); i++) {
+                ((WorkoutItem) workoutAdapter.getItem(i)).mID = i;
             }
         }
-
 
 
     }

@@ -199,7 +199,7 @@ public class AddWorkoutActivity extends AppCompatActivity {
         saveState();
 
         //Toast.makeText(this, "onPause called", Toast.LENGTH_SHORT).show();
-        // saveState();
+        // saveStateWithGson();
     }
 
     @Override

@@ -4,6 +4,9 @@ package nova.workoutapp22.listviewSrcForWorkOut;
  * Created by Administrator on 2017-09-02.
  */
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by user on 2016-08-10.
  */
@@ -14,6 +17,7 @@ public class WorkoutItem {
 
     public int mID;
 
+    public WorkoutItem(){}
     public WorkoutItem(String woName, String woNum, String woSet, String timerSetting) {
         this.woName = woName;
         this.woNum = woNum;
@@ -27,6 +31,26 @@ public class WorkoutItem {
         this.woNum = woNum;
         this.woSet = woSet;
         this.timerSetting = timerSetting;
+    }
+
+
+    public final String toJSON(){
+
+        JSONObject jsonObject= new JSONObject();
+        try {
+            jsonObject.put("woName", getWoName());
+            jsonObject.put("woNum", getWoNum());
+            jsonObject.put("woSet", getWoSet());
+            jsonObject.put("timerSetting", getTimerSetting());
+
+            return jsonObject.toString();
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "bad bug here toJSON";
+        }
+
     }
 
 

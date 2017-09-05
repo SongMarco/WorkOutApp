@@ -383,7 +383,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         String json = gson.toJson(saveArray);
         editor.putString("arrayList", json);
-        editor.commit();
+        editor.apply();
 
 
     }
