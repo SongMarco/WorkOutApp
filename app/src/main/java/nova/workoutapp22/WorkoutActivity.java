@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -287,8 +288,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
                 workoutAdapter.notifyDataSetChanged();
 
-                 //  saveStateWithGson();
-                saveStateWithJson();
+                saveState();
 
             }
         }
@@ -318,8 +318,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
                 workoutAdapter.notifyDataSetChanged();
 
-               //      saveStateWithGson();
-                saveStateWithJson();
+                saveState();
 
             }
 
@@ -346,8 +345,7 @@ public class WorkoutActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-      //  saveStateWithGson();
-        saveStateWithJson();
+        saveState();
 
     }
 
@@ -356,27 +354,38 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
         super.onResume();
-        // restoreStateWithGson();
-       restoreStateWithJson();
+        restoreState();
+    }
+
+
+    public void saveState() {
+       // saveStateWithGson();
+        saveStateWithJson();
+    }
+
+    public void restoreState() {
+
+       // restoreStateWithGson();
+        restoreStateWithJson();
     }
 
 
     public void saveStateWithJson() {
         SharedPreferences prefForWo = getSharedPreferences("prefForWoWithJson", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefForWo.edit();
-        int a;
-////
+
+
         ArrayList<WorkoutItem> saveArray;
         WorkoutItem tempItem;
         saveArray = (ArrayList<WorkoutItem>) workoutAdapter.woItems.clone();
 
-        JSONArray jsonArray = new JSONArray();
+        JsonArray jsonArray = new JsonArray();
 
         for (int i = 0; i < saveArray.size(); i++) {
             tempItem = saveArray.get(i);
 
-            jsonArray.put( tempItem.toJSON() );
-            Log.wtf("saved", "saved Item : " + tempItem.toJSON());
+            jsonArray.add(tempItem.toJson());
+            Log.wtf("saved", "saved Item : " + tempItem.toJson());
 
         }
 
@@ -388,6 +397,7 @@ public class WorkoutActivity extends AppCompatActivity {
             editor.putString("arrayListItem", null);
         }
 
+
         editor.apply();
 
     }
@@ -397,28 +407,35 @@ public class WorkoutActivity extends AppCompatActivity {
 
         String jsonString = prefForWo.getString("arrayListItem", "Err:item not transferred");
 
+        // jsonString = jsonString.replaceAll("\\\\","");
+        Log.wtf("saved jsonArray : ", "jsonString = " + jsonString);
         ArrayList<WorkoutItem> loadArray = new ArrayList<>();
 
         if (jsonString != null) {
             try {
                 JSONArray jsonArray = new JSONArray(jsonString);
-                Log.wtf("saved jsonArray : ", "loaded Item : " + jsonArray.toString());
-
+                //   Log.wtf("jsonArray","jasonArray = " +jsonArray );
 
                 for (int i = 0; i < jsonArray.length(); i++) {
 
                     JSONObject joLoaded = jsonArray.getJSONObject(i);
+                    //      Log.wtf("loaded2233",""+joLoaded );
 
-                    Log.wtf("loaded", "loaded Item : " + joLoaded.toString());
+                    Log.wtf("TagForJson = ", joLoaded.getString("woName"));
+                    WorkoutItem tempItem = new WorkoutItem("", "", "", "");
 
-                    WorkoutItem tempItem = new WorkoutItem();
-                    tempItem.setWoName( joLoaded.getString("woName")    );
-                    tempItem.setWoNum( joLoaded.getString("woNum")    );
-                    tempItem.setWoSet( joLoaded.getString("woSet")    );
-                    tempItem.setTimerSetting( joLoaded.getString("timerSetting")    );
+
+                    tempItem.setWoName(joLoaded.getString("woName"));
+                    Log.wtf("TagForJson", "set" + joLoaded.getString("woName"));
+                    tempItem.setWoNum(joLoaded.getString("woNum"));
+                    tempItem.setWoSet(joLoaded.getString("woSet"));
+                    tempItem.setTimerSetting(joLoaded.getString("timerSetting"));
+
+                    Log.wtf("TagForJson", tempItem.getWoName());
 
                     loadArray.add(tempItem);
-                    }
+
+                }
 
 
                     /*
@@ -429,6 +446,7 @@ public class WorkoutActivity extends AppCompatActivity {
                     // ...
                 }*/
             } catch (JSONException e) {
+                Log.wtf("err comes", "ERRERR");
                 e.printStackTrace();
             }
         }
@@ -459,7 +477,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         String json = gson.toJson(saveArray);
 
-        Log.wtf("wtf",json);
+        Log.wtf("wtf", json);
         editor.putString("arrayList", json);
         //apply vs commit
 

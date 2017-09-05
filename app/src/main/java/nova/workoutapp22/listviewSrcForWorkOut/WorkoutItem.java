@@ -4,8 +4,7 @@ package nova.workoutapp22.listviewSrcForWorkOut;
  * Created by Administrator on 2017-09-02.
  */
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 
 /**
  * Created by user on 2016-08-10.
@@ -17,7 +16,9 @@ public class WorkoutItem {
 
     public int mID;
 
-    public WorkoutItem(){}
+    public WorkoutItem() {
+    }
+
     public WorkoutItem(String woName, String woNum, String woSet, String timerSetting) {
         this.woName = woName;
         this.woNum = woNum;
@@ -34,25 +35,18 @@ public class WorkoutItem {
     }
 
 
-    public final String toJSON(){
+    public final JsonObject toJson() {
 
-        JSONObject jsonObject= new JSONObject();
-        try {
-            jsonObject.put("woName", getWoName());
-            jsonObject.put("woNum", getWoNum());
-            jsonObject.put("woSet", getWoSet());
-            jsonObject.put("timerSetting", getTimerSetting());
+        JsonObject jsonObject = new JsonObject();
 
-            return jsonObject.toString();
+        jsonObject.addProperty("woName", getWoName());
+        jsonObject.addProperty("woNum", getWoNum());
+        jsonObject.addProperty("woSet", getWoSet());
+        jsonObject.addProperty("timerSetting", getTimerSetting());
 
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return "bad bug here toJSON";
-        }
+        return jsonObject;
 
     }
-
 
 
     public String getWoName() {
@@ -87,8 +81,12 @@ public class WorkoutItem {
         this.timerSetting = timerSetting;
     }
 
-    public int getmID(){ return mID; }
+    public int getmID() {
+        return mID;
+    }
 
-    public void setmID(int mID){ this.mID = mID;}
+    public void setmID(int mID) {
+        this.mID = mID;
+    }
 
 }
