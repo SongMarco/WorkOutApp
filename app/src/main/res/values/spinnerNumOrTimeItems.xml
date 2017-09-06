@@ -2,7 +2,7 @@
 
 <resources>
     <string-array name="numOrTime">
-        <item >횟수</item>
-        <item >시간</item>
+        <item >횟수로 운동</item>
+        <item >시간으로 운동</item>
     </string-array>
 </resources>

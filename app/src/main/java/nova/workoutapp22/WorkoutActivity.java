@@ -58,9 +58,9 @@ public class WorkoutActivity extends AppCompatActivity {
         listViewForWorkout = (ListView) findViewById(R.id.listViewForWorkout);
         listViewForWorkout.setAdapter(workoutAdapter);
 
-        workoutAdapter.addItem(new WorkoutItem(0, "벤치 프레스", "50개", "3세트", "타이머 사용"));
-        workoutAdapter.addItem(new WorkoutItem(1, "팔굽혀 펴기", "20개", "5세트", "스톱워치 사용"));
-        workoutAdapter.addItem(new WorkoutItem(2, "스쿼트", "100개", "2세트", "사용 안함"));
+        workoutAdapter.addItem(new WorkoutItem(0, "벤치 프레스", "50", "3", "타이머 사용"));
+        workoutAdapter.addItem(new WorkoutItem(1, "팔굽혀 펴기", "20", "5", "스톱워치 사용"));
+        workoutAdapter.addItem(new WorkoutItem(2, "스쿼트", "100", "2", "사용 안함"));
 
         workoutAdapter.notifyDataSetChanged();
 
@@ -433,7 +433,7 @@ public class WorkoutActivity extends AppCompatActivity {
                     JSONObject joLoaded = jsonArray.getJSONObject(i);
                     //      Log.wtf("loaded2233",""+joLoaded );
 
-                    Log.wtf("TagForJson = ", joLoaded.getString("woName"));
+                    //Log.wtf("TagForJson = ", joLoaded.getString("woName"));
                     WorkoutItem tempItem = new WorkoutItem(i, "", "", "", "","" );
 
 

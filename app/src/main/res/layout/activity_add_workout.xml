@@ -32,7 +32,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="운동 이름 입력"
-            android:inputType="textPersonName"
+            android:inputType="text"
             android:textAlignment="center" />
     </LinearLayout>
 
@@ -43,39 +43,77 @@
         android:gravity="center">
 
         <TextView
-            android:id="@+id/textView52"
+            android:id="@+id/textViewNumOrTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="횟수/시간"
 
             android:textSize="18sp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="10dp"/>
 
         <Spinner
             android:id="@+id/spinnerNumOrTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/editTextWNum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-            android:ems="10"
-            android:hint="횟수/시간 입력"
-            android:inputType="textPersonName"
-            android:textAlignment="center"
+            <FrameLayout
+                android:id="@+id/FrameForTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            />
+                <TextView
+                    android:id="@+id/textViewForTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시분초시분초"
+                    android:textSize="30sp" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/FrameForNum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editTextWNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+
+
+                    android:hint="횟수 입력"
+                    android:inputType="number"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textViewNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_weight="1"
+                    android:text="회"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/textView11"
@@ -86,13 +124,21 @@
 
         <EditText
             android:id="@+id/editTextWSet"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.32"
             android:ems="10"
             android:hint="세트 수 입력"
             android:inputType="textPersonName"
             android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="세트"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout

@@ -3,6 +3,6 @@
     <string-array name="timerSetting">
         <item >스톱워치</item>
         <item >타이머</item>
-        <item >사용 안함</item>
+        <item >시간 측정 안함</item>
     </string-array>
 </resources>

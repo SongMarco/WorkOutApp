@@ -12,10 +12,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import nova.workoutapp22.subSources.BasicInfo;
+
+import static nova.workoutapp22.R.id.spinnerTimerSetting;
 
 public class AddWorkoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     EditText workoutName, workoutNum, workoutSet, etTimerSetting;
@@ -43,14 +47,9 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         workoutSet = (EditText) findViewById(R.id.editTextWSet);
 
 
-
         Intent intent = getIntent();
 
         strAddWoMode = intent.getStringExtra(BasicInfo.KEY_ADDWO_MODE);
-
-        setSpinnerTimer();
-
-        setNumOrTime();
 
 
         //메모를 걍클릭 함(모드뷰), or 롱클릭 -> 수정누름 (MODE_MODIFY)
@@ -61,6 +60,9 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
         } else { // 새로 메모를 하려는 경우. 화면을 새로 그려준다.
 
+            setSpinnerTimer();
+
+            setNumOrTime();
 
             Button saveWoButton = (Button) findViewById(R.id.buttonSaveWo);
             saveWoButton.setOnClickListener(new View.OnClickListener() {
@@ -91,10 +93,27 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
 
         spinner.setAdapter(spinnerNumOrTime);
+
+
+        // 스피너의 정보를 불러온다.
+        if (numOrTime != null) {
+
+            //Log.wtf("arrayTag", "timerSetting =="+timerSetting);
+
+            String[] numOrTimeItems = getResources().getStringArray(R.array.numOrTime);
+
+            for(int i = 0; i < numOrTimeItems.length; i++){
+
+                if( numOrTimeItems[i].equals(numOrTime)){
+
+                    spinner.setSelection(i); break;
+                }
+            }
+        }
     }
 
     public void setSpinnerTimer() {
-        Spinner spinner = (Spinner) findViewById(R.id.spinnerTimerSetting);
+        Spinner spinner = (Spinner) findViewById(spinnerTimerSetting);
 
         spinner.setOnItemSelectedListener(this);
         //스피너 레이아웃과 아이템 어레이를 적용
@@ -104,22 +123,50 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         //드롭다운 레이아웃을 적용한다.
         spinnerTimerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //어댑터를 스피너에 적용한다.
-        spinner.setSelection(2);
+
         spinner.setAdapter(spinnerTimerAdapter);
+
+        if (timerSetting != null) {
+
+            Log.wtf("arrayTag", "timerSetting =="+timerSetting);
+
+            String[] timerItems = getResources().getStringArray(R.array.timerSetting);
+
+            for(int i = 0; i < timerItems.length; i++){
+
+                if( timerItems[i].equals(timerSetting)){
+
+                    spinner.setSelection(i); break;
+                }
+            }
+        }
+
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        switch( parent.getId() ){
+        switch (parent.getId()) {
             case R.id.spinnerNumOrTime:
+                FrameLayout frameTime = (FrameLayout) findViewById(R.id.FrameForTime);
+                LinearLayout linearNum = (LinearLayout) findViewById(R.id.FrameForNum);
+                numOrTime = (String) parent.getItemAtPosition(position);
+                //if numOrTime이 시간설정일 경우
+                if(numOrTime.equals( getResources().getStringArray(R.array.numOrTime)[1] )) {
+                    frameTime.setVisibility(View.VISIBLE);
+                    linearNum.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    frameTime.setVisibility(View.INVISIBLE);
+                    linearNum.setVisibility(View.VISIBLE);
+                }
 
-                numOrTime = (String)parent.getItemAtPosition(position);
+
 
                 break;
-            case R.id.spinnerTimerSetting:
+            case spinnerTimerSetting:
 
-                timerSetting = (String)parent.getItemAtPosition(position);
+                timerSetting = (String) parent.getItemAtPosition(position);
 
                 break;
         }
@@ -127,7 +174,14 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+        switch (parent.getId()) {
 
+            case spinnerTimerSetting:
+
+                timerSetting = (String) parent.getItemAtPosition(2);
+
+                break;
+        }
     }
 
 
@@ -172,9 +226,12 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         workoutNum.setText(intent.getExtras().getString("workoutNum"));
         workoutSet.setText(intent.getExtras().getString("workoutSet"));
 
+        timerSetting = intent.getStringExtra("timerSetting");
+        numOrTime = intent.getStringExtra("numOrTime");
 
-        //TODO 타이머 정보 스피너로 만들어서 전달하기
+        setSpinnerTimer();
 
+        setNumOrTime();
 
         mIDForTransport = intent.getIntExtra("mID", 1);
         Log.v("mIDTrak", "mID = " + mIDForTransport);
@@ -194,7 +251,6 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
     }
 
 
-
     public void saveAndSetResult() {
         clearMyPrefs();
 
@@ -207,14 +263,25 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         intentForSave.putExtra("mID", mIDForTransport);
 
         intentForSave.putExtra("workoutName", workoutName.getText().toString());
-        intentForSave.putExtra("workoutNum", workoutNum.getText().toString());
-        intentForSave.putExtra("workoutSet", workoutSet.getText().toString());
-        intentForSave.putExtra("timerSetting", timerSetting );
-        intentForSave.putExtra("numOrTime", numOrTime );
 
-        Log.wtf("spinnerLog", "numorTime = "+numOrTime);
-     //   Toast.makeText(getApplicationContext(), "timerSetting = "+timerSetting, Toast.LENGTH_SHORT).show();
 
+        Log.v("strModeLog", "strAMode =" + strAddWoMode);
+        if ( (strAddWoMode.equals(BasicInfo.MODE_MODIFY) || strAddWoMode.equals(BasicInfo.MODE_VIEW))  ){
+            intentForSave.putExtra("workoutNum", workoutNum.getText().toString()  );
+            intentForSave.putExtra("workoutSet", workoutSet.getText().toString() );
+
+
+        }
+        else{
+
+            intentForSave.putExtra("workoutNum", workoutNum.getText().toString() +"회" );
+            intentForSave.putExtra("workoutSet", workoutSet.getText().toString() + "세트");
+        }
+        intentForSave.putExtra("timerSetting", timerSetting);
+        intentForSave.putExtra("numOrTime", numOrTime);
+
+        Log.wtf("spinnerLog", "numorTime = " + numOrTime);
+        //   Toast.makeText(getApplicationContext(), "timerSetting = "+timerSetting, Toast.LENGTH_SHORT).show();
 
 
         setResult(RESULT_OK, intentForSave);
@@ -272,7 +339,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         editor.putString("workoutNum", workoutNum.getText().toString());
         editor.putString("workoutSet", workoutSet.getText().toString());
 
-        //TODO 타이머 스톱워치 관련 정보 추가할 것!!
+
         editor.putString("timerSetting", "스톱워치");
 
 
