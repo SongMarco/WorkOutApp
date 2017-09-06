@@ -8,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import nova.workoutapp22.subSources.BasicInfo;
@@ -52,6 +54,11 @@ public class AddWorkoutActivity extends AppCompatActivity {
 
         strAddWoMode = intent.getStringExtra(BasicInfo.KEY_ADDWO_MODE);
 
+        setSpinnerTimer();
+
+        setNumOrTime();
+
+
         //메모를 걍클릭 함(모드뷰), or 롱클릭 -> 수정누름 (MODE_MODIFY)
         // 기존 내용을 먼저 그려주고, 사용자의 입력을 저장해준다
         if (strAddWoMode.equals(BasicInfo.MODE_MODIFY) || strAddWoMode.equals(BasicInfo.MODE_VIEW)) {
@@ -77,6 +84,28 @@ public class AddWorkoutActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void setNumOrTime(){
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerNumOrTime);
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> spinnerNumOrTime = ArrayAdapter.createFromResource(this,
+                R.array.numOrTime, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        spinnerNumOrTime.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner.setAdapter(spinnerNumOrTime);
+    }
+
+    public void setSpinnerTimer(){
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerTimerSetting);
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> spinnerTimerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.timerSetting, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        spinnerTimerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner.setAdapter(spinnerTimerAdapter);
     }
 
 /*
