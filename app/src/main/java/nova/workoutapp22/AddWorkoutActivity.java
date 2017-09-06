@@ -24,11 +24,10 @@ import static nova.workoutapp22.R.id.spinnerTimerSetting;
 public class AddWorkoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     EditText workoutName, workoutNum, workoutSet, etTimerSetting;
 
-    EditText EtHour, EtMin, EtSec;
+    EditText etHour, etMin, etSec;
 
     String timerSetting, numOrTime;
     Spinner spinnerTimer;
-
 
 
     // EditText etWoName, etWoNum, etWoSet, etTimerSetting;
@@ -51,11 +50,11 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         workoutNum = (EditText) findViewById(R.id.editTextWNum);
         workoutSet = (EditText) findViewById(R.id.editTextWSet);
 
-        EtHour = (EditText) findViewById(R.id.editTextHour);
-        EtMin = (EditText)findViewById(R.id.editTextMin);
-        EtSec = (EditText)findViewById(R.id.editTextSec);
+        etHour = (EditText) findViewById(R.id.editTextHour);
+        etMin = (EditText) findViewById(R.id.editTextMin);
+        etSec = (EditText) findViewById(R.id.editTextSec);
 
-        spinnerTimer = (Spinner)findViewById(R.id.spinnerTimerSetting);
+        spinnerTimer = (Spinner) findViewById(R.id.spinnerTimerSetting);
 
         Intent intent = getIntent();
 
@@ -112,11 +111,12 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
             String[] numOrTimeItems = getResources().getStringArray(R.array.numOrTime);
 
-            for(int i = 0; i < numOrTimeItems.length; i++){
+            for (int i = 0; i < numOrTimeItems.length; i++) {
 
-                if( numOrTimeItems[i].equals(numOrTime)){
+                if (numOrTimeItems[i].equals(numOrTime)) {
 
-                    spinner.setSelection(i); break;
+                    spinner.setSelection(i);
+                    break;
                 }
             }
         }
@@ -138,15 +138,16 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
         if (timerSetting != null) {
 
-            Log.wtf("arrayTag", "timerSetting =="+timerSetting);
+            Log.wtf("arrayTag", "timerSetting ==" + timerSetting);
 
             String[] timerItems = getResources().getStringArray(R.array.timerSetting);
 
-            for(int i = 0; i < timerItems.length; i++){
+            for (int i = 0; i < timerItems.length; i++) {
 
-                if( timerItems[i].equals(timerSetting)){
+                if (timerItems[i].equals(timerSetting)) {
 
-                    spinner.setSelection(i); break;
+                    spinner.setSelection(i);
+                    break;
                 }
             }
         }
@@ -162,7 +163,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                 LinearLayout linearNum = (LinearLayout) findViewById(R.id.FrameForNum);
                 numOrTime = (String) parent.getItemAtPosition(position);
                 //if numOrTime이 시간설정일 경우
-                if(numOrTime.equals( getResources().getStringArray(R.array.numOrTime)[1] )) {
+                if (numOrTime.equals(getResources().getStringArray(R.array.numOrTime)[1])) {
                     frameTime.setVisibility(View.VISIBLE);
                     linearNum.setVisibility(View.INVISIBLE);
 
@@ -171,11 +172,10 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                 }
 
                 // numOrTime에서 횟수를 설정했다!
-                else{
+                else {
                     frameTime.setVisibility(View.INVISIBLE);
                     linearNum.setVisibility(View.VISIBLE);
                 }
-
 
 
                 break;
@@ -266,6 +266,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
     }
 
 
+    //입력 결과를 저장하고 result 세팅하는 메소드
+
     public void saveAndSetResult() {
         clearMyPrefs();
 
@@ -279,24 +281,56 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
         intentForSave.putExtra("workoutName", workoutName.getText().toString());
 
-
-        Log.v("strModeLog", "strAMode =" + strAddWoMode);
-        if ( (strAddWoMode.equals(BasicInfo.MODE_MODIFY) || strAddWoMode.equals(BasicInfo.MODE_VIEW))  ){
-            intentForSave.putExtra("workoutNum", workoutNum.getText().toString()  );
-            intentForSave.putExtra("workoutSet", workoutSet.getText().toString() );
+        // 시간제 운동을 선택했을 때에만 이 수치를 전달한다.
 
 
+        //if 조건 뜻 : 시간, 분, 초 전부 안골랐다. 시간을 세팅하지 않았다.) 가 아니다 -> 세팅했다.
+
+        if(!etHour.getText().toString().equals("")){
+            intentForSave.putExtra("hour", Integer.parseInt( etHour.getText().toString() )  );
         }
-        else{
+        if(!etMin.getText().toString().equals("")){
 
-            intentForSave.putExtra("workoutNum", workoutNum.getText().toString() +"회" );
-            intentForSave.putExtra("workoutSet", workoutSet.getText().toString() + "세트");
+            intentForSave.putExtra("min", Integer.parseInt(etMin.getText().toString()));
         }
+        if(!etSec.getText().toString().equals("")){
+            intentForSave.putExtra("sec", Integer.parseInt(etSec.getText().toString()) );
+        }
+
+        // 시간 세팅을 하지 않은 경우, -1을 전달해서 리스트뷰에 보이지 않도록 하겠다.
+        if( (etHour.getText().toString().equals("")
+                && etMin.getText().toString().equals("")
+                && etSec.getText().toString().equals("") ) )
+        {
+            intentForSave.putExtra("hour", -1);
+            intentForSave.putExtra("min", -1);
+            intentForSave.putExtra("sec", -1);
+        }
+
+
+
+
         intentForSave.putExtra("timerSetting", timerSetting);
         intentForSave.putExtra("numOrTime", numOrTime);
 
-        Log.wtf("spinnerLog", "numorTime = " + numOrTime);
-        //   Toast.makeText(getApplicationContext(), "timerSetting = "+timerSetting, Toast.LENGTH_SHORT).show();
+
+
+
+
+        Log.v("strModeLog", "strAMode =" + strAddWoMode);
+        //수정 모드임
+        if ((strAddWoMode.equals(BasicInfo.MODE_MODIFY) || strAddWoMode.equals(BasicInfo.MODE_VIEW))) {
+            intentForSave.putExtra("workoutNum", workoutNum.getText().toString());
+            intentForSave.putExtra("workoutSet", workoutSet.getText().toString());
+
+        // 메뉴의 신규 추가임
+        } else {
+
+            intentForSave.putExtra("workoutNum", workoutNum.getText().toString() + "회");
+            intentForSave.putExtra("workoutSet", workoutSet.getText().toString() + "세트");
+        }
+
+
 
 
         setResult(RESULT_OK, intentForSave);

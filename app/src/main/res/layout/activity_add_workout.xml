@@ -79,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="00"
-                        android:inputType="textPersonName"
+                        android:inputType="number"
                         android:textAlignment="center" />
 
                     <TextView
@@ -95,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="00"
-                        android:inputType="textPersonName"
+                        android:inputType="number"
                         android:textAlignment="center" />
 
                     <TextView
@@ -113,7 +113,7 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:hint="00"
-                        android:inputType="textPersonName"
+                        android:inputType="number"
                         android:textAlignment="center" />
 
                     <TextView
@@ -183,7 +183,7 @@
             android:layout_weight="0.32"
             android:ems="10"
             android:hint="세트 수 입력"
-            android:inputType="textPersonName"
+            android:inputType="number"
             android:textAlignment="center" />
 
         <TextView
@@ -192,6 +192,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="세트"
+
             android:textSize="18sp" />
     </LinearLayout>
 
