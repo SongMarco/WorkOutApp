@@ -24,6 +24,8 @@ import static nova.workoutapp22.R.id.spinnerTimerSetting;
 public class AddWorkoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     EditText workoutName, workoutNum, workoutSet, etTimerSetting;
     String timerSetting, numOrTime;
+    Spinner spinnerTimer;
+
 
 
     // EditText etWoName, etWoNum, etWoSet, etTimerSetting;
@@ -46,6 +48,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         workoutNum = (EditText) findViewById(R.id.editTextWNum);
         workoutSet = (EditText) findViewById(R.id.editTextWSet);
 
+        spinnerTimer = (Spinner)findViewById(R.id.spinnerTimerSetting);
 
         Intent intent = getIntent();
 
@@ -155,7 +158,12 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                 if(numOrTime.equals( getResources().getStringArray(R.array.numOrTime)[1] )) {
                     frameTime.setVisibility(View.VISIBLE);
                     linearNum.setVisibility(View.INVISIBLE);
+
+                    spinnerTimer.setSelection(1);
+
                 }
+
+                // numOrTime에서 횟수를 설정했다!
                 else{
                     frameTime.setVisibility(View.INVISIBLE);
                     linearNum.setVisibility(View.VISIBLE);
