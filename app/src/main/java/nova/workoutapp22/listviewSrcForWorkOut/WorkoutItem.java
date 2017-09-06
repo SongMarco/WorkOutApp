@@ -17,6 +17,8 @@ public class WorkoutItem {
            timerSetting,
     woTime, numOrTime;
 
+    int hour, min, sec;
+
 
     public int mID;
 
@@ -67,6 +69,10 @@ public class WorkoutItem {
         jsonObject.addProperty("timerSetting", getTimerSetting());
         jsonObject.addProperty("numOrTime", getNumOrTime());
 
+        jsonObject.addProperty("hour", getHour());
+        jsonObject.addProperty("min", getMin());
+        jsonObject.addProperty("sec", getSec() );
+
         return jsonObject;
 
     }
@@ -116,5 +122,20 @@ public class WorkoutItem {
     public String getNumOrTime(){ return numOrTime;}
 
     public void setNumOrTime(String numOrTime) {this.numOrTime = numOrTime;}
+
+
+    //////////////////// 시간 관련 세팅
+
+    public int getHour(){ return hour;}
+
+    public void setHour(int hour) {this.hour = hour;}
+
+    public int getMin(){ return min;}
+
+    public void setMin(int min) {this.min = min;}
+
+    public int getSec(){ return sec;}
+
+    public void setSec(int sec) {this.sec = sec;}
 
 }

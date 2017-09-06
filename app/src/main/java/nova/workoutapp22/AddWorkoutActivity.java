@@ -23,6 +23,9 @@ import static nova.workoutapp22.R.id.spinnerTimerSetting;
 
 public class AddWorkoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     EditText workoutName, workoutNum, workoutSet, etTimerSetting;
+
+    EditText EtHour, EtMin, EtSec;
+
     String timerSetting, numOrTime;
     Spinner spinnerTimer;
 
@@ -47,6 +50,10 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         workoutName = (EditText) findViewById(R.id.editTextWorkOutName);
         workoutNum = (EditText) findViewById(R.id.editTextWNum);
         workoutSet = (EditText) findViewById(R.id.editTextWSet);
+
+        EtHour = (EditText) findViewById(R.id.editTextHour);
+        EtMin = (EditText)findViewById(R.id.editTextMin);
+        EtSec = (EditText)findViewById(R.id.editTextSec);
 
         spinnerTimer = (Spinner)findViewById(R.id.spinnerTimerSetting);
 
