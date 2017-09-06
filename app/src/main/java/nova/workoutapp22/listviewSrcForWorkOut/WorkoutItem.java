@@ -17,7 +17,11 @@ public class WorkoutItem {
            timerSetting,
     woTime, numOrTime;
 
-    int hour, min, sec;
+    boolean boolTimeSet = false;
+
+    int hour = -1;
+    int min = -1;
+    int sec = -1;
 
 
     public int mID;
@@ -32,14 +36,32 @@ public class WorkoutItem {
         this.timerSetting = timerSetting;
     }
 
-    public WorkoutItem(String woName, String woNum, String woSet, String timerSetting, String numOrTime) {
+    public WorkoutItem(String woName, String woNum, String woSet, String timerSetting, boolean boolTimeSet) {
         this.woName = woName;
         this.woNum = woNum;
         this.woSet = woSet;
         this.timerSetting = timerSetting;
-        this.woTime = woTime;
-        this.numOrTime = numOrTime;
+        this.boolTimeSet = boolTimeSet;
     }
+
+    public WorkoutItem(String woName,  int hour, int min, int sec ,String timerSetting){
+        this.woName = woName;
+        this.timerSetting = timerSetting;
+        this.hour = hour;
+        this.min = min;
+        this.sec = sec;
+    }
+    public WorkoutItem(String woName,  int hour, int min, int sec ,String timerSetting, boolean boolTimeSet){
+        this.woName = woName;
+        this.timerSetting = timerSetting;
+        this.hour = hour;
+        this.min = min;
+        this.sec = sec;
+        this.boolTimeSet = boolTimeSet;
+    }
+
+
+
 
     public WorkoutItem(int mID, String woName, String woNum, String woSet, String timerSetting) {
         this.mID = mID;
@@ -137,5 +159,11 @@ public class WorkoutItem {
     public int getSec(){ return sec;}
 
     public void setSec(int sec) {this.sec = sec;}
+
+    //////////////////////////
+
+    public boolean getBoolTimeSet(){ return boolTimeSet; }
+
+    public void setBoolTimeSet(Boolean boolTimeSet){ this.boolTimeSet = boolTimeSet; }
 
 }

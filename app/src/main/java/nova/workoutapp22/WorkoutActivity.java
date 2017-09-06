@@ -255,9 +255,32 @@ public class WorkoutActivity extends AppCompatActivity {
                 intent.putExtra("mID", item.getmID());
 
                 intent.putExtra("workoutName", item.getWoName().toString());
-                intent.putExtra("workoutNum", item.getWoNum().toString());
-                intent.putExtra("workoutSet", item.getWoSet().toString());
                 intent.putExtra("timerSetting", item.getTimerSetting().toString());
+
+                //시간을 세팅하지 않았다면 횟수와 세트만 전달하자.
+                if(item.getBoolTimeSet() == false){
+
+                    intent.putExtra("boolTimeSet", item.getBoolTimeSet() );
+                    intent.putExtra("workoutNum", item.getWoNum());
+                    intent.putExtra("workoutSet", item.getWoSet());
+                }
+                //시간을 세팅했다면 시간만 전달해서 뿌려라.
+                else {
+                    Log.d ("ggwp", "here im : booltimeset = "+ item.getBoolTimeSet() );
+
+                    intent.putExtra("boolTimeSet", item.getBoolTimeSet() );
+                    intent.putExtra("hour", item.getHour());
+                    intent.putExtra("min", item.getMin() );
+                    intent.putExtra("sec", item.getSec() );
+
+                }
+
+
+
+
+
+
+
                 intent.putExtra("numOrTime", item.getNumOrTime() );
 
 
@@ -340,11 +363,31 @@ public class WorkoutActivity extends AppCompatActivity {
         String woSet = data.getExtras().getString("workoutSet");
         String numOrTime = data.getStringExtra("numOrTime");
 
+        boolean boolTimeSet = data.getBooleanExtra("boolTimeSet", false);
+        Log.d ("ggwp", "boolTset = "+ boolTimeSet);
         String timerSetting = data.getExtras().getString("timerSetting");
 
+        //시간을 세팅하지 않아서 hour가 -1인 상태 -> 횟수 세트만 전달해주면 OK
+        if( boolTimeSet == false ){
+
+            return new WorkoutItem(woName, woNum, woSet, timerSetting, boolTimeSet);
 
 
-        return new WorkoutItem(woName, woNum, woSet, timerSetting, numOrTime);
+        }
+        //시간을 세팅 하였음. 시간을 전달한다.
+        else{
+            int loadedHour = data.getIntExtra("hour", -1);
+            int loadedMin = data.getIntExtra("min", -1);
+            int loadedSec = data.getIntExtra("sec", -1);
+
+            return new WorkoutItem(woName, loadedHour, loadedMin, loadedSec, timerSetting, boolTimeSet);
+
+        }
+
+
+
+
+
 
     }
 
@@ -378,7 +421,7 @@ public class WorkoutActivity extends AppCompatActivity {
         // 주의 !! restore에서 오류가 많이 나는데,
         // 아이템을 추가할 경우 toJson도 손보아야 한다.
 
-        restoreStateWithJson();
+     //   restoreStateWithJson();
     }
 
 

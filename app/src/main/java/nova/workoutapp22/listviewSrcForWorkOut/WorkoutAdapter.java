@@ -1,10 +1,11 @@
 package nova.workoutapp22.listviewSrcForWorkOut;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -92,9 +93,37 @@ public class WorkoutAdapter extends BaseAdapter {
 
         WorkoutItem item = woItems.get(position);
         view.setWoNameInLayout( item.getWoName() );
-        view.setWoNumInLayout( item.getWoNum() );
-        view.setWoSetInLayout( item.getWoSet() );
-        view.setTimerSettingInLayout( item.getTimerSetting() );
+
+        FrameLayout frameForTime = (FrameLayout)view.findViewById(R.id.frameForTime);
+        LinearLayout frameForNum = (LinearLayout)view.findViewById(R.id.frameForNum);
+
+        //시간이 세팅되어있지 않을 경우(횟수 운동)
+        if (item.boolTimeSet == false) {
+            view.setWoNumInLayout( item.getWoNum() );
+            view.setWoSetInLayout( item.getWoSet() );
+            view.setTimerSettingInLayout( item.getTimerSetting() );
+
+            frameForTime.setVisibility(View.INVISIBLE);
+            frameForNum.setVisibility(View.VISIBLE);
+
+        }
+        //시간운동으로 세팅한 경우
+        else{
+
+            view.setTimeInLayout( item.getHour(), item.getMin(), item.getSec()  );
+            view.setTimerSettingInLayout( item.getTimerSetting() );
+
+            frameForTime.setVisibility(View.VISIBLE);
+            frameForNum.setVisibility(View.INVISIBLE);
+
+        }
+
+
+
+
+
+        ////////////////////
+
 
         CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkBoxForWo);
 

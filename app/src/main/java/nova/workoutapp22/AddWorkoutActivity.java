@@ -27,8 +27,9 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
     EditText etHour, etMin, etSec;
 
     String timerSetting, numOrTime;
-    Spinner spinnerTimer;
+    Spinner spinnerTimer, spinnerNumOrTime;
 
+    boolean timeSetFlag;
 
     // EditText etWoName, etWoNum, etWoSet, etTimerSetting;
 
@@ -36,7 +37,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
     String strAddWoMode;
     boolean editFlag = false;
-
+    FrameLayout frameTime;
+    LinearLayout linearNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,13 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         etHour = (EditText) findViewById(R.id.editTextHour);
         etMin = (EditText) findViewById(R.id.editTextMin);
         etSec = (EditText) findViewById(R.id.editTextSec);
+        frameTime = (FrameLayout) findViewById(R.id.FrameForTime);
+        linearNum = (LinearLayout) findViewById(R.id.FrameForNum);
+
+        timeSetFlag = false;
 
         spinnerTimer = (Spinner) findViewById(R.id.spinnerTimerSetting);
+        spinnerNumOrTime = (Spinner) findViewById(R.id.spinnerNumOrTime);
 
         Intent intent = getIntent();
 
@@ -159,8 +166,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
         switch (parent.getId()) {
             case R.id.spinnerNumOrTime:
-                FrameLayout frameTime = (FrameLayout) findViewById(R.id.FrameForTime);
-                LinearLayout linearNum = (LinearLayout) findViewById(R.id.FrameForNum);
+
                 numOrTime = (String) parent.getItemAtPosition(position);
                 //if numOrTime이 시간설정일 경우
                 if (numOrTime.equals(getResources().getStringArray(R.array.numOrTime)[1])) {
@@ -237,16 +243,41 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
     public void processIntent(Intent intent) {
 
-        workoutName.setText(intent.getExtras().getString("workoutName"));
-        workoutNum.setText(intent.getExtras().getString("workoutNum"));
-        workoutSet.setText(intent.getExtras().getString("workoutSet"));
-
-        timerSetting = intent.getStringExtra("timerSetting");
-        numOrTime = intent.getStringExtra("numOrTime");
-
         setSpinnerTimer();
 
         setNumOrTime();
+
+
+        boolean boolTimeSet = intent.getBooleanExtra("boolTimeSet", false);
+        workoutName.setText(intent.getExtras().getString("workoutName"));
+        timerSetting = intent.getStringExtra("timerSetting");
+        numOrTime = intent.getStringExtra("numOrTime");
+
+
+        //시간을 세팅하지 않았다면 횟수와 세트만 받아 뿌려준다.
+        if(boolTimeSet == false){
+            spinnerNumOrTime.setSelection(0);
+            workoutNum.setText(intent.getExtras().getString("workoutNum"));
+            workoutSet.setText(intent.getExtras().getString("workoutSet"));
+        }
+
+        //시간이 세팅된 상태이다. 시간을 뿌려준다. 시간/넘 스피너를 시간으로 해둔다.
+        else{
+
+            spinnerNumOrTime.setSelection(1);
+            etHour.setText( String.valueOf( intent.getIntExtra("hour", -1) )  );
+            etMin.setText( String.valueOf( intent.getIntExtra("min", -1) ));
+            etSec.setText( String.valueOf( intent.getIntExtra("sec", -1) ));
+
+        }
+
+
+
+
+
+
+
+
 
         mIDForTransport = intent.getIntExtra("mID", 1);
         Log.v("mIDTrak", "mID = " + mIDForTransport);
@@ -286,26 +317,47 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
         //if 조건 뜻 : 시간, 분, 초 전부 안골랐다. 시간을 세팅하지 않았다.) 가 아니다 -> 세팅했다.
 
-        if(!etHour.getText().toString().equals("")){
-            intentForSave.putExtra("hour", Integer.parseInt( etHour.getText().toString() )  );
-        }
-        if(!etMin.getText().toString().equals("")){
 
-            intentForSave.putExtra("min", Integer.parseInt(etMin.getText().toString()));
-        }
-        if(!etSec.getText().toString().equals("")){
-            intentForSave.putExtra("sec", Integer.parseInt(etSec.getText().toString()) );
-        }
 
-        // 시간 세팅을 하지 않은 경우, -1을 전달해서 리스트뷰에 보이지 않도록 하겠다.
-        if( (etHour.getText().toString().equals("")
-                && etMin.getText().toString().equals("")
-                && etSec.getText().toString().equals("") ) )
-        {
+        // 시간 세팅을 하지 않은 경우, boolTimeSet를 false로 전달해서 리스트뷰에 보이지 않도록 하겠다.
+        if( frameTime.getVisibility()==View.INVISIBLE ) {
+            intentForSave.putExtra("boolTimeSet", false);
+
             intentForSave.putExtra("hour", -1);
             intentForSave.putExtra("min", -1);
             intentForSave.putExtra("sec", -1);
         }
+        //시간 세팅을 한 상태이다. 시간을 전달해준다.
+        else {
+
+            intentForSave.putExtra("boolTimeSet", true);
+
+            if(!etHour.getText().toString().equals("")){
+                intentForSave.putExtra("hour", Integer.parseInt( etHour.getText().toString() )  );
+            }
+            else {
+                intentForSave.putExtra("hour", 0);
+            }
+            if(!etMin.getText().toString().equals("")){
+
+                intentForSave.putExtra("min", Integer.parseInt(etMin.getText().toString()));
+            }
+            else{
+                intentForSave.putExtra("min", 0);
+            }
+            if(!etSec.getText().toString().equals("")){
+                intentForSave.putExtra("sec", Integer.parseInt(etSec.getText().toString()) );
+            }
+            else{
+                intentForSave.putExtra("sec", 0 );
+            }
+
+
+        }
+        Log.d ("ggwp", "boolTset = "+ intentForSave.getBooleanExtra("boolTimeSet", false) );
+//        Log.d("ggwp", "hour = "+ intentForSave.getIntExtra("hour", 567));
+//        Log.d("ggwp", "min = "+ intentForSave.getIntExtra("min", 567));
+//        Log.d("ggwp", "sec = "+ intentForSave.getIntExtra("sec", 567));
 
 
 
