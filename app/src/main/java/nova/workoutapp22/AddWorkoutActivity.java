@@ -265,6 +265,9 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         else{
 
             spinnerNumOrTime.setSelection(1);
+
+            workoutSet.setText(intent.getExtras().getString("workoutSet"));
+
             etHour.setText( String.valueOf( intent.getIntExtra("hour", -1) )  );
             etMin.setText( String.valueOf( intent.getIntExtra("min", -1) ));
             etSec.setText( String.valueOf( intent.getIntExtra("sec", -1) ));
@@ -327,7 +330,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
             intentForSave.putExtra("min", -1);
             intentForSave.putExtra("sec", -1);
         }
-        //시간 세팅을 한 상태이다. 시간을 전달해준다.
+        //시간 세팅을 한 상태이다. 시간+ 세트를 전달해준다.
         else {
 
             intentForSave.putExtra("boolTimeSet", true);

@@ -97,21 +97,32 @@ public class WorkoutAdapter extends BaseAdapter {
         FrameLayout frameForTime = (FrameLayout)view.findViewById(R.id.frameForTime);
         LinearLayout frameForNum = (LinearLayout)view.findViewById(R.id.frameForNum);
 
+
         //시간이 세팅되어있지 않을 경우(횟수 운동)
         if (item.boolTimeSet == false) {
+
+
+
             view.setWoNumInLayout( item.getWoNum() );
             view.setWoSetInLayout( item.getWoSet() );
+
+
             view.setTimerSettingInLayout( item.getTimerSetting() );
+
+
 
             frameForTime.setVisibility(View.INVISIBLE);
             frameForNum.setVisibility(View.VISIBLE);
 
         }
-        //시간운동으로 세팅한 경우
+        //시간운동으로 세팅한 경우 시간 + 세트를 표시
         else{
+
+            view.setWoSetInLayout( item.getWoSet() );
 
             view.setTimeInLayout( item.getHour(), item.getMin(), item.getSec()  );
             view.setTimerSettingInLayout( item.getTimerSetting() );
+
 
             frameForTime.setVisibility(View.VISIBLE);
             frameForNum.setVisibility(View.INVISIBLE);
