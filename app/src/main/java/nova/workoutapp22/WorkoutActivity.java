@@ -102,6 +102,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
     }
 
+
+    //region @@@@OnclickListener 버튼클릭 관련
     Button.OnClickListener mClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             Intent intent;
@@ -171,6 +173,7 @@ public class WorkoutActivity extends AppCompatActivity {
             }
         }
     };
+    //endregion
 
 
     public void showMessage(final WorkoutItem item) {
@@ -255,6 +258,7 @@ public class WorkoutActivity extends AppCompatActivity {
                 intent.putExtra("workoutNum", item.getWoNum().toString());
                 intent.putExtra("workoutSet", item.getWoSet().toString());
                 intent.putExtra("timerSetting", item.getTimerSetting().toString());
+                intent.putExtra("numOrTime", item.getNumOrTime() );
 
 
                 // 모든 선택 상태 초기화.
@@ -334,10 +338,13 @@ public class WorkoutActivity extends AppCompatActivity {
         Log.v("nameTagg", "woName = " + woName);
         String woNum = data.getExtras().getString("workoutNum");
         String woSet = data.getExtras().getString("workoutSet");
+        String numOrTime = data.getStringExtra("numOrTime");
+
         String timerSetting = data.getExtras().getString("timerSetting");
 
 
-        return new WorkoutItem(woName, woNum, woSet, timerSetting);
+
+        return new WorkoutItem(woName, woNum, woSet, timerSetting, numOrTime);
 
     }
 
@@ -359,13 +366,18 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
     public void saveState() {
-        //saveStateWithGson();
+      //  saveStateWithGson();
         saveStateWithJson();
     }
 
     public void restoreState() {
 
-        // restoreStateWithGson();
+     //    restoreStateWithGson();
+
+
+        // 주의 !! restore에서 오류가 많이 나는데,
+        // 아이템을 추가할 경우 toJson도 손보아야 한다.
+
         restoreStateWithJson();
     }
 
@@ -385,14 +397,14 @@ public class WorkoutActivity extends AppCompatActivity {
             tempItem = saveArray.get(i);
 
             jsonArray.add(tempItem.toJson());
-            Log.wtf("saved", "saved Item : " + tempItem.toJson());
+        //    Log.wtf("saved", "saved Item : " + tempItem.toJson());
 
         }
 
         if (!saveArray.isEmpty()) {
 
             editor.putString("arrayListItem", jsonArray.toString());
-            Log.wtf("saved jsonArray : ", "saved Item : " + jsonArray.toString());
+         //   Log.wtf("saved jsonArray : ", "saved Item : " + jsonArray.toString());
         } else {
             editor.putString("arrayListItem", null);
         }
@@ -408,7 +420,7 @@ public class WorkoutActivity extends AppCompatActivity {
         String jsonString = prefForWo.getString("arrayListItem", null);
 
         // jsonString = jsonString.replaceAll("\\\\","");
-        Log.wtf("saved jsonArray : ", "jsonString = " + jsonString);
+    //    Log.wtf("saved jsonArray : ", "jsonString = " + jsonString);
         ArrayList<WorkoutItem> loadArray = new ArrayList<>();
 
         if (jsonString != null) {
@@ -422,7 +434,7 @@ public class WorkoutActivity extends AppCompatActivity {
                     //      Log.wtf("loaded2233",""+joLoaded );
 
                     Log.wtf("TagForJson = ", joLoaded.getString("woName"));
-                    WorkoutItem tempItem = new WorkoutItem(i, "", "", "", "");
+                    WorkoutItem tempItem = new WorkoutItem(i, "", "", "", "","" );
 
 
                     tempItem.setWoName(joLoaded.getString("woName"));
@@ -430,13 +442,14 @@ public class WorkoutActivity extends AppCompatActivity {
                     tempItem.setWoNum(joLoaded.getString("woNum"));
                     tempItem.setWoSet(joLoaded.getString("woSet"));
                     tempItem.setTimerSetting(joLoaded.getString("timerSetting"));
+                    tempItem.setNumOrTime( joLoaded.getString("numOrTime"));
 
-                    Log.wtf("TagForJson", "temp Item describtion" +
+              /*      Log.wtf("TagForJson", "temp Item describtion" +
                             "\twoName = " + tempItem.getWoName() +
                             "\twoNum = " + tempItem.getWoNum() +
                             "\twoSet = " + tempItem.getWoSet() +
                             "\ttimerSet = " + tempItem.getTimerSetting());
-
+*/
                     loadArray.add(tempItem);
                 }
 

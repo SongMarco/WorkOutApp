@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,23 +17,17 @@ import android.widget.Toast;
 
 import nova.workoutapp22.subSources.BasicInfo;
 
-public class AddWorkoutActivity extends AppCompatActivity {
+public class AddWorkoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     EditText workoutName, workoutNum, workoutSet, etTimerSetting;
+    String timerSetting, numOrTime;
 
 
-
-   // EditText etWoName, etWoNum, etWoSet, etTimerSetting;
+    // EditText etWoName, etWoNum, etWoSet, etTimerSetting;
 
     int mIDForTransport;
 
     String strAddWoMode;
     boolean editFlag = false;
-
-
-
-
-
-
 
 
     @Override
@@ -43,11 +38,10 @@ public class AddWorkoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_workout);
 
 
+        workoutName = (EditText) findViewById(R.id.editTextWorkOutName);
+        workoutNum = (EditText) findViewById(R.id.editTextWNum);
+        workoutSet = (EditText) findViewById(R.id.editTextWSet);
 
-
-        workoutName = (EditText)findViewById(R.id.editTextWorkOutName);
-        workoutNum = (EditText)findViewById(R.id.editTextWNum);
-        workoutSet = (EditText)findViewById(R.id.editTextWSet);
 
 
         Intent intent = getIntent();
@@ -74,74 +68,89 @@ public class AddWorkoutActivity extends AppCompatActivity {
 
 
                     saveAndSetResult();
-                    Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             });
         }
 
 
-
-
-
     }
 
-    public void setNumOrTime(){
+    //region @@@@ Spinner 관련 파트
+    public void setNumOrTime() {
         Spinner spinner = (Spinner) findViewById(R.id.spinnerNumOrTime);
-// Create an ArrayAdapter using the string array and a default spinner layout
+        spinner.setOnItemSelectedListener(this);
+
+
         ArrayAdapter<CharSequence> spinnerNumOrTime = ArrayAdapter.createFromResource(this,
                 R.array.numOrTime, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
+
+
         spinnerNumOrTime.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
+
+
         spinner.setAdapter(spinnerNumOrTime);
     }
 
-    public void setSpinnerTimer(){
+    public void setSpinnerTimer() {
         Spinner spinner = (Spinner) findViewById(R.id.spinnerTimerSetting);
-// Create an ArrayAdapter using the string array and a default spinner layout
+
+        spinner.setOnItemSelectedListener(this);
+        //스피너 레이아웃과 아이템 어레이를 적용
         ArrayAdapter<CharSequence> spinnerTimerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.timerSetting, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
+
+        //드롭다운 레이아웃을 적용한다.
         spinnerTimerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
+        //어댑터를 스피너에 적용한다.
+        spinner.setSelection(2);
         spinner.setAdapter(spinnerTimerAdapter);
     }
 
-/*
-    Button.OnClickListener mClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-            switch (v.getId()) {
-                case R.id.buttonSaveWo:
+        switch( parent.getId() ){
+            case R.id.spinnerNumOrTime:
 
-                    saveAndSetResult();
-                    finish();
-                    break;
-            }
+                numOrTime = (String)parent.getItemAtPosition(position);
+
+                break;
+            case R.id.spinnerTimerSetting:
+
+                timerSetting = (String)parent.getItemAtPosition(position);
+
+                break;
         }
-    };
-  */
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+
+    //endregion
+
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        if( event.getAction() == KeyEvent.ACTION_DOWN ){ //키 다운 액션 감지
-            if( keyCode == KeyEvent.KEYCODE_BACK ){ //BackKey 다운일 경우만 처리
+        if (event.getAction() == KeyEvent.ACTION_DOWN) { //키 다운 액션 감지
+            if (keyCode == KeyEvent.KEYCODE_BACK) { //BackKey 다운일 경우만 처리
 
-                if ( !(workoutName.getText().toString().equals("")) )
+                if (!(workoutName.getText().toString().equals("")))
                     editFlag = true;
 
 
-
-                if( editFlag ==false){ //메모부분이 비어있으면 저장하지 마라
+                if (editFlag == false) { //메모부분이 비어있으면 저장하지 마라
 
                     // Toast.makeText(this, "editTextMemo.getText() = "+editTextMemo.getText(),Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(this, "입력한 내용이 없어 저장되지 않습니다.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "입력한 내용이 없어 저장되지 않습니다.", Toast.LENGTH_SHORT).show();
                     finish();
-                }
-
-                else{
+                } else {
                     //  Toast.makeText(this, "editTextMemo.getText() = "+editTextMemo.getText(),Toast.LENGTH_SHORT).show();
                     saveAndSetResult();
 
@@ -150,18 +159,16 @@ public class AddWorkoutActivity extends AppCompatActivity {
                 }
 
 
-
                 return true;
             }
         }
-        return super.onKeyDown( keyCode, event );
+        return super.onKeyDown(keyCode, event);
     }
-
 
 
     public void processIntent(Intent intent) {
 
-        workoutName.setText( intent.getExtras().getString("workoutName") );
+        workoutName.setText(intent.getExtras().getString("workoutName"));
         workoutNum.setText(intent.getExtras().getString("workoutNum"));
         workoutSet.setText(intent.getExtras().getString("workoutSet"));
 
@@ -170,14 +177,13 @@ public class AddWorkoutActivity extends AppCompatActivity {
 
 
         mIDForTransport = intent.getIntExtra("mID", 1);
-        Log.v("mIDTrak", "mID = "+mIDForTransport);
+        Log.v("mIDTrak", "mID = " + mIDForTransport);
 
         Button button = (Button) findViewById(R.id.buttonSaveWo);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 saveAndSetResult();
-
 
 
                 finish();
@@ -192,7 +198,7 @@ public class AddWorkoutActivity extends AppCompatActivity {
     public void saveAndSetResult() {
         clearMyPrefs();
 
-        Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.", Toast.LENGTH_SHORT).show();
 
         Intent intentForSave = new Intent();
 
@@ -200,10 +206,16 @@ public class AddWorkoutActivity extends AppCompatActivity {
 
         intentForSave.putExtra("mID", mIDForTransport);
 
-        intentForSave.putExtra("workoutName", workoutName.getText().toString() );
-        intentForSave.putExtra("workoutNum", workoutNum.getText().toString() );
-        intentForSave.putExtra("workoutSet", workoutSet.getText().toString() );
-        intentForSave.putExtra("timerSetting", "스톱워치 사용" );
+        intentForSave.putExtra("workoutName", workoutName.getText().toString());
+        intentForSave.putExtra("workoutNum", workoutNum.getText().toString());
+        intentForSave.putExtra("workoutSet", workoutSet.getText().toString());
+        intentForSave.putExtra("timerSetting", timerSetting );
+        intentForSave.putExtra("numOrTime", numOrTime );
+
+        Log.wtf("spinnerLog", "numorTime = "+numOrTime);
+     //   Toast.makeText(getApplicationContext(), "timerSetting = "+timerSetting, Toast.LENGTH_SHORT).show();
+
+
 
         setResult(RESULT_OK, intentForSave);
     }
@@ -211,7 +223,7 @@ public class AddWorkoutActivity extends AppCompatActivity {
     /////////////////////////////////////////생명주기 관련 파트////////
     ////////// onPause에서 입력하던 상태가 저장되며, onResume에서 입력하던 상태가 복원된다.
 
-
+    //region Save/restore pref 관련 파트
     @Override
     protected void onStart() {
         super.onStart();
@@ -256,13 +268,12 @@ public class AddWorkoutActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
-        editor.putString("workoutName", workoutName.getText().toString() );
-        editor.putString("workoutNum", workoutNum.getText().toString() );
-        editor.putString("workoutSet", workoutSet.getText().toString() );
+        editor.putString("workoutName", workoutName.getText().toString());
+        editor.putString("workoutNum", workoutNum.getText().toString());
+        editor.putString("workoutSet", workoutSet.getText().toString());
 
         //TODO 타이머 스톱워치 관련 정보 추가할 것!!
-        editor.putString("timerSetting", "스톱워치" );
-
+        editor.putString("timerSetting", "스톱워치");
 
 
         editor.commit();
@@ -271,30 +282,30 @@ public class AddWorkoutActivity extends AppCompatActivity {
 
     protected void restoreState() {
 
-        Toast.makeText(getApplicationContext(),"restore called", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "restore called", Toast.LENGTH_SHORT).show();
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
 
-        if ((pref != null) && (pref.contains("workoutName"))   ) {
+        if ((pref != null) && (pref.contains("workoutName"))) {
             String wName = pref.getString("workoutName", "");
 
             workoutName.setText(wName);
         }
 
-        if( (pref != null) &&(pref.contains("workoutNum"))  ){
+        if ((pref != null) && (pref.contains("workoutNum"))) {
 
             String wNum = pref.getString("workoutNum", "");
             workoutNum.setText(wNum);
 
         }
 
-        if( (pref!=null) && pref.contains("workoutSet")){
+        if ((pref != null) && pref.contains("workoutSet")) {
 
-            String wSet = pref.getString("workoutSet","");
+            String wSet = pref.getString("workoutSet", "");
             workoutSet.setText(wSet);
 
         }
 
-        if ( pref!=null && pref.contains("timerSetting") ){
+        if (pref != null && pref.contains("timerSetting")) {
 
             String eTimer = pref.getString("timerSetting", "");
 
@@ -310,4 +321,5 @@ public class AddWorkoutActivity extends AppCompatActivity {
         editor.clear();
         editor.commit();
     }
+    //endregion
 }
