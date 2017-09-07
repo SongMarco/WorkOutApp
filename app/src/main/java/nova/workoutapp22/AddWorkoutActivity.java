@@ -1,9 +1,11 @@
 package nova.workoutapp22;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -219,6 +221,16 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         if (event.getAction() == KeyEvent.ACTION_DOWN) { //키 다운 액션 감지
             if (keyCode == KeyEvent.KEYCODE_BACK) { //BackKey 다운일 경우만 처리
 
+
+
+
+
+
+
+
+
+
+
                 if (!(workoutName.getText().toString().equals("")))
                     editFlag = true;
 
@@ -230,10 +242,44 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                     Toast.makeText(this, "입력한 내용이 없어 저장되지 않습니다.", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    //  Toast.makeText(this, "editTextMemo.getText() = "+editTextMemo.getText(),Toast.LENGTH_SHORT).show();
-                    saveAndSetResult();
+                    //뒤로를 눌렀는데 내용이 존재한다. 내용을 저장할 것인지 물어본다.
 
-                    finish();
+                    // 1. Instantiate an AlertDialog.Builder with its constructor
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AddWorkoutActivity.this);
+
+                    builder.setMessage("작성 내용을 저장하시겠습니까??")
+                            .setTitle("저장 확인");
+
+                    // Add the buttons
+                    builder.setPositiveButton("저장", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            //  Toast.makeText(this, "editTextMemo.getText() = "+editTextMemo.getText(),Toast.LENGTH_SHORT).show();
+                            saveAndSetResult();
+
+                            finish();
+
+                        }
+                    });
+                    builder.setNegativeButton("저장 안함", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+
+                            finish();
+                        }
+                    });
+
+
+                    // 2. Chain together various setter methods to set the dialog characteristics
+
+                    // 3. Get the AlertDialog from create()
+                    AlertDialog dialog = builder.create();
+
+                    dialog.show();
+
+
+
+
 
                 }
 
