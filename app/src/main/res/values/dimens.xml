@@ -10,4 +10,5 @@
 
     <dimen name="wide_size">40px</dimen>
 
+    <string name="action_delete">삭제</string>
 </resources>

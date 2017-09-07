@@ -19,7 +19,9 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
 
         android:background="@color/colorPrimary"
-        app:titleTextColor="@color/colorWhite"
+        app:titleTextColor="@color/colorBlack"
+
+
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
 
 

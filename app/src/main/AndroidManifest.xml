@@ -34,7 +34,7 @@
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
             android:name=".WorkoutActivity"
-            android:label="운동 프로그램" />
+            android:label="나만의 운동을 만들어 시작해보세요!" />
         <activity
             android:name=".WorkoutMemoActivity"
             android:label="운동 일지22"></activity>

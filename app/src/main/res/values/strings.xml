@@ -3,4 +3,5 @@
     <string name="action_settings">설정</string>
     <string name="overflow">overflow</string>
     <string name="action_removeItems">삭제하기</string>
+    <string name="action_selectMult">다중선택</string>
 </resources>

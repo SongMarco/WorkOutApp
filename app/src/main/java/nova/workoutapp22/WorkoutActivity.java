@@ -51,13 +51,14 @@ public class WorkoutActivity extends AppCompatActivity {
 
     ListView listViewForWorkout;
     WorkoutAdapter workoutAdapter;
+    Toolbar myToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBarWoActivity);
+        myToolbar = (Toolbar) findViewById(R.id.toolBarWoActivity);
         setSupportActionBar(myToolbar);
 
         workoutAdapter = new WorkoutAdapter();
@@ -112,23 +113,53 @@ public class WorkoutActivity extends AppCompatActivity {
     //region 액션바 메뉴 관련 파트
     ///
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_workout, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        //
+        //        menu.findItem(R.id.start).setVisible(!isStarted);
+        //        menu.findItem(R.id.stop).setVisible(isStarted);
 
-        switch(item.getItemId()){
+        return true;
+
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
 
             case R.id.action_addWorkout:
+
                 Intent intent = new Intent(getApplicationContext(), AddWorkoutActivity.class);
                 intent.putExtra(BasicInfo.KEY_ADDWO_MODE, BasicInfo.MODE_MODIFY);
 
                 startActivityForResult(intent, BasicInfo.REQ_ADD_WORKOUT);
                 return true;
+
+            case R.id.action_selectMult:
+                if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
+
+                    setSingleChoice(listViewForWorkout);
+
+                } else {
+
+                    setMultipleChoice(listViewForWorkout);
+
+                }
+                return true;
+
+            case R.id.action_delete:
+                askDelete();
+                return true;
+
 
             default:
                 return true;
@@ -169,12 +200,12 @@ public class WorkoutActivity extends AppCompatActivity {
                 case R.id.buttonWoDelete:
 
 
-
                     // 1. Instantiate an AlertDialog.Builder with its constructor
                     AlertDialog.Builder builder = new AlertDialog.Builder(WorkoutActivity.this);
 
                     builder.setMessage("정말 삭제하시겠습니까?")
-                            .setTitle("삭제 확인");
+                            .setTitle("삭제 확인")
+                            .setIcon(R.drawable.ic_warning_black_48dp);
 
                     // Add the buttons
                     builder.setPositiveButton("삭제합니다", new DialogInterface.OnClickListener() {
@@ -187,7 +218,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
                                 //int i = count - 1;  0<=i; i--
                                 if (checkedItems.get(i)) {
-                                   WorkoutItem item = workoutAdapter.woItems.get(i);
+                                    WorkoutItem item = workoutAdapter.woItems.get(i);
                                     workoutAdapter.removeItem(item);
                                 }
                             }
@@ -244,13 +275,59 @@ public class WorkoutActivity extends AppCompatActivity {
 
     //endregion
 
+    public void askDelete() {
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(WorkoutActivity.this);
+
+        builder.setMessage("정말 삭제하시겠습니까?")
+                .setTitle("삭제 확인")
+                .setIcon(R.drawable.ic_warning_black_48dp);
+
+        // Add the buttons
+        builder.setPositiveButton("삭제합니다", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                SparseBooleanArray checkedItems = listViewForWorkout.getCheckedItemPositions();
+                int count2 = workoutAdapter.getCount();
+
+                for (int i = count2 - 1; i >= 0; i--) {
+
+                    //int i = count - 1;  0<=i; i--
+                    if (checkedItems.get(i)) {
+                        WorkoutItem item = workoutAdapter.woItems.get(i);
+                        workoutAdapter.removeItem(item);
+                    }
+                }
+                // 모든 선택 상태 초기화.
+                listViewForWorkout.clearChoices();
+                workoutAdapter.notifyDataSetChanged();
+                workoutAdapter.setCheckBoxState(false);
+                setSingleChoice(listViewForWorkout);
+
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+
+        // 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
 
     public void showMessage(final WorkoutItem item) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("삭제 확인");
-        builder.setMessage("삭제하시겠습니까?");
-        builder.setIcon(android.R.drawable.ic_dialog_alert);
+        builder.setTitle("삭제 확인")
+                .setMessage("삭제하시겠습니까?")
+                .setIcon(android.R.drawable.ic_dialog_alert);
         builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
