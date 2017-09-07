@@ -105,7 +105,23 @@ public class WorkoutItemViewLayout extends LinearLayout implements Checkable {
 
     public void setTimeInLayout(int hour, int min, int sec){
 
-        time.setText(hour+"시간"+min+"분"+sec+"초"   );
+        String outputTime = "";
+        if( hour != 0){
+            outputTime = outputTime+hour+"시간";
+        }
+
+        if( min != 0){
+            outputTime = outputTime+min+"분";
+        }
+
+        if( sec != 0){
+            outputTime = outputTime+sec+"초";
+        }
+
+
+
+        time.setText(outputTime);
+
 
     }
     ///////////////////////// 구버전 set메소드들

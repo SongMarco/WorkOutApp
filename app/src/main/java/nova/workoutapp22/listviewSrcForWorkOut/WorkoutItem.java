@@ -14,8 +14,8 @@ public class WorkoutItem {
     String woName,
             woNum,
             woSet,
-           timerSetting,
-    woTime, numOrTime;
+           timerSetting;
+
 
     boolean boolTimeSet = false;
 
@@ -29,6 +29,9 @@ public class WorkoutItem {
     public WorkoutItem() {
     }
 
+    public WorkoutItem(int mID) {
+        this.mID = mID;
+    }
     public WorkoutItem(String woName, String woNum, String woSet, String timerSetting) {
         this.woName = woName;
         this.woNum = woNum;
@@ -82,15 +85,6 @@ public class WorkoutItem {
         this.timerSetting = timerSetting;
     }
 
-    public WorkoutItem(int mID, String woName, String woNum, String woSet, String timerSetting, String numOrTime) {
-        this.mID = mID;
-        this.woName = woName;
-        this.woNum = woNum;
-        this.woSet = woSet;
-        this.timerSetting = timerSetting;
-        this.numOrTime = numOrTime;
-    }
-
 
     public final JsonObject toJson() {
 
@@ -100,7 +94,8 @@ public class WorkoutItem {
         jsonObject.addProperty("woNum", getWoNum());
         jsonObject.addProperty("woSet", getWoSet());
         jsonObject.addProperty("timerSetting", getTimerSetting());
-        jsonObject.addProperty("numOrTime", getNumOrTime());
+
+        jsonObject.addProperty("boolTimeSet", getBoolTimeSet() );
 
         jsonObject.addProperty("hour", getHour());
         jsonObject.addProperty("min", getMin());
@@ -150,11 +145,6 @@ public class WorkoutItem {
     public void setmID(int mID) {
         this.mID = mID;
     }
-
-
-    public String getNumOrTime(){ return numOrTime;}
-
-    public void setNumOrTime(String numOrTime) {this.numOrTime = numOrTime;}
 
 
     //////////////////// 시간 관련 세팅

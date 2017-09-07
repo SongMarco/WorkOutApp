@@ -132,21 +132,53 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
                 case R.id.buttonWoDelete:
-                    SparseBooleanArray checkedItems = listViewForWorkout.getCheckedItemPositions();
-                    count = workoutAdapter.getCount();
 
-                    for (int i = count - 1; i >= 0; i--) {
 
-                        //int i = count - 1;  0<=i; i--
-                        if (checkedItems.get(i)) {
-                            workoutAdapter.woItems.remove(i);
+
+                    // 1. Instantiate an AlertDialog.Builder with its constructor
+                    AlertDialog.Builder builder = new AlertDialog.Builder(WorkoutActivity.this);
+
+                    builder.setMessage("정말 삭제하시겠습니까?")
+                            .setTitle("삭제 확인");
+
+                    // Add the buttons
+                    builder.setPositiveButton("삭제합니다", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            SparseBooleanArray checkedItems = listViewForWorkout.getCheckedItemPositions();
+                            int count2 = workoutAdapter.getCount();
+
+                            for (int i = count2 - 1; i >= 0; i--) {
+
+                                //int i = count - 1;  0<=i; i--
+                                if (checkedItems.get(i)) {
+                                   WorkoutItem item = workoutAdapter.woItems.get(i);
+                                    workoutAdapter.removeItem(item);
+                                }
+                            }
+                            // 모든 선택 상태 초기화.
+                            listViewForWorkout.clearChoices();
+                            workoutAdapter.notifyDataSetChanged();
+                            workoutAdapter.setCheckBoxState(false);
+                            setSingleChoice(listViewForWorkout);
+
                         }
-                    }
-                    // 모든 선택 상태 초기화.
-                    listViewForWorkout.clearChoices();
-                    workoutAdapter.notifyDataSetChanged();
-                    workoutAdapter.setCheckBoxState(false);
-                    setSingleChoice(listViewForWorkout);
+                    });
+                    builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+
+
+                    // 2. Chain together various setter methods to set the dialog characteristics
+
+                    // 3. Get the AlertDialog from create()
+                    AlertDialog dialog = builder.create();
+
+                    dialog.show();
+
+
                     break;
 
 
@@ -173,13 +205,15 @@ public class WorkoutActivity extends AppCompatActivity {
             }
         }
     };
+
+
     //endregion
 
 
     public void showMessage(final WorkoutItem item) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("삭제");
+        builder.setTitle("삭제 확인");
         builder.setMessage("삭제하시겠습니까?");
         builder.setIcon(android.R.drawable.ic_dialog_alert);
         builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
@@ -193,7 +227,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         });
 
-        builder.setNeutralButton("취소", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
@@ -258,33 +292,25 @@ public class WorkoutActivity extends AppCompatActivity {
                 intent.putExtra("timerSetting", item.getTimerSetting().toString());
 
                 //시간을 세팅하지 않았다면 횟수와 세트만 전달하자.
-                if(item.getBoolTimeSet() == false){
+                if (item.getBoolTimeSet() == false) {
 
-                    intent.putExtra("boolTimeSet", item.getBoolTimeSet() );
+                    intent.putExtra("boolTimeSet", item.getBoolTimeSet());
                     intent.putExtra("workoutNum", item.getWoNum());
                     intent.putExtra("workoutSet", item.getWoSet());
                 }
                 //시간을 세팅했다면 시간 + 세트를 전달해서 뿌려라.
                 else {
-                    Log.d ("ggwp", "here im : booltimeset = "+ item.getBoolTimeSet() );
+                    Log.d("ggwp", "here im : booltimeset = " + item.getBoolTimeSet());
 
-                    intent.putExtra("boolTimeSet", item.getBoolTimeSet() );
+                    intent.putExtra("boolTimeSet", item.getBoolTimeSet());
 
                     intent.putExtra("workoutSet", item.getWoSet());
 
                     intent.putExtra("hour", item.getHour());
-                    intent.putExtra("min", item.getMin() );
-                    intent.putExtra("sec", item.getSec() );
+                    intent.putExtra("min", item.getMin());
+                    intent.putExtra("sec", item.getSec());
 
                 }
-
-
-
-
-
-
-
-                intent.putExtra("numOrTime", item.getNumOrTime() );
 
 
                 // 모든 선택 상태 초기화.
@@ -367,18 +393,18 @@ public class WorkoutActivity extends AppCompatActivity {
         String numOrTime = data.getStringExtra("numOrTime");
 
         boolean boolTimeSet = data.getBooleanExtra("boolTimeSet", false);
-        Log.d ("ggwp", "boolTset = "+ boolTimeSet);
+        Log.d("ggwp", "boolTset = " + boolTimeSet);
         String timerSetting = data.getExtras().getString("timerSetting");
 
         //시간을 세팅하지 않아서 hour가 -1인 상태 -> 횟수 세트만 전달해주면 OK
-        if( boolTimeSet == false ){
+        if (boolTimeSet == false) {
 
             return new WorkoutItem(woName, woNum, woSet, timerSetting, boolTimeSet);
 
 
         }
         //시간을 세팅 하였음. 시간과 세트를 전달한다.
-        else{
+        else {
             int loadedHour = data.getIntExtra("hour", -1);
             int loadedMin = data.getIntExtra("min", -1);
             int loadedSec = data.getIntExtra("sec", -1);
@@ -386,10 +412,6 @@ public class WorkoutActivity extends AppCompatActivity {
             return new WorkoutItem(woName, woSet, loadedHour, loadedMin, loadedSec, timerSetting, boolTimeSet);
 
         }
-
-
-
-
 
 
     }
@@ -412,19 +434,19 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
     public void saveState() {
-      //  saveStateWithGson();
+        //   saveStateWithGson();
         saveStateWithJson();
     }
 
     public void restoreState() {
 
-     //    restoreStateWithGson();
+        //  restoreStateWithGson();
 
 
         // 주의 !! restore에서 오류가 많이 나는데,
         // 아이템을 추가할 경우 toJson도 손보아야 한다.
 
-     //   restoreStateWithJson();
+        restoreStateWithJson();
     }
 
 
@@ -443,14 +465,14 @@ public class WorkoutActivity extends AppCompatActivity {
             tempItem = saveArray.get(i);
 
             jsonArray.add(tempItem.toJson());
-        //    Log.wtf("saved", "saved Item : " + tempItem.toJson());
+            Log.wtf("saved", "saved Item : " + tempItem.toJson());
 
         }
 
         if (!saveArray.isEmpty()) {
 
             editor.putString("arrayListItem", jsonArray.toString());
-         //   Log.wtf("saved jsonArray : ", "saved Item : " + jsonArray.toString());
+            Log.wtf("saved jsonArray : ", "saved Item : " + jsonArray.toString());
         } else {
             editor.putString("arrayListItem", null);
         }
@@ -466,7 +488,7 @@ public class WorkoutActivity extends AppCompatActivity {
         String jsonString = prefForWo.getString("arrayListItem", null);
 
         // jsonString = jsonString.replaceAll("\\\\","");
-    //    Log.wtf("saved jsonArray : ", "jsonString = " + jsonString);
+        //    Log.wtf("saved jsonArray : ", "jsonString = " + jsonString);
         ArrayList<WorkoutItem> loadArray = new ArrayList<>();
 
         if (jsonString != null) {
@@ -480,15 +502,37 @@ public class WorkoutActivity extends AppCompatActivity {
                     //      Log.wtf("loaded2233",""+joLoaded );
 
                     //Log.wtf("TagForJson = ", joLoaded.getString("woName"));
-                    WorkoutItem tempItem = new WorkoutItem(i, "", "", "", "","" );
-
+                    WorkoutItem tempItem = new WorkoutItem(i);
 
                     tempItem.setWoName(joLoaded.getString("woName"));
 
-                    tempItem.setWoNum(joLoaded.getString("woNum"));
-                    tempItem.setWoSet(joLoaded.getString("woSet"));
-                    tempItem.setTimerSetting(joLoaded.getString("timerSetting"));
-                    tempItem.setNumOrTime( joLoaded.getString("numOrTime"));
+
+                    // 시간제 운동인가 아닌가?
+                    //시간제가 아니라면 세트와 넘버만 취해라
+                    if (joLoaded.getBoolean("boolTimeSet") == false) {
+
+                        tempItem.setBoolTimeSet(joLoaded.getBoolean("boolTimeSet"));
+                        tempItem.setWoNum(joLoaded.getString("woNum"));
+                        tempItem.setWoSet(joLoaded.getString("woSet"));
+                        tempItem.setTimerSetting(joLoaded.getString("timerSetting"));
+                    } else {
+                        tempItem.setBoolTimeSet(joLoaded.getBoolean("boolTimeSet"));
+
+                        tempItem.setWoSet(joLoaded.getString("woSet"));
+                        tempItem.setTimerSetting(joLoaded.getString("timerSetting"));
+
+                        tempItem.setHour(joLoaded.getInt("hour"));
+                        tempItem.setMin(joLoaded.getInt("min"));
+                        tempItem.setSec(joLoaded.getInt("sec"));
+
+
+                    }
+
+
+
+
+
+
 
               /*      Log.wtf("TagForJson", "temp Item describtion" +
                             "\twoName = " + tempItem.getWoName() +

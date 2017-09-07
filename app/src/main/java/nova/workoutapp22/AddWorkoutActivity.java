@@ -174,13 +174,17 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                     linearNum.setVisibility(View.INVISIBLE);
 
                     spinnerTimer.setSelection(1);
+                    spinnerTimer.setEnabled(false);
 
+                 //   Toast.makeText(getApplicationContext(), "시간을 정하여 운동하므로 타이머 사용이 고정됩니다.", Toast.LENGTH_SHORT).show();
                 }
 
                 // numOrTime에서 횟수를 설정했다!
                 else {
+                    spinnerTimer.setEnabled(true);
                     frameTime.setVisibility(View.INVISIBLE);
                     linearNum.setVisibility(View.VISIBLE);
+
                 }
 
 
@@ -453,7 +457,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
     protected void restoreState() {
 
-        Toast.makeText(getApplicationContext(), "restore called", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getApplicationContext(), "restore called", Toast.LENGTH_SHORT).show();
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
 
         if ((pref != null) && (pref.contains("workoutName"))) {
