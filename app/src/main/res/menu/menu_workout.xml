@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- "Mark Favorite", should appear as action button if possible -->
+
+
+    <!-- Settings, should always be in the overflow -->
+
+
+
+    <item
+        android:id="@+id/action_addWorkout"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_add_black_48dp"
+
+        android:title="@string/action_settings"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/removeItems"
+        android:orderInCategory="90"
+
+        android:title="@string/action_removeItems"
+        app:showAsAction="never" />
+
+
+
+</menu>

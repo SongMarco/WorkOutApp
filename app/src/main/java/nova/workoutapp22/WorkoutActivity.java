@@ -8,8 +8,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -53,6 +57,8 @@ public class WorkoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBarWoActivity);
+        setSupportActionBar(myToolbar);
 
         workoutAdapter = new WorkoutAdapter();
         listViewForWorkout = (ListView) findViewById(R.id.listViewForWorkout);
@@ -101,6 +107,35 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
     }
+
+
+    //region 액션바 메뉴 관련 파트
+    ///
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_workout, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        switch(item.getItemId()){
+
+            case R.id.action_addWorkout:
+                Intent intent = new Intent(getApplicationContext(), AddWorkoutActivity.class);
+                intent.putExtra(BasicInfo.KEY_ADDWO_MODE, BasicInfo.MODE_MODIFY);
+
+                startActivityForResult(intent, BasicInfo.REQ_ADD_WORKOUT);
+                return true;
+
+            default:
+                return true;
+        }
+
+    }
+    //endregion
 
 
     //region @@@@OnclickListener 버튼클릭 관련
