@@ -114,7 +114,7 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
 
-    //region 액션바 메뉴 관련 파트
+    //region @@@@@액션바 메뉴 관련 파트@@@@@
     ///
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -170,18 +170,13 @@ public class WorkoutActivity extends AppCompatActivity {
 
                 //이미 멀티모드였다면 멀티모드를 비활성화하도록 할 것.
                 if(isMultMode == true){
-                    woMenuState = BasicInfo.MENU_WO_NORMAL;
-                    isMultMode = false;
-                    invalidateOptionsMenu();
 
                     setSingleChoice(listViewForWorkout);
 
                 }
                 //멀티모드가 아니므로 멀티모드 활성화
                 else{
-                    woMenuState = BasicInfo.MENU_WO_MULT;
-                    isMultMode = true;
-                    invalidateOptionsMenu();
+
 
                     setMultipleChoice(listViewForWorkout);
                 }
@@ -201,6 +196,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
             case R.id.action_delete:
                 askDelete();
+
                 return true;
 
             case R.id.action_selectAll:
@@ -227,7 +223,7 @@ public class WorkoutActivity extends AppCompatActivity {
         }
 
     }
-    //endregion
+    //endregion@@@@@
 
 
     public void askDelete() {
@@ -259,10 +255,16 @@ public class WorkoutActivity extends AppCompatActivity {
                 workoutAdapter.setCheckBoxState(false);
                 setSingleChoice(listViewForWorkout);
 
+                woMenuState = BasicInfo.MENU_WO_NORMAL;
+                isMultMode = false;
+                invalidateOptionsMenu();
+
+
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+
                 dialog.dismiss();
             }
         });
@@ -321,6 +323,10 @@ public class WorkoutActivity extends AppCompatActivity {
         workoutAdapter.setCheckBoxState(false);
 
         setItemClicker();
+
+        woMenuState = BasicInfo.MENU_WO_NORMAL;
+        isMultMode = false;
+        invalidateOptionsMenu();
     }
 
     public void setMultipleChoice(ListView lv) {
@@ -334,6 +340,10 @@ public class WorkoutActivity extends AppCompatActivity {
 
         //아이템클릭리스너를 무효화한다.
         lv.setOnItemClickListener(null);
+
+        woMenuState = BasicInfo.MENU_WO_MULT;
+        isMultMode = true;
+        invalidateOptionsMenu();
     }
 
     // 아이템 클릭 리스너를 활성화해준다.
