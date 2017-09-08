@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -155,23 +154,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                     break;
 
 
-                case R.id.buttonWoDelete:
-                    SparseBooleanArray checkedItems = listViewForMemo.getCheckedItemPositions();
-                    count = memoAdapter.getCount();
-
-                    for (int i = count - 1; i >= 0; i--) {
-
-                        //int i = count - 1;  0<=i; i--
-                        if (checkedItems.get(i)) {
-                            memoAdapter.items.remove(i);
-                        }
-                    }
-                    // 모든 선택 상태 초기화.
-                    listViewForMemo.clearChoices();
-                    memoAdapter.notifyDataSetChanged();
-                    memoAdapter.setCheckBoxState(false);
-                    setSingleChoice(listViewForMemo);
-                    break;
 
 
                 case R.id.buttonSelectAll:

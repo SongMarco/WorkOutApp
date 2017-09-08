@@ -16,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -87,11 +86,6 @@ public class WorkoutActivity extends AppCompatActivity {
 
         setItemClicker();
 
-        findViewById(R.id.buttonAddWO).setOnClickListener(mClickListener);
-        findViewById(R.id.buttonWoDelete).setOnClickListener(mClickListener);
-        findViewById(R.id.buttonWoSelectAll).setOnClickListener(mClickListener);
-        findViewById(R.id.buttonWoCancelSelect).setOnClickListener(mClickListener);
-        findViewById(R.id.buttonWoSwitch).setOnClickListener(mClickListener);
 
         //setSingleChoice(listViewForWorkout);
 
@@ -235,112 +229,6 @@ public class WorkoutActivity extends AppCompatActivity {
     }
     //endregion
 
-
-    //region @@@@OnclickListener 버튼클릭 관련
-    Button.OnClickListener mClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            Intent intent;
-            int count;
-            switch (v.getId()) {
-                case R.id.buttonAddWO:
-                    intent = new Intent(getApplicationContext(), AddWorkoutActivity.class);
-                    intent.putExtra(BasicInfo.KEY_ADDWO_MODE, BasicInfo.MODE_MODIFY);
-
-                    startActivityForResult(intent, BasicInfo.REQ_ADD_WORKOUT);
-
-                    break;
-
-                case (R.id.buttonWoSwitch):
-
-                    if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
-
-                        setSingleChoice(listViewForWorkout);
-
-                    } else {
-
-                        setMultipleChoice(listViewForWorkout);
-
-                    }
-                    break;
-
-
-                case R.id.buttonWoDelete:
-
-
-                    // 1. Instantiate an AlertDialog.Builder with its constructor
-                    AlertDialog.Builder builder = new AlertDialog.Builder(WorkoutActivity.this);
-
-                    builder.setMessage("정말 삭제하시겠습니까?")
-                            .setTitle("삭제 확인")
-                            .setIcon(R.drawable.ic_warning_black_48dp);
-
-                    // Add the buttons
-                    builder.setPositiveButton("삭제합니다", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-
-                            SparseBooleanArray checkedItems = listViewForWorkout.getCheckedItemPositions();
-                            int count2 = workoutAdapter.getCount();
-
-                            for (int i = count2 - 1; i >= 0; i--) {
-
-                                //int i = count - 1;  0<=i; i--
-                                if (checkedItems.get(i)) {
-                                    WorkoutItem item = workoutAdapter.woItems.get(i);
-                                    workoutAdapter.removeItem(item);
-                                }
-                            }
-                            // 모든 선택 상태 초기화.
-                            listViewForWorkout.clearChoices();
-                            workoutAdapter.notifyDataSetChanged();
-                            workoutAdapter.setCheckBoxState(false);
-                            setSingleChoice(listViewForWorkout);
-
-                        }
-                    });
-                    builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-
-
-                    // 2. Chain together various setter methods to set the dialog characteristics
-
-                    // 3. Get the AlertDialog from create()
-                    AlertDialog dialog = builder.create();
-
-                    dialog.show();
-
-
-                    break;
-
-
-                case R.id.buttonWoSelectAll:
-                    Toast.makeText(getApplicationContext(), "전체선택 시작됨", Toast.LENGTH_SHORT).show();
-                    count = workoutAdapter.getCount();
-
-                    for (int i = 0; i < count; i++) {
-                        listViewForWorkout.setItemChecked(i, true);
-                    }
-                    workoutAdapter.setCheckBoxState(true);
-
-
-                    break;
-                case R.id.buttonWoCancelSelect:
-                    count = workoutAdapter.getCount();
-                    for (int i = 0; i < count; i++) {
-
-                        listViewForWorkout.setItemChecked(i, false);
-
-                    }
-                    break;
-
-            }
-        }
-    };
-
-
-    //endregion
 
     public void askDelete() {
         // 1. Instantiate an AlertDialog.Builder with its constructor
