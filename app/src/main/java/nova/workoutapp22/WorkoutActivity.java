@@ -53,15 +53,25 @@ public class WorkoutActivity extends AppCompatActivity {
     WorkoutAdapter workoutAdapter;
     Toolbar myToolbar;
 
+    String woMenuState = BasicInfo.MENU_WO_NORMAL;
+
+    boolean isMultMode = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
 
+
+        ///////////////////////툴바를 만듭니다
         myToolbar = (Toolbar) findViewById(R.id.toolBarWoActivity);
         setSupportActionBar(myToolbar);
+/////////////////////////////////////////
+
 
         workoutAdapter = new WorkoutAdapter();
+
+
         listViewForWorkout = (ListView) findViewById(R.id.listViewForWorkout);
         listViewForWorkout.setAdapter(workoutAdapter);
 
@@ -116,13 +126,30 @@ public class WorkoutActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_workout, menu);
+
+
+
+        if(woMenuState.equals(BasicInfo.MENU_WO_MULT)){
+            menu.findItem(R.id.action_addWorkout).setVisible(false);
+            menu.findItem(R.id.action_delete).setVisible(true);
+            menu.findItem(R.id.action_selectAll).setVisible(true);
+            menu.findItem(R.id.action_clearSelection).setVisible(true);
+
+        }
+        else{
+            menu.findItem(R.id.action_addWorkout).setVisible(true);
+            menu.findItem(R.id.action_delete).setVisible(false);
+            menu.findItem(R.id.action_selectAll).setVisible(false);
+            menu.findItem(R.id.action_clearSelection).setVisible(false);
+        }
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        //
+
+
         //        menu.findItem(R.id.start).setVisible(!isStarted);
         //        menu.findItem(R.id.stop).setVisible(isStarted);
 
@@ -145,19 +172,59 @@ public class WorkoutActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_selectMult:
-                if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
+
+
+                //이미 멀티모드였다면 멀티모드를 비활성화하도록 할 것.
+                if(isMultMode == true){
+                    woMenuState = BasicInfo.MENU_WO_NORMAL;
+                    isMultMode = false;
+                    invalidateOptionsMenu();
 
                     setSingleChoice(listViewForWorkout);
 
-                } else {
+                }
+                //멀티모드가 아니므로 멀티모드 활성화
+                else{
+                    woMenuState = BasicInfo.MENU_WO_MULT;
+                    isMultMode = true;
+                    invalidateOptionsMenu();
 
                     setMultipleChoice(listViewForWorkout);
-
                 }
+
+
+
+//                if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
+//
+//                    setSingleChoice(listViewForWorkout);
+//
+//                } else {
+//
+//                    setMultipleChoice(listViewForWorkout);
+//
+//                }
                 return true;
 
             case R.id.action_delete:
                 askDelete();
+                return true;
+
+            case R.id.action_selectAll:
+                int count = workoutAdapter.getCount();
+
+                for (int i = 0; i < count; i++) {
+                    listViewForWorkout.setItemChecked(i, true);
+                }
+//                workoutAdapter.setCheckBoxState(true);
+                return true;
+
+            case R.id.action_clearSelection:
+                count = workoutAdapter.getCount();
+                for (int i = 0; i < count; i++) {
+
+                    listViewForWorkout.setItemChecked(i, false);
+
+                }
                 return true;
 
 

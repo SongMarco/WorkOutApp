@@ -39,4 +39,12 @@ public class BasicInfo {
 
     public static final int REQ_PHOTO_CAPTURE_ACTIVITY = 1501;
     public static final int REQ_PHOTO_SELECTION_ACTIVITY = 1502;
+
+
+    /// 메뉴 세팅 관련 값들 ///
+
+    public static final String MENU_WO_NORMAL = "WO_NORMAL";
+
+    public static final String MENU_WO_MULT = "WO_MULT";
+
 }

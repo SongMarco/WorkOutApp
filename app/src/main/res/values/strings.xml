@@ -4,4 +4,7 @@
     <string name="overflow">overflow</string>
     <string name="action_removeItems">삭제하기</string>
     <string name="action_selectMult">다중선택</string>
+    <string name="action_selectAll">전체 선택</string>
+    <string name="action_clearSelection">선택 해제</string>
+    <string name="action_add_workout">운동 추가하기</string>
 </resources>
