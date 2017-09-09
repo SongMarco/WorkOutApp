@@ -9,7 +9,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -71,7 +76,10 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
     ListView listViewForMemo;
     MemoAdapter memoAdapter;
+    Toolbar memoToolbar;
 
+    boolean isMultMode = false;
+    String memoMenuState = BasicInfo.MENU_WO_NORMAL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +111,11 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         findViewById(R.id.buttonSwitchMode).setOnClickListener(mClickListener);
 
 
+        ///////////////////////툴바를 만듭니다
+        memoToolbar = (Toolbar) findViewById(R.id.toolBarMemoActivity);
+        setSupportActionBar(memoToolbar);
+/////////////////////////////////////////
+
 /////////////////////////////// 메모아이템을 수정한다.
 
 
@@ -124,6 +137,189 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
     }
+
+
+    //region @@@@@액션바 메뉴 관련 파트@@@@@
+    ///
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_workout, menu);
+
+
+
+        if(memoMenuState.equals(BasicInfo.MENU_WO_MULT)){
+            menu.findItem(R.id.action_addItem).setVisible(false);
+            menu.findItem(R.id.action_delete).setVisible(true);
+            menu.findItem(R.id.action_selectAll).setVisible(true);
+            menu.findItem(R.id.action_clearSelection).setVisible(true);
+
+        }
+        else{
+            menu.findItem(R.id.action_addItem).setVisible(true);
+            menu.findItem(R.id.action_delete).setVisible(false);
+            menu.findItem(R.id.action_selectAll).setVisible(false);
+            menu.findItem(R.id.action_clearSelection).setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+
+        //        menu.findItem(R.id.start).setVisible(!isStarted);
+        //        menu.findItem(R.id.stop).setVisible(isStarted);
+
+        return true;
+
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.action_addItem:
+
+                Intent intent = new Intent(getApplicationContext(), AddMemoActivity.class);
+                intent.putExtra(BasicInfo.KEY_ADDMEMO_MODE, BasicInfo.MODE_ADD);
+
+                startActivityForResult(intent, BasicInfo.REQ_ADD_MEMO);
+                return true;
+
+            case R.id.action_selectMult:
+
+
+                //이미 멀티모드였다면 멀티모드를 비활성화하도록 할 것.
+                if(isMultMode == true){
+
+                    setSingleChoice(listViewForMemo);
+
+                }
+                //멀티모드가 아니므로 멀티모드 활성화
+                else{
+
+
+                    setMultipleChoice(listViewForMemo);
+                }
+
+                return true;
+
+            case R.id.action_delete:
+                SparseBooleanArray checkedItems = listViewForMemo.getCheckedItemPositions();
+
+                Boolean okToDelete = false;
+
+                int count2 = memoAdapter.getCount();
+
+                //아이템 선택을 하지 않았다면 토스트를 띄워주고 돌아간다.
+
+
+
+                for (int i = count2 - 1; i >= 0; i--) {
+
+                    //int i = count - 1;  0<=i; i--
+                    if (checkedItems.get(i)) {
+                        okToDelete = true;
+                    }
+                }
+                if(okToDelete == false){
+                    Toast.makeText(getApplicationContext(), "삭제할 아이템을 선택하지 않으셨네요!",Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                // 제거할 아이템이 있다. 제거를 물어보자
+                else{
+                    askDelete();
+
+                    return true;
+                }
+
+
+            case R.id.action_selectAll:
+                int count = memoAdapter.getCount();
+
+                for (int i = 0; i < count; i++) {
+                    listViewForMemo.setItemChecked(i, true);
+                }
+
+                return true;
+
+            case R.id.action_clearSelection:
+                count = memoAdapter.getCount();
+                for (int i = 0; i < count; i++) {
+
+                    listViewForMemo.setItemChecked(i, false);
+
+                }
+                return true;
+
+
+            default:
+                return true;
+        }
+
+    }
+    //endregion@@@@@
+
+
+    public void askDelete() {
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(WorkoutMemoActivity.this);
+
+        builder.setMessage("정말 삭제하시겠습니까?")
+                .setTitle("삭제 확인")
+                .setIcon(R.drawable.ic_warning_black_48dp);
+
+        // Add the buttons
+        builder.setPositiveButton("삭제합니다", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                SparseBooleanArray checkedItems = listViewForMemo.getCheckedItemPositions();
+                int count2 = memoAdapter.getCount();
+
+                for (int i = count2 - 1; i >= 0; i--) {
+
+                    //int i = count - 1;  0<=i; i--
+                    if (checkedItems.get(i)) {
+                        MemoItem item = memoAdapter.items.get(i);
+                        memoAdapter.removeItem(item);
+                    }
+                }
+                // 모든 선택 상태 초기화.
+                listViewForMemo.clearChoices();
+                memoAdapter.notifyDataSetChanged();
+                memoAdapter.setCheckBoxState(false);
+                setSingleChoice(listViewForMemo);
+
+                memoMenuState = BasicInfo.MENU_WO_NORMAL;
+                isMultMode = false;
+                invalidateOptionsMenu();
+
+
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                dialog.dismiss();
+            }
+        });
+
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+
+        // 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+
+
+
 
 
     Button.OnClickListener mClickListener = new View.OnClickListener() {
@@ -192,6 +388,11 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         memoAdapter.setCheckBoxState(false);
 
         setItemClick();
+
+        memoMenuState = BasicInfo.MENU_WO_NORMAL;
+        isMultMode = false;
+        invalidateOptionsMenu();
+
     }
 
     public void setMultipleChoice(ListView lv){
@@ -205,6 +406,10 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         //아이템클릭리스너를 무효화한다.
         lv.setOnItemClickListener(null);
+
+        memoMenuState = BasicInfo.MENU_WO_MULT;
+        isMultMode = true;
+        invalidateOptionsMenu();
     }
 
     public void showDeleteMessage(final MemoItem item) {

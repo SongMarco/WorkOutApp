@@ -124,14 +124,14 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
         if(woMenuState.equals(BasicInfo.MENU_WO_MULT)){
-            menu.findItem(R.id.action_addWorkout).setVisible(false);
+            menu.findItem(R.id.action_addItem).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_selectAll).setVisible(true);
             menu.findItem(R.id.action_clearSelection).setVisible(true);
 
         }
         else{
-            menu.findItem(R.id.action_addWorkout).setVisible(true);
+            menu.findItem(R.id.action_addItem).setVisible(true);
             menu.findItem(R.id.action_delete).setVisible(false);
             menu.findItem(R.id.action_selectAll).setVisible(false);
             menu.findItem(R.id.action_clearSelection).setVisible(false);
@@ -157,10 +157,12 @@ public class WorkoutActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
 
-            case R.id.action_addWorkout:
+            case R.id.action_addItem:
 
                 Intent intent = new Intent(getApplicationContext(), AddWorkoutActivity.class);
-                intent.putExtra(BasicInfo.KEY_ADDWO_MODE, BasicInfo.MODE_MODIFY);
+
+
+                intent.putExtra(BasicInfo.KEY_ADDWO_MODE, BasicInfo.MODE_ADD);
 
                 startActivityForResult(intent, BasicInfo.REQ_ADD_WORKOUT);
                 return true;
@@ -181,23 +183,37 @@ public class WorkoutActivity extends AppCompatActivity {
                     setMultipleChoice(listViewForWorkout);
                 }
 
-
-
-//                if (listViewForWorkout.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
-//
-//                    setSingleChoice(listViewForWorkout);
-//
-//                } else {
-//
-//                    setMultipleChoice(listViewForWorkout);
-//
-//                }
                 return true;
 
             case R.id.action_delete:
-                askDelete();
+                SparseBooleanArray checkedItems = listViewForWorkout.getCheckedItemPositions();
 
-                return true;
+                Boolean okToDelete = false;
+
+                int count2 = workoutAdapter.getCount();
+
+                //아이템 선택을 하지 않았다면 토스트를 띄워주고 돌아간다.
+
+
+
+                for (int i = count2 - 1; i >= 0; i--) {
+
+                    //int i = count - 1;  0<=i; i--
+                    if (checkedItems.get(i)) {
+                       okToDelete = true;
+                    }
+                }
+                if(okToDelete == false){
+                    Toast.makeText(getApplicationContext(), "삭제할 아이템을 선택하지 않으셨네요!",Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                // 제거할 아이템이 있다. 제거를 물어보자
+                else{
+                    askDelete();
+
+                    return true;
+                }
+
 
             case R.id.action_selectAll:
                 int count = workoutAdapter.getCount();
@@ -324,6 +340,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         setItemClicker();
 
+        ////////////// 메뉴를 원상복귀시킴
         woMenuState = BasicInfo.MENU_WO_NORMAL;
         isMultMode = false;
         invalidateOptionsMenu();

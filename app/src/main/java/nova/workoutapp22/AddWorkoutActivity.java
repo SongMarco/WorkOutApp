@@ -431,8 +431,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         // 메뉴의 신규 추가임
         } else {
 
-            intentForSave.putExtra("workoutNum", workoutNum.getText().toString() + "회");
-            intentForSave.putExtra("workoutSet", workoutSet.getText().toString() + "세트");
+            intentForSave.putExtra("workoutNum", workoutNum.getText().toString() );
+            intentForSave.putExtra("workoutSet", workoutSet.getText().toString() );
         }
 
 

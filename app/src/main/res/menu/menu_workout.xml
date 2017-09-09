@@ -9,7 +9,7 @@
 
 
     <item
-        android:id="@+id/action_addWorkout"
+        android:id="@+id/action_addItem"
         android:orderInCategory="1"
         android:icon="@drawable/ic_add_black_48dp"
 
