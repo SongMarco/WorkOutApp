@@ -28,10 +28,10 @@ import java.io.IOException;
 
 import nova.workoutapp22.subSources.BasicInfo;
 
-import static nova.workoutapp22.MotivationActivity.CROP_FROM_IMAGE;
-import static nova.workoutapp22.MotivationActivity.PICK_FROM_ALBUM;
-import static nova.workoutapp22.MotivationActivity.PICK_FROM_CAMERA;
 import static nova.workoutapp22.R.id.imageViewForAdd;
+import static nova.workoutapp22.subSources.BasicInfo.CROP_FROM_IMAGE;
+import static nova.workoutapp22.subSources.BasicInfo.PICK_FROM_ALBUM;
+import static nova.workoutapp22.subSources.BasicInfo.PICK_FROM_CAMERA;
 import static nova.workoutapp22.subSources.timeController.getTimeCutSec;
 
 public class AddMemoActivity extends AppCompatActivity {

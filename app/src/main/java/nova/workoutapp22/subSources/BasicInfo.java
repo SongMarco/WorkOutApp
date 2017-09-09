@@ -6,6 +6,11 @@ package nova.workoutapp22.subSources;
 
 public class BasicInfo {
 
+    /////////////////////////////////카메라 관련 상수들
+    public static final int CHOOSE_IMAGE = 300;
+    public static final int PICK_FROM_ALBUM = 301;
+    public static final int PICK_FROM_CAMERA = 302;
+    public static final int CROP_FROM_IMAGE = 303;
 
     //========== 인텐트 부가정보 전달을 위한 키값 ==========//
     public static final String KEY_ADDMEMO_MODE = "MEMO_MODE";
