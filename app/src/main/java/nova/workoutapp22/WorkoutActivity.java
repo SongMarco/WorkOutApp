@@ -46,6 +46,18 @@ import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_WORKOUT;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_WORKOUT;
 
 
+
+
+
+//
+//1. 툴바 만드는 법
+//툴바 변수 초기화 하기.myToolBar = ~~~...
+//onCreateOptionMenu 오버라이팅해주고
+//onItemSelected로 클릭리스너를 받는다.(아래 코드 참조)
+//툴바를 레이아웃에 잡아주고, 테마를 설정한다(색깔 같은 거 설정할 때)
+//메뉴아이템을 설정하여, 메뉴에 어떤 것을 넣을지 정하고 여기서 inflate시킨다.
+//
+
 public class WorkoutActivity extends AppCompatActivity {
 
     ListView listViewForWorkout;
