@@ -70,7 +70,7 @@
 
     <CheckBox
         android:id="@+id/checkBox"
-        app:theme="@style/AppTheme"
+
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,7 +79,9 @@
         android:layout_toEndOf="@+id/textView2"
         android:layout_toRightOf="@+id/textView2"
         android:gravity="right"
-        android:buttonTint="@color/colorAccent"
+
+        app:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:buttonTint="@color/colorPrimary"
         android:layout_gravity="center"
 
 

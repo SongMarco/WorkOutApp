@@ -33,7 +33,7 @@
             android:label="운동 세팅하기" />
         <activity
             android:name=".WorkoutMemoActivity"
-            android:label="운동 일지22"></activity>
+            android:label="운동 일지"></activity>
         <activity
             android:name=".AddMemoActivity"
             android:label="일기 추가하기"></activity>

@@ -78,7 +78,6 @@
 
 
                 android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
                 android:layout_gravity="end"
                 android:text="timer"
                 android:textColor="@color/colorHBlue"
@@ -110,15 +109,14 @@
 
         android:layout_height="match_parent"
 
-        app:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:buttonTint="@color/colorPrimary"
-
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
+        android:layout_gravity="center"
+        app:theme="@style/Theme.AppCompat.Light.NoActionBar"
 
 
-
-       />
+        />
 
 </LinearLayout>
