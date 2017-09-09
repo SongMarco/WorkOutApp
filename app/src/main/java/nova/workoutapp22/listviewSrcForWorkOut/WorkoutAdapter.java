@@ -1,5 +1,6 @@
 package nova.workoutapp22.listviewSrcForWorkOut;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -98,24 +99,26 @@ public class WorkoutAdapter extends BaseAdapter {
         LinearLayout frameForNum = (LinearLayout)view.findViewById(R.id.frameForNum);
 
 
+        //woSet을 입력하지 않았으면 1로 세팅해준다.
+
+        Log.v("","items.set = "+item.getWoSet());
+        if(item.getWoSet().equals("")){
+            item.setWoSet("1");
+
+        }
+        //woSet이 0이 아니다. 그대로 넣는다.
+
+        Log.v("","items.set = "+item.getWoSet());
+
         //시간이 세팅되어있지 않을 경우(횟수 운동)
         if (item.boolTimeSet == false) {
 
 
-
+            view.setWoSetInLayout( item.getWoSet() );
             view.setWoNumInLayout( item.getWoNum() );
 
-            //woSet을 입력하지 않으면 1로 세팅해준다.
-            if(item.getWoSet().equals("")){
-                item.setWoSet("1");
-                view.setWoSetInLayout( item.getWoSet() );
-            }
-            //woSet이 0이 아니다. 그대로 넣는다.
-            else{
 
-                view.setWoSetInLayout( item.getWoSet() );
-            }
-
+            view.setWoNumInLayout( item.getWoNum() );
 
             view.setTimerSettingInLayout( item.getTimerSetting() );
 

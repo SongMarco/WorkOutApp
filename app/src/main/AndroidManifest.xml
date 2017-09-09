@@ -29,10 +29,6 @@
             android:name=".MotivationActivity"
             android:label="동기부여 자료" />
         <activity
-            android:name=".WorkoutAphroActivity"
-            android:label="아프로디테"
-            android:theme="@style/Theme.AppCompat.Dialog" />
-        <activity
             android:name=".WorkoutActivity"
             android:label="운동 세팅하기" />
         <activity

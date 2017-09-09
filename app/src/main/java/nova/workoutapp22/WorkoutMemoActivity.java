@@ -16,8 +16,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -103,12 +103,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         listViewForMemo.setAdapter(memoAdapter);
         setItemClick();
-
-        findViewById(R.id.buttonAddMemo).setOnClickListener(mClickListener);
-        findViewById(R.id.buttonDelete).setOnClickListener(mClickListener);
-        findViewById(R.id.buttonSelectAll).setOnClickListener(mClickListener);
-        findViewById(R.id.buttonClearSelection).setOnClickListener(mClickListener);
-        findViewById(R.id.buttonSwitchMode).setOnClickListener(mClickListener);
+        setItemLongClicker(listViewForMemo, memoAdapter);
 
 
         ///////////////////////툴바를 만듭니다
@@ -121,19 +116,77 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         ///////////////롱클릭을 통한 수정 / 삭제 메뉴를 추가해야 한다.
         //////*
-        listViewForMemo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+
+
+    }
+
+    public void setItemLongClicker(final ListView lv, final Adapter adapter) {
+
+        //멀티모드가 아니었다. 멀티모드로 만든다.
+
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                MemoItem item = (MemoItem) memoAdapter.getItem(position);
+                if (isMultMode == false) {
+                    lv.clearChoices();
 
-                showDeleteMessage(item);
+                    setMultipleChoice(lv);
 
+
+                    lv.setItemChecked(position, true);
+
+                    isMultMode = true;
+
+
+                    return true;
+                }
+                //멀티모드면 미리 선택된 아이템부터~ 선택한 아이템까지 모두 선택처리.
+                else {
+
+                    int lastPosition = -1;
+
+                    for (int i = 0; i < adapter.getCount(); i++) {
+
+                        if (lv.isItemChecked(i) == true) {
+                            lastPosition = i;
+                        }
+
+                    }
+                    //마지막에 선택한 아이템이 없을 경우
+                    if (lastPosition == -1) {
+                        lv.setItemChecked(position, true);
+                        return true;
+                    }
+
+                    // 마지막에 선택한 아이템 존재! 얘부터 포지션까지 체크처리한다.
+                    else {
+                        // 마지막 선택 포지션이 지금 포지션과 비교해서 큰?작? 같?에 따라 다른가??
+
+                        if (lastPosition < position) {
+                            for (int i = lastPosition; i <= position; i++) {
+                                lv.setItemChecked(i, true);
+                            }
+
+                        } else if (lastPosition > position) {
+                            for (int i = lastPosition; i >= position; i--) {
+                                lv.setItemChecked(i, true);
+                            }
+
+                        } else {
+                            lv.setItemChecked(position, false);
+                            return true;
+                        }
+                    }
+                }
 
                 return true;
             }
         });
+
+        //멀티모드이므로 활성화되지 않음
 
 
     }
@@ -147,15 +200,13 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_workout, menu);
 
 
-
-        if(memoMenuState.equals(BasicInfo.MENU_WO_MULT)){
+        if (memoMenuState.equals(BasicInfo.MENU_WO_MULT)) {
             menu.findItem(R.id.action_addItem).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_selectAll).setVisible(true);
             menu.findItem(R.id.action_clearSelection).setVisible(true);
 
-        }
-        else{
+        } else {
             menu.findItem(R.id.action_addItem).setVisible(true);
             menu.findItem(R.id.action_delete).setVisible(false);
             menu.findItem(R.id.action_selectAll).setVisible(false);
@@ -194,13 +245,13 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
                 //이미 멀티모드였다면 멀티모드를 비활성화하도록 할 것.
-                if(isMultMode == true){
+                if (isMultMode == true) {
 
                     setSingleChoice(listViewForMemo);
 
                 }
                 //멀티모드가 아니므로 멀티모드 활성화
-                else{
+                else {
 
 
                     setMultipleChoice(listViewForMemo);
@@ -218,7 +269,6 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 //아이템 선택을 하지 않았다면 토스트를 띄워주고 돌아간다.
 
 
-
                 for (int i = count2 - 1; i >= 0; i--) {
 
                     //int i = count - 1;  0<=i; i--
@@ -226,12 +276,12 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                         okToDelete = true;
                     }
                 }
-                if(okToDelete == false){
-                    Toast.makeText(getApplicationContext(), "삭제할 아이템을 선택하지 않으셨네요!",Toast.LENGTH_SHORT).show();
+                if (okToDelete == false) {
+                    Toast.makeText(getApplicationContext(), "삭제할 아이템을 선택하지 않으셨네요!", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 // 제거할 아이템이 있다. 제거를 물어보자
-                else{
+                else {
                     askDelete();
 
                     return true;
@@ -318,67 +368,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-    Button.OnClickListener mClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            Intent intent;
-            int count;
-            switch (v.getId()) {
-                case R.id.buttonAddMemo:
-                    intent = new Intent(getApplicationContext(), AddMemoActivity.class);
-                    intent.putExtra(BasicInfo.KEY_ADDMEMO_MODE, BasicInfo.MODE_ADD);
-
-                    startActivityForResult(intent, BasicInfo.REQ_ADD_MEMO);
-
-                    break;
-
-                case (R.id.buttonSwitchMode):
-
-                    if (listViewForMemo.getChoiceMode() == ListView.CHOICE_MODE_MULTIPLE) {
-
-                        setSingleChoice(listViewForMemo);
-
-                    }
-                    else {
-
-                        setMultipleChoice(listViewForMemo);
-
-                    }
-                    break;
-
-
-
-
-                case R.id.buttonSelectAll:
-                    Toast.makeText(getApplicationContext(), "전체선택 시작됨", Toast.LENGTH_SHORT).show();
-                    count = memoAdapter.getCount();
-
-                    for (int i = 0; i < count; i++) {
-                        listViewForMemo.setItemChecked(i, true);
-                    }
-                    memoAdapter.setCheckBoxState(true);
-
-
-
-
-                    break;
-                case R.id.buttonClearSelection:
-                    count = memoAdapter.getCount();
-                    for (int i = 0; i < count; i++) {
-
-                        listViewForMemo.setItemChecked(i, false);
-
-                    }
-                    break;
-
-            }
-        }
-    };
-
-    public void setSingleChoice(ListView lv){
+    public void setSingleChoice(ListView lv) {
 
         //  Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
@@ -395,7 +385,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
     }
 
-    public void setMultipleChoice(ListView lv){
+    public void setMultipleChoice(ListView lv) {
         // Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
 
@@ -600,8 +590,8 @@ public class WorkoutMemoActivity extends AppCompatActivity {
             memoAdapter.items = (ArrayList<MemoItem>) loadArray.clone();
 
             // mID를 세팅해줘야 아이템클릭(수정에 사용)이 제대로된다.
-            for(int i = 0; i < memoAdapter.getCount(); i++){
-                ((MemoItem)memoAdapter.getItem(i)).mID = i;
+            for (int i = 0; i < memoAdapter.getCount(); i++) {
+                ((MemoItem) memoAdapter.getItem(i)).mID = i;
             }
         }
 
