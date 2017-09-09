@@ -27,6 +27,4 @@ public class PictureItem {
     public Uri getUri(){ return picturUri;}
     public void setUri(Uri uri) {this.picturUri = uri;}
 
-
-
 }

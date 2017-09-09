@@ -79,6 +79,7 @@
         android:layout_toEndOf="@+id/textView2"
         android:layout_toRightOf="@+id/textView2"
         android:gravity="right"
+        android:buttonTint="@color/colorAccent"
         android:layout_gravity="center"
 
 

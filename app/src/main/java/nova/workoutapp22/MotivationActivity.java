@@ -11,7 +11,6 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import java.io.BufferedOutputStream;
@@ -36,17 +35,6 @@ public class MotivationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_motivation);
 
 
-        Button buttonMotiveToMain = (Button) findViewById(R.id.motiveToMainButton);
-        buttonMotiveToMain.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent = new Intent();
-                intent.putExtra("name","bravo");
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
-        iv_User_Photo = (ImageView)this.findViewById(R.id.imageViewFirst);
 
 
     }
