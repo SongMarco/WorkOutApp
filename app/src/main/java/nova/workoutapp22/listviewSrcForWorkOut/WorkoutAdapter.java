@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 import nova.workoutapp22.R;
-import nova.workoutapp22.subSources.MyApplication;
 
 /**
  * Created by Administrator on 2017-09-02.
@@ -90,7 +89,7 @@ public class WorkoutAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
-        WorkoutItemViewLayout view = new WorkoutItemViewLayout(MyApplication.getAppContext());
+        WorkoutItemViewLayout view = new WorkoutItemViewLayout(viewGroup.getContext());
 
         WorkoutItem item = woItems.get(position);
         view.setWoNameInLayout( item.getWoName() );
