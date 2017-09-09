@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -44,9 +45,15 @@ import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_WORKOUT;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_WORKOUT;
-
-
-
+import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
+import static nova.workoutapp22.subSources.KeySet.key_hour;
+import static nova.workoutapp22.subSources.KeySet.key_mID;
+import static nova.workoutapp22.subSources.KeySet.key_min;
+import static nova.workoutapp22.subSources.KeySet.key_sec;
+import static nova.workoutapp22.subSources.KeySet.key_timerSetting;
+import static nova.workoutapp22.subSources.KeySet.key_workoutName;
+import static nova.workoutapp22.subSources.KeySet.key_workoutNum;
+import static nova.workoutapp22.subSources.KeySet.key_workoutSet;
 
 
 //
@@ -67,6 +74,7 @@ public class WorkoutActivity extends AppCompatActivity {
     String woMenuState = BasicInfo.MENU_WO_NORMAL;
 
     boolean isMultMode = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,31 +104,111 @@ public class WorkoutActivity extends AppCompatActivity {
 // 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
         workoutAdapter.setCheckBoxState(false);
 
-        setItemClicker();
-
+        setItemClicker(listViewForWorkout, workoutAdapter);
+        setItemLongClicker(listViewForWorkout);
 
         //setSingleChoice(listViewForWorkout);
 
 
 /////////////////////////////// 메모아이템을 수정한다.
 
+///////////////롱클릭을 통한 수정 / 삭제 메뉴를 추가해야 한다.
+        //////*롱클릭시 다중메뉴 활성화시키고 아이템을 선택시키자.
 
-        ///////////////롱클릭을 통한 수정 / 삭제 메뉴를 추가해야 한다.
-        //////*
-        listViewForWorkout.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+    }
+
+    public void setItemLongClicker(final ListView lv) {
+
+        //멀티모드가 아니었다. 멀티모드로 만든다.
+
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                WorkoutItem item = (WorkoutItem) workoutAdapter.getItem(position);
+                if (isMultMode == false) {
+                    lv.clearChoices();
 
-                showMessage(item);
+                    setMultipleChoice(lv);
 
 
-                listViewForWorkout.clearChoices();
+                    lv.setItemChecked(position, true);
+
+                    isMultMode = true;
+
+
+                    return true;
+                }
+                //멀티모드면 미리 선택된 아이템부터~ 선택한 아이템까지 모두 선택처리.
+                else {
+
+                    int lastPosition = -1;
+
+                    for (int i = 0; i < workoutAdapter.getCount(); i++) {
+
+                        if (listViewForWorkout.isItemChecked(i) == true) {
+                            lastPosition = i;
+                        }
+
+                    }
+                    //마지막에 선택한 아이템이 없을 경우
+                    if (lastPosition == -1) {
+                        lv.setItemChecked(position, true);
+                        return true;
+                    }
+
+                    // 마지막에 선택한 아이템 존재! 얘부터 포지션까지 체크처리한다.
+                    else {
+                        // 마지막 선택 포지션이 지금 포지션과 비교해서 큰?작? 같?에 따라 다른가??
+
+                        if (lastPosition < position) {
+                            for (int i = lastPosition; i <= position; i++) {
+                                lv.setItemChecked(i, true);
+                            }
+
+                        } else if (lastPosition > position) {
+                            for (int i = lastPosition; i >= position; i--) {
+                                lv.setItemChecked(i, true);
+                            }
+
+                        } else {
+                            lv.setItemChecked(position, false);
+                            return true;
+                        }
+                    }
+                }
+//
+//
+//                        for(int)
+//
+//                        //Toast.makeText(getApplicationContext(), "짧게 클릭해도 아이템이 선택돼요 ^^", Toast.LENGTH_SHORT).show();
+//                        lv.setItemChecked(position, true);
+//
+//                        return true;
+
+//
+//                        int count = workoutAdapter.getCount();
+//
+//                        for (int i = 0; i < count; i++) {
+//                            listViewForWorkout.setItemChecked(i, true);
+//                        }
+////                workoutAdapter.setCheckBoxState(true);
+//                        return true;
+//
+//                        case R.id.action_clearSelection:
+//                            count = workoutAdapter.getCount();
+//                            for (int i = 0; i < count; i++) {
+//
+//                                listViewForWorkout.setItemChecked(i, false);
+//
+//                            }
+
                 return true;
             }
         });
+
+        //멀티모드이므로 활성화되지 않음
 
 
     }
@@ -134,15 +222,13 @@ public class WorkoutActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_workout, menu);
 
 
-
-        if(woMenuState.equals(BasicInfo.MENU_WO_MULT)){
+        if (woMenuState.equals(BasicInfo.MENU_WO_MULT)) {
             menu.findItem(R.id.action_addItem).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_selectAll).setVisible(true);
             menu.findItem(R.id.action_clearSelection).setVisible(true);
 
-        }
-        else{
+        } else {
             menu.findItem(R.id.action_addItem).setVisible(true);
             menu.findItem(R.id.action_delete).setVisible(false);
             menu.findItem(R.id.action_selectAll).setVisible(false);
@@ -183,13 +269,13 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
                 //이미 멀티모드였다면 멀티모드를 비활성화하도록 할 것.
-                if(isMultMode == true){
+                if (isMultMode == true) {
 
                     setSingleChoice(listViewForWorkout);
 
                 }
                 //멀티모드가 아니므로 멀티모드 활성화
-                else{
+                else {
 
 
                     setMultipleChoice(listViewForWorkout);
@@ -207,20 +293,19 @@ public class WorkoutActivity extends AppCompatActivity {
                 //아이템 선택을 하지 않았다면 토스트를 띄워주고 돌아간다.
 
 
-
                 for (int i = count2 - 1; i >= 0; i--) {
 
                     //int i = count - 1;  0<=i; i--
                     if (checkedItems.get(i)) {
-                       okToDelete = true;
+                        okToDelete = true;
                     }
                 }
-                if(okToDelete == false){
-                    Toast.makeText(getApplicationContext(), "삭제할 아이템을 선택하지 않으셨네요!",Toast.LENGTH_SHORT).show();
+                if (okToDelete == false) {
+                    Toast.makeText(getApplicationContext(), "삭제할 아이템을 선택하지 않으셨네요!", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 // 제거할 아이템이 있다. 제거를 물어보자
-                else{
+                else {
                     askDelete();
 
                     return true;
@@ -350,7 +435,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         workoutAdapter.setCheckBoxState(false);
 
-        setItemClicker();
+        setItemClicker(listViewForWorkout, workoutAdapter);
 
         ////////////// 메뉴를 원상복귀시킴
         woMenuState = BasicInfo.MENU_WO_NORMAL;
@@ -377,50 +462,51 @@ public class WorkoutActivity extends AppCompatActivity {
 
     // 아이템 클릭 리스너를 활성화해준다.
 
-    public void setItemClicker() {
-        listViewForWorkout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    public void setItemClicker(final ListView lv, final Adapter adapter) {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
+                //todo 어댑터가 woadapter아닌 그냥 adapter써도 되는지 확인할 것. 추후 버그 가능성
 
-                WorkoutItem item = (WorkoutItem) workoutAdapter.getItem(position);
+                WorkoutItem item = (WorkoutItem) adapter.getItem(position);
 
-                // 수정 -- 메모 보기 액티비티 띄우기
+                // 수정 -- 메모 보기 액티비티 띄우기 -> 액티비티 따라 달라짐
                 Intent intent = new Intent(getApplicationContext(), AddWorkoutActivity.class);
 
                 // intent.putExtra(BasicInfo.KEY_MEMO_MODE, BasicInfo.MODE_VIEW);
                 intent.putExtra(BasicInfo.KEY_ADDWO_MODE, BasicInfo.MODE_MODIFY);
 
 
-                intent.putExtra("mID", item.getmID());
+                intent.putExtra(key_mID, item.getmID());
 
-                intent.putExtra("workoutName", item.getWoName().toString());
-                intent.putExtra("timerSetting", item.getTimerSetting().toString());
+                intent.putExtra(key_workoutName, item.getWoName().toString());
+                intent.putExtra(key_timerSetting, item.getTimerSetting().toString());
 
                 //시간을 세팅하지 않았다면 횟수와 세트만 전달하자.
                 if (item.getBoolTimeSet() == false) {
 
-                    intent.putExtra("boolTimeSet", item.getBoolTimeSet());
-                    intent.putExtra("workoutNum", item.getWoNum());
-                    intent.putExtra("workoutSet", item.getWoSet());
+                    intent.putExtra(key_boolTimeSet, item.getBoolTimeSet());
+                    intent.putExtra(key_workoutNum, item.getWoNum());
+                    intent.putExtra(key_workoutSet, item.getWoSet());
                 }
                 //시간을 세팅했다면 시간 + 세트를 전달해서 뿌려라.
                 else {
                     Log.d("ggwp", "here im : booltimeset = " + item.getBoolTimeSet());
 
-                    intent.putExtra("boolTimeSet", item.getBoolTimeSet());
+                    intent.putExtra(key_boolTimeSet, item.getBoolTimeSet());
 
-                    intent.putExtra("workoutSet", item.getWoSet());
+                    intent.putExtra(key_workoutSet, item.getWoSet());
 
-                    intent.putExtra("hour", item.getHour());
-                    intent.putExtra("min", item.getMin());
-                    intent.putExtra("sec", item.getSec());
+                    intent.putExtra(key_hour, item.getHour());
+                    intent.putExtra(key_min, item.getMin());
+                    intent.putExtra(key_sec, item.getSec());
 
                 }
 
 
                 // 모든 선택 상태 초기화.
-                listViewForWorkout.clearChoices();
+                lv.clearChoices();
                 workoutAdapter.notifyDataSetChanged();
 
                 startActivityForResult(intent, REQ_MODIFY_WORKOUT);

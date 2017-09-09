@@ -104,7 +104,17 @@ public class WorkoutAdapter extends BaseAdapter {
 
 
             view.setWoNumInLayout( item.getWoNum() );
-            view.setWoSetInLayout( item.getWoSet() );
+
+            //woSet을 입력하지 않으면 1로 세팅해준다.
+            if(item.getWoSet().equals("")){
+                item.setWoSet("1");
+                view.setWoSetInLayout( item.getWoSet() );
+            }
+            //woSet이 0이 아니다. 그대로 넣는다.
+            else{
+
+                view.setWoSetInLayout( item.getWoSet() );
+            }
 
 
             view.setTimerSettingInLayout( item.getTimerSetting() );
