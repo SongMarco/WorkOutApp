@@ -22,11 +22,15 @@ import android.widget.Toast;
 import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.R.id.spinnerTimerSetting;
+import static nova.workoutapp22.subSources.KeySet.key_restMin;
+import static nova.workoutapp22.subSources.KeySet.key_restSec;
 
 public class AddWorkoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     EditText workoutName, workoutNum, workoutSet, etTimerSetting;
 
     EditText etHour, etMin, etSec;
+
+    EditText etRestMin, etRestSec;
 
     String timerSetting, numOrTime;
     Spinner spinnerTimer, spinnerNumOrTime;
@@ -57,6 +61,11 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         etHour = (EditText) findViewById(R.id.editTextHour);
         etMin = (EditText) findViewById(R.id.editTextMin);
         etSec = (EditText) findViewById(R.id.editTextSec);
+
+        etRestMin = (EditText) findViewById(R.id.editTextRestMin);
+        etRestSec = (EditText) findViewById(R.id.editTextRestSec);
+
+
         frameTime = (FrameLayout) findViewById(R.id.FrameForTime);
         linearNum = (LinearLayout) findViewById(R.id.FrameForNum);
 
@@ -364,6 +373,11 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         intentForSave.putExtra("mID", mIDForTransport);
 
         intentForSave.putExtra("workoutName", workoutName.getText().toString());
+
+        intentForSave.putExtra(key_restMin, etRestMin.getText().toString() );
+        intentForSave.putExtra(key_restSec, etRestSec.getText().toString() );
+
+//        Toast.makeText(this, "Min and Sec = "+etRestMin.getText().toString()+"min"+etRestSec.getText().toString(), Toast.LENGTH_SHORT).show();
 
         // 시간제 운동을 선택했을 때에만 이 수치를 전달한다.
 

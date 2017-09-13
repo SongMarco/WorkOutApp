@@ -49,6 +49,8 @@ import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
 import static nova.workoutapp22.subSources.KeySet.key_hour;
 import static nova.workoutapp22.subSources.KeySet.key_mID;
 import static nova.workoutapp22.subSources.KeySet.key_min;
+import static nova.workoutapp22.subSources.KeySet.key_restMin;
+import static nova.workoutapp22.subSources.KeySet.key_restSec;
 import static nova.workoutapp22.subSources.KeySet.key_sec;
 import static nova.workoutapp22.subSources.KeySet.key_timerSetting;
 import static nova.workoutapp22.subSources.KeySet.key_workoutName;
@@ -582,16 +584,20 @@ public class WorkoutActivity extends AppCompatActivity {
         Log.v("nameTagg", "woName = " + woName);
         String woNum = data.getExtras().getString("workoutNum");
         String woSet = data.getExtras().getString("workoutSet");
-        String numOrTime = data.getStringExtra("numOrTime");
+
+        int restMin = Integer.parseInt( data.getExtras().getString(key_restMin) );
+        int restSec = Integer.parseInt( data.getExtras().getString(key_restSec) );
+
 
         boolean boolTimeSet = data.getBooleanExtra("boolTimeSet", false);
-        Log.d("ggwp", "boolTset = " + boolTimeSet);
+
+
         String timerSetting = data.getExtras().getString("timerSetting");
 
         //시간을 세팅하지 않아서 hour가 -1인 상태 -> 횟수 세트만 전달해주면 OK
         if (boolTimeSet == false) {
 
-            return new WorkoutItem(woName, woNum, woSet, timerSetting, boolTimeSet);
+            return new WorkoutItem(woName, woNum, woSet, timerSetting, boolTimeSet, restMin, restSec);
 
 
         }

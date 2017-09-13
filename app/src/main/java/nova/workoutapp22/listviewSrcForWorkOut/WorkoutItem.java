@@ -50,6 +50,17 @@ public class WorkoutItem {
         this.boolTimeSet = boolTimeSet;
     }
 
+    public WorkoutItem(String woName, String woNum, String woSet, String timerSetting, boolean boolTimeSet, int restMin, int restSec) {
+        this.woName = woName;
+        this.woNum = woNum;
+        this.woSet = woSet;
+        this.timerSetting = timerSetting;
+        this.boolTimeSet = boolTimeSet;
+
+        this.restMin = restMin;
+        this.restSec = restSec;
+    }
+
     public WorkoutItem(String woName,  int hour, int min, int sec ,String timerSetting){
         this.woName = woName;
         this.timerSetting = timerSetting;

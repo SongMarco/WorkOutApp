@@ -1,15 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="firstTh">
+    <style name="AppTheme">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorHBlue</item>
         <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="firstTh" parent="AppTheme" >
-        <item name="colorPrimary">#FFB74D</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
     </style>
 
 </resources>
