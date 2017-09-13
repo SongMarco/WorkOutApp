@@ -98,12 +98,9 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
 
             //processIntent가 정상적으로 끝나면 텍스트의 변화를 감지하여, editFlag를 변경한다 -> 이후 저장여부 결정함
-
            if( processIntent(intentReceived) ){
 
                setTextWatcher();
-
-
            }
 
         } else { // 새로 메모를 하려는 경우. 화면을 새로 그려준다.
@@ -191,6 +188,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
     }
 
+
+
     public void setTextWatcher(){
         workoutName.addTextChangedListener( new CustomTextWatcher(workoutName) );
 
@@ -210,20 +209,14 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
     private class CustomTextWatcher implements TextWatcher {
         private EditText mEditText;
-
+        String stringBefore;
         public CustomTextWatcher(EditText e) {
             mEditText = e;
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            stringBefore = s.toString();
 
-            if (getCurrentFocus() == mEditText) {
-//                Toast.makeText(AddWorkoutActivity.this, "before called", Toast.LENGTH_SHORT).show();
-
-                editFlag=true;
-
-
-            }
 
         }
 
@@ -231,8 +224,10 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
         }
 
-        public void afterTextChanged(Editable s) {
-
+        public void afterTextChanged(Editable afterText) {
+            if (getCurrentFocus() == mEditText) {
+                    editFlag = true;
+            }
         }
     }
 
