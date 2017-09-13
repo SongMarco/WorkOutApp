@@ -89,16 +89,20 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         Intent intentReceived = getIntent();
 
         strAddWoMode = intentReceived.getStringExtra(BasicInfo.KEY_ADDWO_MODE);
-        CustomTextWatcher ctWoName = new CustomTextWatcher( workoutName );
+
+
 
         //메모를 걍클릭 함(모드뷰), or 롱클릭 -> 수정누름 (MODE_MODIFY)
         // 기존 내용을 먼저 그려주고, 사용자의 입력을 저장해준다
         if (strAddWoMode.equals(BasicInfo.MODE_MODIFY) || strAddWoMode.equals(BasicInfo.MODE_VIEW)) {
 
-            //TODO getIntent -> intent로 수정함. 버그생기는지 확인
+
+            //processIntent가 정상적으로 끝나면 텍스트의 변화를 감지하여, editFlag를 변경한다 -> 이후 저장여부 결정함
+
            if( processIntent(intentReceived) ){
 
-               workoutName.addTextChangedListener(ctWoName);
+               setTextWatcher();
+
 
            }
 
@@ -130,7 +134,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                 Intent intentPlayWo = new Intent(getApplicationContext(), PlayWorkoutActivity.class);
 
 
-                //TODO 필요한 요소들을 여기에 집어넣을 것(갯수, 시간 등 if 문으로 가를 것)
+
                 intentPlayWo.putExtra(key_workoutName, workoutName.getText().toString() );
                 intentPlayWo.putExtra(key_workoutSet, workoutSet.getText().toString() );
                 intentPlayWo.putExtra(key_currentSet, 1 );
@@ -187,14 +191,22 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
     }
 
-
     public void setTextWatcher(){
+        workoutName.addTextChangedListener( new CustomTextWatcher(workoutName) );
 
+        workoutNum.addTextChangedListener( new CustomTextWatcher(workoutNum) );
 
+        workoutSet.addTextChangedListener( new CustomTextWatcher(workoutSet) );
 
+        etHour.addTextChangedListener( new CustomTextWatcher(etHour) );
+        etMin.addTextChangedListener( new CustomTextWatcher(etMin) );
+        etSec.addTextChangedListener( new CustomTextWatcher(etSec) );
 
+        etRestMin.addTextChangedListener( new CustomTextWatcher(etRestMin) );
+        etRestSec.addTextChangedListener( new CustomTextWatcher(etRestSec) );
     }
 
+    // 이 textWatcher가 텍스트 변화를 감지한다. -> editFlag가 true로 되면 -> 저장 여부를 물어보게 된다.
 
     private class CustomTextWatcher implements TextWatcher {
         private EditText mEditText;
