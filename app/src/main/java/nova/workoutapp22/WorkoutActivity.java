@@ -499,6 +499,8 @@ public class WorkoutActivity extends AppCompatActivity {
                     intent.putExtra(key_boolTimeSet, item.getBoolTimeSet());
                     intent.putExtra(key_workoutNum, item.getWoNum());
                     intent.putExtra(key_workoutSet, item.getWoSet());
+
+
                 }
                 //시간을 세팅했다면 시간 + 세트를 전달해서 뿌려라.
                 else {
@@ -511,6 +513,7 @@ public class WorkoutActivity extends AppCompatActivity {
                     intent.putExtra(key_hour, item.getHour());
                     intent.putExtra(key_min, item.getMin());
                     intent.putExtra(key_sec, item.getSec());
+
 
                 }
 

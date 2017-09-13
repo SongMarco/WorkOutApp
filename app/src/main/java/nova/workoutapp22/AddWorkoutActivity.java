@@ -198,7 +198,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
                 startActivity(intentPlayWo);
 
-//                finish();
+                finish();
             }
         });
         //endregion

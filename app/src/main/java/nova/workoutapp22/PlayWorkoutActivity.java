@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_FAIL;
@@ -142,6 +143,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     if(currentSet == totalSet){
                         buttonStart.setVisibility(View.VISIBLE);
                         buttonSetDone.setVisibility(View.INVISIBLE);
+
+                        Toast.makeText(PlayWorkoutActivity.this, getIntent().getStringExtra(key_workoutName)+" 운동 프로그램이 끝났습니다.", Toast.LENGTH_LONG).show();
                         finish();
 
                     }
