@@ -35,6 +35,7 @@ import static nova.workoutapp22.subSources.KeySet.key_min;
 import static nova.workoutapp22.subSources.KeySet.key_restMin;
 import static nova.workoutapp22.subSources.KeySet.key_restSec;
 import static nova.workoutapp22.subSources.KeySet.key_sec;
+import static nova.workoutapp22.subSources.KeySet.key_timerSetting;
 import static nova.workoutapp22.subSources.KeySet.key_workoutName;
 import static nova.workoutapp22.subSources.KeySet.key_workoutNum;
 import static nova.workoutapp22.subSources.KeySet.key_workoutSet;
@@ -56,8 +57,12 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
     int mIDForTransport;
 
     String strAddWoMode;
+
     boolean editFlag = false;
-    boolean processIntentDone = false;
+
+    boolean isEditable = false;
+
+
 
     FrameLayout frameTime;
     LinearLayout linearNum;
@@ -109,13 +114,14 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         if (strAddWoMode.equals(BasicInfo.MODE_MODIFY) || strAddWoMode.equals(BasicInfo.MODE_VIEW)) {
 
 
-            setNotEditable();
+
 
             //processIntent가 정상적으로 끝나면 텍스트의 변화를 감지하여, editFlag를 변경한다 -> 이후 저장여부 결정함
            if( processIntent(intentReceived) ){
 
                setTextWatcher();
            }
+           setNotEditable();
 
         } else { // 새로 메모를 하려는 경우. 화면을 새로 그려준다.
 
@@ -216,6 +222,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
         spinnerNumOrTime.setEnabled(false);
         spinnerTimer.setEnabled(false);
+
+        isEditable = false;
     }
 
     public void setEditable(){
@@ -242,6 +250,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
         spinnerNumOrTime.setEnabled(true);
         spinnerTimer.setEnabled(true);
+
+        isEditable = true;
     }
 
 
@@ -289,6 +299,11 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
             case R.id.action_editItem:
 
                 setEditable();
+
+                if(getIntent().getBooleanExtra(key_boolTimeSet, false) == true){
+                    spinnerTimer.setEnabled(false);
+                }
+
                 addWoMenuState = BasicInfo.MENU_ADDWO_EDIT;
                 invalidateOptionsMenu();
 
@@ -441,7 +456,12 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
                 // numOrTime에서 횟수를 설정했다!
                 else {
-                    spinnerTimer.setEnabled(true);
+
+                    if(isEditable == true){
+                        spinnerTimer.setEnabled(true);
+                    }
+
+
                     frameTime.setVisibility(View.INVISIBLE);
                     linearNum.setVisibility(View.VISIBLE);
 
@@ -548,9 +568,24 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         setNumOrTime();
 
 
-        final boolean boolTimeSet = intent.getBooleanExtra("boolTimeSet", false);
+        final boolean boolTimeSet = intent.getBooleanExtra(key_boolTimeSet, false);
         workoutName.setText(intent.getExtras().getString("workoutName"));
-        timerSetting = intent.getStringExtra("timerSetting");
+
+        timerSetting = intent.getStringExtra(key_timerSetting);
+        int timerCode = 2;
+
+        if( timerSetting.equals("스톱워치") ){
+            timerCode = 0;
+        }
+        else if( timerSetting.equals("타이머") ){
+            timerCode = 1;
+        }
+        else{
+            timerCode = 2;
+        }
+
+
+
         numOrTime = intent.getStringExtra("numOrTime");
 
         etRestMin.setText( String.valueOf( intent.getIntExtra(key_restMin,0) ) );
@@ -560,6 +595,10 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         //시간을 세팅하지 않았다면 횟수와 세트만 받아 뿌려준다.
         if(boolTimeSet == false){
             spinnerNumOrTime.setSelection(0);
+            spinnerTimer.setSelection(timerCode);
+            spinnerTimer.setEnabled(false);
+            Toast.makeText(this, "timer :: "+spinnerTimer.isEnabled(), Toast.LENGTH_SHORT).show();
+
             workoutNum.setText(intent.getExtras().getString("workoutNum"));
             workoutSet.setText(intent.getExtras().getString("workoutSet"));
         }
@@ -568,6 +607,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         else{
 
             spinnerNumOrTime.setSelection(1);
+            spinnerTimer.setSelection(timerCode);
+            spinnerTimer.setEnabled(false);
 
             workoutSet.setText(intent.getExtras().getString("workoutSet"));
 
@@ -764,7 +805,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
     protected void restoreState() {
 
-      //  Toast.makeText(getApplicationContext(), "restore called", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "restore called", Toast.LENGTH_SHORT).show();
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
 
         if ((pref != null) && (pref.contains("workoutName"))) {
