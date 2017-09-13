@@ -805,7 +805,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
     protected void restoreState() {
 
-        Toast.makeText(getApplicationContext(), "restore called", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "restore called", Toast.LENGTH_SHORT).show();
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
 
         if ((pref != null) && (pref.contains("workoutName"))) {

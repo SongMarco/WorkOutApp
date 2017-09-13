@@ -132,8 +132,6 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 case R.id.buttonStartWo:
 
 
-                    buttonStart.setVisibility(View.INVISIBLE);
-                    buttonSetDone.setVisibility(View.VISIBLE);
 
                     new CountdownTask().execute(Long.parseLong("3"));
 
@@ -148,9 +146,15 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                     }
 
+
+                    //아직 운동이 진행중이다.
                     else{
                         currentSet++;
                         woSetPl.setText("세트 : "+ currentSet + "/" + totalSet );
+                        buttonStart.setText(currentSet+"세트 운동 시작!");
+
+                        tvCountDown.setText(currentSet+"세트를 준비하세요!");
+
                         buttonStart.setVisibility(View.VISIBLE);
                         buttonSetDone.setVisibility(View.INVISIBLE);
 
@@ -191,6 +195,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
             super.onPostExecute(result);
             tvCountDown.setText("GO !!!");
 
+            buttonSetDone.setText(currentSet+"세트 완료!");
+            buttonStart.setVisibility(View.INVISIBLE);
+            buttonSetDone.setVisibility(View.VISIBLE);
 
         }
 
