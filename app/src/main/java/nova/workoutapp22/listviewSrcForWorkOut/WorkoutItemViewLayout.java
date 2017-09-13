@@ -11,6 +11,7 @@ import android.widget.TextView;
 import nova.workoutapp22.R;
 
 import static nova.workoutapp22.R.id.textViewForTime;
+import static nova.workoutapp22.R.id.textViewRestTime;
 import static nova.workoutapp22.R.id.textViewTimerSetting;
 import static nova.workoutapp22.R.id.textViewWoName;
 import static nova.workoutapp22.R.id.textViewWoNum;
@@ -24,6 +25,7 @@ public class WorkoutItemViewLayout extends LinearLayout implements Checkable {
 
     TextView woName, woNum, woSet, timerSetting, time;
 
+    TextView restTime;
     CheckBox checkBox;
 
 
@@ -51,6 +53,8 @@ public class WorkoutItemViewLayout extends LinearLayout implements Checkable {
 
         timerSetting = (TextView)findViewById(textViewTimerSetting);
         time = (TextView)findViewById(textViewForTime);
+
+        restTime = (TextView)findViewById(textViewRestTime);
 
         checkBox = (CheckBox) findViewById(checkBoxId);
 
@@ -121,9 +125,30 @@ public class WorkoutItemViewLayout extends LinearLayout implements Checkable {
 
 
         time.setText(outputTime);
-
-
     }
+
+
+    public void setRestTimeInLayout(int restMin, int restSec){
+
+        String outputRestTime = "쉬는 시간:";
+
+        if(restMin ==0 && restSec ==0){
+            outputRestTime = "쉬는 시간 없음";
+            restTime.setText(outputRestTime);
+            return;
+        }
+
+        if( restMin != 0){
+            outputRestTime = outputRestTime+restMin+"분";
+        }
+        if( restSec != 0){
+            outputRestTime = outputRestTime+restSec+"초";
+        }
+
+        restTime.setText(outputRestTime);
+        return;
+    }
+
     ///////////////////////// 구버전 set메소드들
 
 

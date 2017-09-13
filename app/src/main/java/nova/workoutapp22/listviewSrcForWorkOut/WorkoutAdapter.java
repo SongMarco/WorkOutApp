@@ -93,6 +93,8 @@ public class WorkoutAdapter extends BaseAdapter {
 
         WorkoutItem item = woItems.get(position);
         view.setWoNameInLayout( item.getWoName() );
+        view.setRestTimeInLayout(item.getRestMin(), item.getRestSec());
+
 
         FrameLayout frameForTime = (FrameLayout)view.findViewById(R.id.frameForTime);
         LinearLayout frameForNum = (LinearLayout)view.findViewById(R.id.frameForNum);

@@ -585,9 +585,16 @@ public class WorkoutActivity extends AppCompatActivity {
         String woNum = data.getExtras().getString("workoutNum");
         String woSet = data.getExtras().getString("workoutSet");
 
-        int restMin = Integer.parseInt( data.getExtras().getString(key_restMin) );
-        int restSec = Integer.parseInt( data.getExtras().getString(key_restSec) );
+        int restMin = 0;
+        int restSec = 0;
+        if (!data.getExtras().getString(key_restMin).equals("")) {
+            restMin = Integer.parseInt(data.getExtras().getString(key_restMin));
+        }
+        if (!data.getExtras().getString(key_restSec).equals("")) {
+            restSec = Integer.parseInt(data.getExtras().getString(key_restSec));
+        }
 
+//        Toast.makeText(this, "Min and Sec = "+restMin+restSec, Toast.LENGTH_SHORT).show();
 
         boolean boolTimeSet = data.getBooleanExtra("boolTimeSet", false);
 
@@ -607,7 +614,7 @@ public class WorkoutActivity extends AppCompatActivity {
             int loadedMin = data.getIntExtra("min", -1);
             int loadedSec = data.getIntExtra("sec", -1);
 
-            return new WorkoutItem(woName, woSet, loadedHour, loadedMin, loadedSec, timerSetting, boolTimeSet);
+            return new WorkoutItem(woName, woSet, loadedHour, loadedMin, loadedSec, timerSetting, boolTimeSet, restMin, restSec);
 
         }
 
@@ -632,19 +639,19 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
     public void saveState() {
-        //   saveStateWithGson();
-        saveStateWithJson();
+        saveStateWithGson();
+//        saveStateWithJson();
     }
 
     public void restoreState() {
 
-        //  restoreStateWithGson();
+        restoreStateWithGson();
 
 
         // 주의 !! restore에서 오류가 많이 나는데,
         // 아이템을 추가할 경우 toJson도 손보아야 한다.
 
-        restoreStateWithJson();
+//        restoreStateWithJson();
     }
 
 

@@ -23,8 +23,8 @@ public class WorkoutItem {
     int min = -1;
     int sec = -1;
 
-    int restMin = -1;
-    int restSec = -1;
+    int restMin = 0;
+    int restSec = 0;
 
 
     public int mID;
@@ -77,7 +77,7 @@ public class WorkoutItem {
         this.boolTimeSet = boolTimeSet;
     }
 
-    public WorkoutItem(String woName, String woSet, int hour, int min, int sec ,String timerSetting, boolean boolTimeSet){
+    public WorkoutItem(String woName, String woSet, int hour, int min, int sec ,String timerSetting, boolean boolTimeSet, int restMin, int restSec){
         this.woName = woName;
         this.timerSetting = timerSetting;
         this.woSet = woSet;
@@ -85,6 +85,9 @@ public class WorkoutItem {
         this.min = min;
         this.sec = sec;
         this.boolTimeSet = boolTimeSet;
+
+        this.restMin = restMin;
+        this.restSec = restSec;
     }
 
 
