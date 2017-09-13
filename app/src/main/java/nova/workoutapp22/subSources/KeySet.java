@@ -17,7 +17,12 @@ public class KeySet {
     public static final String key_min = "min";
     public static final String key_sec = "sec";
 
+    public static final String key_restMin = "restMin";
+    public static final String key_restSec = "restSec";
+
 
     /////keyset for workout Memo Item
+
+
 
 }

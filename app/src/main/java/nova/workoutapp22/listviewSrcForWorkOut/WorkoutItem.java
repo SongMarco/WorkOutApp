@@ -23,6 +23,9 @@ public class WorkoutItem {
     int min = -1;
     int sec = -1;
 
+    int restMin = -1;
+    int restSec = -1;
+
 
     public int mID;
 
@@ -160,6 +163,18 @@ public class WorkoutItem {
     public int getSec(){ return sec;}
 
     public void setSec(int sec) {this.sec = sec;}
+
+    ////////////////////쉬는 시간 관련 세팅
+
+    public int getRestMin(){return restMin;}
+
+    public void setRestMin(int restMin){this.restMin = restMin;}
+
+    public int getRestSec(){return restSec;}
+
+    public void setRestSec(int restSec){this.restSec = restSec;}
+
+
 
     //////////////////////////
 
