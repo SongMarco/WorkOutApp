@@ -68,7 +68,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="287dp"
-        android:layout_weight="0.19">
+        android:layout_weight="0.19"
+        android:background="@color/colorLBlue"
+        >
+
 
         <TextView
             android:id="@+id/textViewTimerSetPl"
@@ -78,6 +81,17 @@
             android:layout_centerVertical="true"
             android:text="시간 세팅 안함"
             android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/textViewCountDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="운동을 시작하세요!"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"
+            android:textSize="25sp" />
     </RelativeLayout>
 
     <FrameLayout
@@ -86,14 +100,14 @@
         >
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/buttonStartWo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="운동 시작!"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:text="운동 시작!" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/buttonSetDone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

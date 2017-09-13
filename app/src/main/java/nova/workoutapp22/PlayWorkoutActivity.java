@@ -1,12 +1,20 @@
 package nova.workoutapp22;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+
+import static nova.workoutapp22.subSources.BasicInfo.RESULT_FAIL;
+import static nova.workoutapp22.subSources.BasicInfo.RESULT_SUCCESS;
 import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
 import static nova.workoutapp22.subSources.KeySet.key_currentSet;
 import static nova.workoutapp22.subSources.KeySet.key_hour;
@@ -23,10 +31,14 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
     TextView woNamePl, woNumTimePl, woSetPl;
 
+    TextView tvCountDown;
+
     int currentSet, totalSet;
     int hour, min, sec;
     Boolean isTimeSet;
 
+    Button buttonStart;
+    Button buttonSetDone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +51,16 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ///////////////
 
+        //region 뷰 관련 세팅 리전
         /////////뷰 관련 세팅
 
         woNamePl = (TextView)findViewById(R.id.textViewWoNamePl);
         woSetPl = (TextView)findViewById(R.id.textViewSetPl);
         woNumTimePl = (TextView)findViewById(R.id.textViewNumPl);
+
+        tvCountDown = (TextView)findViewById(R.id.textViewCountDown);
+
+
 
         Intent intentReceived = getIntent();
 
@@ -94,17 +111,46 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
             woNumTimePl.setText( "세트 당 "+intentReceived.getStringExtra(key_workoutNum) +"회 운동" );
         }
+        //endregion
 
+        buttonStart = (Button)findViewById(R.id.buttonStartWo);
+        buttonSetDone = (Button)findViewById(R.id.buttonSetDone);
 
-
-
-
-
-
+        findViewById(R.id.buttonStartWo).setOnClickListener(plClickListener);
+        findViewById(R.id.buttonSetDone).setOnClickListener(plClickListener);
 
 
 
     }
+
+
+    //region 버튼 클릭 관련 구역
+    Button.OnClickListener plClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+                case R.id.buttonStartWo:
+
+
+                    buttonStart.setVisibility(View.INVISIBLE);
+                    buttonSetDone.setVisibility(View.VISIBLE);
+
+                    new CountdownTask().execute(Long.parseLong("3"));
+
+                    break;
+                case R.id.buttonSetDone:
+
+                    buttonStart.setVisibility(View.VISIBLE);
+                    buttonSetDone.setVisibility(View.INVISIBLE);
+
+                    break;
+
+            }
+        }
+    };
+    //endregion
+
+    //region 툴바 아이템 선택 관련 구역
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -114,5 +160,65 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    //endregion
+
+    //region 카운트 다운 어싱크 관련 구역
+    class CountdownTask extends AsyncTask<Long, Long, Long> {
+
+        long time;
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onPostExecute(Long result) {
+            super.onPostExecute(result);
+            tvCountDown.setText("GO !!!");
+
+
+        }
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Long... values) {
+            super.onProgressUpdate(values);
+
+            tvCountDown.setText(""+time);
+
+        }
+
+        @Override
+        protected Long doInBackground(Long... params) {
+            time = params[0]+1;
+
+            MediaPlayer.create(getApplicationContext(), R.raw.go).start();
+
+            while(time > 0) {
+                try {
+                    Thread.sleep(900);         // one second sleep
+                    time--;                     // decrement time
+                    publishProgress();          // trigger onProgressUpdate()
+                } catch(InterruptedException e) {
+                    Log.i("GUN", Log.getStackTraceString(e));
+                    return RESULT_FAIL;
+                }
+            }
+            return RESULT_SUCCESS;
+
+//
+////
+////            for (long i = 1; i <= num; i++) {
+////                result = result * i;
+////            }
+//
+//            Log.d("test", "result:" + result);
+
+        }
+    }
+    //endregion
 
 }

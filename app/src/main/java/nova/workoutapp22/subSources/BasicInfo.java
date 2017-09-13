@@ -6,6 +6,11 @@ package nova.workoutapp22.subSources;
 
 public class BasicInfo {
 
+    //////////어싱크태스크 관련 상수들
+    public static final Long RESULT_SUCCESS = Long.parseLong("0");
+    public static final Long RESULT_FAIL = Long.parseLong("1");
+
+
     /////////////////////////////////카메라 관련 상수들
     public static final int CHOOSE_IMAGE = 300;
     public static final int PICK_FROM_ALBUM = 301;
