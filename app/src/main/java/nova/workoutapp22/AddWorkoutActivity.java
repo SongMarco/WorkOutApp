@@ -22,8 +22,16 @@ import android.widget.Toast;
 import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.R.id.spinnerTimerSetting;
+import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
+import static nova.workoutapp22.subSources.KeySet.key_currentSet;
+import static nova.workoutapp22.subSources.KeySet.key_hour;
+import static nova.workoutapp22.subSources.KeySet.key_min;
 import static nova.workoutapp22.subSources.KeySet.key_restMin;
 import static nova.workoutapp22.subSources.KeySet.key_restSec;
+import static nova.workoutapp22.subSources.KeySet.key_sec;
+import static nova.workoutapp22.subSources.KeySet.key_workoutName;
+import static nova.workoutapp22.subSources.KeySet.key_workoutNum;
+import static nova.workoutapp22.subSources.KeySet.key_workoutSet;
 
 public class AddWorkoutActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     EditText workoutName, workoutNum, workoutSet, etTimerSetting;
@@ -35,7 +43,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
     String timerSetting, numOrTime;
     Spinner spinnerTimer, spinnerNumOrTime;
 
-    boolean timeSetFlag;
+    boolean isTimeSet;
 
     // EditText etWoName, etWoNum, etWoSet, etTimerSetting;
 
@@ -69,21 +77,21 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         frameTime = (FrameLayout) findViewById(R.id.FrameForTime);
         linearNum = (LinearLayout) findViewById(R.id.FrameForNum);
 
-        timeSetFlag = false;
 
         spinnerTimer = (Spinner) findViewById(R.id.spinnerTimerSetting);
         spinnerNumOrTime = (Spinner) findViewById(R.id.spinnerNumOrTime);
 
-        Intent intent = getIntent();
+        Intent intentReceived = getIntent();
 
-        strAddWoMode = intent.getStringExtra(BasicInfo.KEY_ADDWO_MODE);
+        strAddWoMode = intentReceived.getStringExtra(BasicInfo.KEY_ADDWO_MODE);
 
 
         //메모를 걍클릭 함(모드뷰), or 롱클릭 -> 수정누름 (MODE_MODIFY)
         // 기존 내용을 먼저 그려주고, 사용자의 입력을 저장해준다
         if (strAddWoMode.equals(BasicInfo.MODE_MODIFY) || strAddWoMode.equals(BasicInfo.MODE_VIEW)) {
 
-            processIntent(getIntent());
+            //TODO getIntent -> intent로 수정함. 버그생기는지 확인
+            processIntent(intentReceived);
 
         } else { // 새로 메모를 하려는 경우. 화면을 새로 그려준다.
 
@@ -187,6 +195,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                     spinnerTimer.setSelection(1);
                     spinnerTimer.setEnabled(false);
 
+                    isTimeSet = true;
+
                  //   Toast.makeText(getApplicationContext(), "시간을 정하여 운동하므로 타이머 사용이 고정됩니다.", Toast.LENGTH_SHORT).show();
                 }
 
@@ -196,6 +206,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                     frameTime.setVisibility(View.INVISIBLE);
                     linearNum.setVisibility(View.VISIBLE);
 
+                    isTimeSet = false;
                 }
 
 
@@ -229,14 +240,6 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
         if (event.getAction() == KeyEvent.ACTION_DOWN) { //키 다운 액션 감지
             if (keyCode == KeyEvent.KEYCODE_BACK) { //BackKey 다운일 경우만 처리
-
-
-
-
-
-
-
-
 
 
 
@@ -307,10 +310,13 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         setNumOrTime();
 
 
-        boolean boolTimeSet = intent.getBooleanExtra("boolTimeSet", false);
+        final boolean boolTimeSet = intent.getBooleanExtra("boolTimeSet", false);
         workoutName.setText(intent.getExtras().getString("workoutName"));
         timerSetting = intent.getStringExtra("timerSetting");
         numOrTime = intent.getStringExtra("numOrTime");
+
+        etRestMin.setText( String.valueOf( intent.getIntExtra(key_restMin,0) ) );
+        etRestSec.setText( String.valueOf (intent.getIntExtra(key_restSec,0) ) );
 
 
         //시간을 세팅하지 않았다면 횟수와 세트만 받아 뿌려준다.
@@ -355,6 +361,66 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
             }
         });
 
+        Button startBtn = (Button) findViewById(R.id.buttonStartWo);
+        startBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent intentPlayWo = new Intent(getApplicationContext(), PlayWorkoutActivity.class);
+
+
+                //TODO 필요한 요소들을 여기에 집어넣을 것(갯수, 시간 등 if 문으로 가를 것)
+                intentPlayWo.putExtra(key_workoutName, workoutName.getText().toString() );
+                intentPlayWo.putExtra(key_workoutSet, workoutSet.getText().toString() );
+                intentPlayWo.putExtra(key_currentSet, 1 );
+
+                intentPlayWo.putExtra(key_boolTimeSet, isTimeSet);
+
+                //시간을 세팅하였다면 시간을 보내줘!
+                if(isTimeSet == true){
+
+                    if(!etHour.getText().toString().equals("")){
+                        intentPlayWo.putExtra(key_hour, Integer.parseInt( etHour.getText().toString() )  );
+                    }
+                    else {
+                        intentPlayWo.putExtra(key_hour, 0);
+                    }
+                    if(!etMin.getText().toString().equals("")){
+
+                        intentPlayWo.putExtra(key_min, Integer.parseInt(etMin.getText().toString()));
+                    }
+                    else{
+                        intentPlayWo.putExtra(key_min, 0);
+                    }
+                    if(!etSec.getText().toString().equals("")){
+                        intentPlayWo.putExtra(key_sec, Integer.parseInt(etSec.getText().toString()) );
+                    }
+                    else{
+                        intentPlayWo.putExtra(key_sec, 0 );
+                    }
+//                    Toast.makeText(AddWorkoutActivity.this, "hour min sec = "+etHour.getText().toString()+etMin.getText().toString()+
+//                            etSec.getText().toString(), Toast.LENGTH_SHORT).show();
+                }
+                //갯수 세팅이다. 갯수만 보낸다.
+                else{
+                    intentPlayWo.putExtra(key_workoutNum, workoutNum.getText().toString()  );
+//                    Toast.makeText(AddWorkoutActivity.this, "workoutnum = "+workoutNum.getText().toString(), Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+
+//                Toast.makeText(AddWorkoutActivity.this, "istimeset = "+isTimeSet, Toast.LENGTH_SHORT).show();
+
+
+                startActivity(intentPlayWo);
+
+//                finish();
+            }
+        });
+
+
+
 
     }
 
@@ -387,7 +453,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
 
         // 시간 세팅을 하지 않은 경우, boolTimeSet를 false로 전달해서 리스트뷰에 보이지 않도록 하겠다.
-        if( frameTime.getVisibility()==View.INVISIBLE ) {
+        if( isTimeSet==false ) {
             intentForSave.putExtra("boolTimeSet", false);
 
             intentForSave.putExtra("hour", -1);
@@ -445,8 +511,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         // 메뉴의 신규 추가임
         } else {
 
-            intentForSave.putExtra("workoutNum", workoutNum.getText().toString() );
-            intentForSave.putExtra("workoutSet", workoutSet.getText().toString() );
+            intentForSave.putExtra("workoutNum", workoutNum.getText().toString());
+            intentForSave.putExtra("workoutSet", workoutSet.getText().toString());
         }
 
 

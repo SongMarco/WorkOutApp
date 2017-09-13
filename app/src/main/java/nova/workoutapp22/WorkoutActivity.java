@@ -485,6 +485,14 @@ public class WorkoutActivity extends AppCompatActivity {
                 intent.putExtra(key_workoutName, item.getWoName().toString());
                 intent.putExtra(key_timerSetting, item.getTimerSetting().toString());
 
+                intent.putExtra(key_restMin, item.getRestMin() );
+                intent.putExtra(key_restSec, item.getRestSec() );
+
+//                Toast.makeText(WorkoutActivity.this, "getRest min sec = "+item.getRestMin()+item.getRestSec(), Toast.LENGTH_SHORT).show();
+
+
+
+
                 //시간을 세팅하지 않았다면 횟수와 세트만 전달하자.
                 if (item.getBoolTimeSet() == false) {
 

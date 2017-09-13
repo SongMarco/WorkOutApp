@@ -20,6 +20,8 @@ public class KeySet {
     public static final String key_restMin = "restMin";
     public static final String key_restSec = "restSec";
 
+    public static final String key_currentSet = "currentSet";
+
 
     /////keyset for workout Memo Item
 
