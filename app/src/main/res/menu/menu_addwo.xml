@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_editItem"
+        android:orderInCategory="1"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        android:title="@string/action_editWorkout"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_editDone"
+        android:orderInCategory="2"
+        android:icon="@drawable/ic_done_black_24dp"
+        android:title="@string/action_editDone"
+        app:showAsAction="always" />
+</menu>

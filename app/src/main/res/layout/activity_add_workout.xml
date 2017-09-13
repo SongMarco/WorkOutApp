@@ -7,6 +7,14 @@
     android:orientation="vertical"
     tools:context="nova.workoutapp22.AddWorkoutActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarAddWorkout"
+        style="@style/ToolbarTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:minHeight="?attr/actionBarSize" />
+
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="match_parent"

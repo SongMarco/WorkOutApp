@@ -140,8 +140,23 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     break;
                 case R.id.buttonSetDone:
 
-                    buttonStart.setVisibility(View.VISIBLE);
-                    buttonSetDone.setVisibility(View.INVISIBLE);
+                    //current = total이라면 운동이 완료된 것이다. 운동을 마치고 운동 화면으로 돌아가자.
+                    if(currentSet == totalSet){
+                        buttonStart.setVisibility(View.VISIBLE);
+                        buttonSetDone.setVisibility(View.INVISIBLE);
+                        finish();
+
+                    }
+
+                    else{
+                        currentSet++;
+                        woSetPl.setText("세트 : "+ currentSet + "/" + totalSet );
+                        buttonStart.setVisibility(View.VISIBLE);
+                        buttonSetDone.setVisibility(View.INVISIBLE);
+
+
+                    }
+
 
                     break;
 

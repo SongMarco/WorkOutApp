@@ -7,4 +7,6 @@
     <string name="action_selectAll">전체 선택</string>
     <string name="action_clearSelection">선택 해제</string>
     <string name="action_add_workout">운동 추가하기</string>
+    <string name="action_editWorkout">운동 편집</string>
+    <string name="action_editDone">운동 편집완료</string>
 </resources>

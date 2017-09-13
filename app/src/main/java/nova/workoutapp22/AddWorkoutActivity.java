@@ -7,10 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -58,12 +62,20 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
     FrameLayout frameTime;
     LinearLayout linearNum;
 
+    Toolbar myToolbar;
+    String addWoMenuState = BasicInfo.MENU_ADDWO_NORMAL;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         clearMyPrefs();
         setContentView(R.layout.activity_add_workout);
+
+        myToolbar = (Toolbar) findViewById(R.id.toolbarAddWorkout);
+        setSupportActionBar(myToolbar);
 
         editFlag = false;
         workoutName = (EditText) findViewById(R.id.editTextWorkOutName);
@@ -96,6 +108,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         // 기존 내용을 먼저 그려주고, 사용자의 입력을 저장해준다
         if (strAddWoMode.equals(BasicInfo.MODE_MODIFY) || strAddWoMode.equals(BasicInfo.MODE_VIEW)) {
 
+
+            setNotEditable();
 
             //processIntent가 정상적으로 끝나면 텍스트의 변화를 감지하여, editFlag를 변경한다 -> 이후 저장여부 결정함
            if( processIntent(intentReceived) ){
@@ -185,10 +199,118 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
 
 
+    }
+
+    public void setNotEditable(){
+
+        workoutName.setFocusable(false);
+        workoutNum.setFocusable(false);
+        workoutSet.setFocusable(false);
+
+        etHour.setFocusable(false);
+        etMin.setFocusable(false);
+        etSec.setFocusable(false);
+
+        etRestMin.setFocusable(false);
+        etRestSec.setFocusable(false);
+
+        spinnerNumOrTime.setEnabled(false);
+        spinnerTimer.setEnabled(false);
+    }
+
+    public void setEditable(){
+
+        workoutName.setFocusableInTouchMode(true);
+        workoutNum.setFocusableInTouchMode(true);
+        workoutSet.setFocusableInTouchMode(true);
+        etHour.setFocusableInTouchMode(true);
+        etMin.setFocusableInTouchMode(true);
+        etSec.setFocusableInTouchMode(true);
+        etRestMin.setFocusableInTouchMode(true);
+        etRestSec.setFocusableInTouchMode(true);
+
+        workoutName.setFocusable(true);
+        workoutNum.setFocusable(true);
+        workoutSet.setFocusable(true);
+
+        etHour.setFocusable(true);
+        etMin.setFocusable(true);
+        etSec.setFocusable(true);
+
+        etRestMin.setFocusable(true);
+        etRestSec.setFocusable(true);
+
+        spinnerNumOrTime.setEnabled(true);
+        spinnerTimer.setEnabled(true);
+    }
+
+
+    //region @@@@@액션바 메뉴 관련 파트@@@@@
+    ///
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_addwo, menu);
+
+        //노말모드일 경우 에딧버튼이 보이게!
+        if(addWoMenuState.equals(BasicInfo.MENU_ADDWO_NORMAL) ){
+            menu.findItem(R.id.action_editItem).setVisible(true);
+            menu.findItem(R.id.action_editDone).setVisible(false);
+        }
+        else{
+            menu.findItem(R.id.action_editItem).setVisible(false);
+            menu.findItem(R.id.action_editDone).setVisible(true);
+        }
+
+
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+
+        //        menu.findItem(R.id.start).setVisible(!isStarted);
+        //        menu.findItem(R.id.stop).setVisible(isStarted);
+
+        return true;
 
     }
 
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.action_editItem:
+
+                setEditable();
+                addWoMenuState = BasicInfo.MENU_ADDWO_EDIT;
+                invalidateOptionsMenu();
+
+                Toast.makeText(this, "운동을 수정합니다.", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.action_editDone:
+
+                setNotEditable();
+                addWoMenuState = BasicInfo.MENU_ADDWO_NORMAL;
+                invalidateOptionsMenu();
+
+                Toast.makeText(this, "수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                return true;
+
+
+            default:
+                return true;
+        }
+
+    }
+    //endregion@@@@@
 
     public void setTextWatcher(){
         workoutName.addTextChangedListener( new CustomTextWatcher(workoutName) );

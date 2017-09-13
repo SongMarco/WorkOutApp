@@ -57,4 +57,6 @@ public class BasicInfo {
 
     public static final String MENU_WO_MULT = "WO_MULT";
 
+    public static final String MENU_ADDWO_NORMAL = "ADDWO_NORMAL";
+    public static final String MENU_ADDWO_EDIT = "ADDWO_EDIT";
 }
