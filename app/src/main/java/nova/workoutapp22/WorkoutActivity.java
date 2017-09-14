@@ -798,7 +798,6 @@ public class WorkoutActivity extends AppCompatActivity {
 
         String json = gson.toJson(saveArray);
 
-        Log.wtf("wtf", json);
         editor.putString("arrayList", json);
         //apply vs commit
 

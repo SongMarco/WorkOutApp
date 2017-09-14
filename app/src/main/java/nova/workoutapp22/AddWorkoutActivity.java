@@ -156,6 +156,24 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                 intentPlayWo.putExtra(key_workoutSet, workoutSet.getText().toString() );
                 intentPlayWo.putExtra(key_currentSet, 1 );
 
+                //쉬는시간 부분
+                if(!etRestMin.getText().toString().equals("")){
+                    intentPlayWo.putExtra(key_restMin, Integer.parseInt( etRestMin.getText().toString() ) );
+                }
+                else{
+                    intentPlayWo.putExtra(key_restMin, 0);
+                }
+                if(!etRestSec.getText().toString().equals("")){
+                    intentPlayWo.putExtra(key_restSec, Integer.parseInt( etRestSec.getText().toString() ) );
+                }
+                else{
+                    intentPlayWo.putExtra(key_restSec, 0);
+                }
+
+
+
+
+
                 intentPlayWo.putExtra(key_boolTimeSet, isTimeSet);
 
                 //시간을 세팅하였다면 시간을 보내줘!
@@ -198,6 +216,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
                 startActivity(intentPlayWo);
 
+                saveAndSetResult();
                 finish();
             }
         });

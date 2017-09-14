@@ -13,13 +13,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_FAIL;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_SUCCESS;
 import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
 import static nova.workoutapp22.subSources.KeySet.key_currentSet;
 import static nova.workoutapp22.subSources.KeySet.key_hour;
 import static nova.workoutapp22.subSources.KeySet.key_min;
+import static nova.workoutapp22.subSources.KeySet.key_restMin;
+import static nova.workoutapp22.subSources.KeySet.key_restSec;
 import static nova.workoutapp22.subSources.KeySet.key_sec;
 import static nova.workoutapp22.subSources.KeySet.key_workoutName;
 import static nova.workoutapp22.subSources.KeySet.key_workoutNum;
@@ -27,6 +28,12 @@ import static nova.workoutapp22.subSources.KeySet.key_workoutSet;
 
 public class PlayWorkoutActivity extends AppCompatActivity {
 
+    private static PlayWorkoutActivity instance;
+    public static PlayWorkoutActivity getInstance(){
+        return instance;
+    }
+
+    private TaskTimer restTimer = new TaskTimer();
 
     Toolbar myToolbar;
 
@@ -36,6 +43,13 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
     int currentSet, totalSet;
     int hour, min, sec;
+
+
+    int restMin = 0;
+    int restSec = 0;
+    int totalRestSec = 0;
+
+
     Boolean isTimeSet;
 
     Button buttonStart;
@@ -43,7 +57,11 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //아래 문장이 없으면 getInstance시 null 반환함.
+        instance = this;
         setContentView(R.layout.activity_play_workout);
+
+
 
 
 ////////// 툴바 관련 세팅
@@ -61,6 +79,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         tvCountDown = (TextView)findViewById(R.id.textViewCountDown);
 
+        restTimer.setTextView(R.id.textViewTimerSetPl);
 
 
         Intent intentReceived = getIntent();
@@ -80,10 +99,38 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         isTimeSet = intentReceived.getBooleanExtra(key_boolTimeSet, false);
 
+        //쉬는 시간 세팅이다.
+
+        restMin = intentReceived.getIntExtra(key_restMin, 0);
+        restSec = intentReceived.getIntExtra(key_restSec, 0);
+        totalRestSec = 60*restMin + restSec;
+
+
+        String outputRestTime = "";
+
+        if(restMin == 0 && restSec == 0){
+            outputRestTime = "없음";
+        }
+
+        if( restMin != 0){
+            outputRestTime = outputRestTime+restMin+"분";
+        }
+        if( restSec != 0){
+            outputRestTime = outputRestTime+restSec+"초";
+        }
+
+
+
+
+        ((TextView)findViewById(R.id.textViewRestTimePl) ).setText( "쉬는시간 : "+outputRestTime );
+
+
+
+
+
+
         //시간 세팅이다.
         if(isTimeSet == true) {
-
-
 
             hour = intentReceived.getIntExtra(key_hour, 0);
             min = intentReceived.getIntExtra(key_min, 0);
@@ -106,6 +153,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
             woNumTimePl.setText( "세트 당 "+outputTime+" 운동"  );
         }
+
+
 
         //갯수 세팅이다.
         else{
@@ -160,6 +209,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                         buttonStart.setVisibility(View.VISIBLE);
                         buttonSetDone.setVisibility(View.INVISIBLE);
+
+                        restTimer.setTime(totalRestSec);
+                        restTimer.execute();
 
 
                     }
