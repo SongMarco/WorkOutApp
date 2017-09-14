@@ -5,7 +5,7 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
-public class TaskTimer extends AsyncTask<Void, Void, String> {
+public class TimerTask extends AsyncTask<Void, Void, String> {
     private static final String RESULT_SUCCESS = "1";
     private static final String RESULT_FAIL = "0";
     private static final int TEXT_COLOR_NORMAL = 0xFF000000;
@@ -14,6 +14,7 @@ public class TaskTimer extends AsyncTask<Void, Void, String> {
     private int time = -1;
 
     boolean isFirst = true;
+    boolean isCountDone = false;
 
     MediaPlayer mp;
     public void setTextView(int textViewId) {
@@ -26,7 +27,7 @@ public class TaskTimer extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPreExecute() {
-        timer.setText(getTime(time));
+        timer.setText(formatTime(time));
         timer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
     }
@@ -36,25 +37,12 @@ public class TaskTimer extends AsyncTask<Void, Void, String> {
         while (time > 0) {
             try {
 
-                if(isFirst == false){
-                    releaseBeep();
-                    makeBeep();
+
+
+
                     Thread.sleep(1000);
 
                     time--;
-                }
-                else{
-
-
-                    Thread.sleep(1000);
-                    makeBeep();
-                    time--;
-
-                }
-
-
-
-                isFirst = false;
 
 
 
@@ -69,7 +57,13 @@ public class TaskTimer extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onProgressUpdate(Void... values) {
-        timer.setText(getTime(time));
+        if(time <= 3 && !isCountDone){
+            MediaPlayer.create(PlayWorkoutActivity.getInstance(), R.raw.go3).start();
+            isCountDone = true;
+        }
+
+        timer.setText(formatTime(time));
+
     }
 
     @Override
@@ -89,7 +83,7 @@ public class TaskTimer extends AsyncTask<Void, Void, String> {
 
     }
 
-    String getTime(int time){
+    String formatTime(int time){
 
 
         String sEll = String.format("%02d:%02d:%02d",time/3600 ,time/ 60, time%60);
@@ -97,4 +91,9 @@ public class TaskTimer extends AsyncTask<Void, Void, String> {
         return sEll;
 
     }
+
+    public int getTime(){
+        return time;
+    }
+
 }

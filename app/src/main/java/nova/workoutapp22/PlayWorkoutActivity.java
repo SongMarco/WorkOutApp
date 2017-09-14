@@ -33,8 +33,6 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         return instance;
     }
 
-    private TaskTimer restTimer = new TaskTimer();
-
     Toolbar myToolbar;
 
     TextView woNamePl, woNumTimePl, woSetPl;
@@ -79,7 +77,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         tvCountDown = (TextView)findViewById(R.id.textViewCountDown);
 
-        restTimer.setTextView(R.id.textViewTimerSetPl);
+
 
 
         Intent intentReceived = getIntent();
@@ -182,10 +180,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 case R.id.buttonStartWo:
 
 
+                  new CountdownTask().execute(Long.parseLong("3"));
 
-                    new CountdownTask().execute(Long.parseLong("3"));
-
-                    break;
+                  break;
                 case R.id.buttonSetDone:
 
                     //current = total이라면 운동이 완료된 것이다. 운동을 마치고 운동 화면으로 돌아가자.
@@ -210,8 +207,15 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         buttonStart.setVisibility(View.VISIBLE);
                         buttonSetDone.setVisibility(View.INVISIBLE);
 
+                        TimerTask restTimer = new TimerTask();
+                        restTimer.setTextView(R.id.textViewTimerSetPl);
                         restTimer.setTime(totalRestSec);
                         restTimer.execute();
+
+
+                        //todo restTimer가 끝나면 바로 운동 시작이다다
+                       while(restTimer.)
+
 
 
                     }
@@ -273,12 +277,19 @@ public class PlayWorkoutActivity extends AppCompatActivity {
             time = params[0]+1;
 
             MediaPlayer.create(getApplicationContext(), R.raw.go).start();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-            while(time > 0) {
+            while(time > 1) {
                 try {
-                    Thread.sleep(900);         // one second sleep
-                    time--;                     // decrement time
+                    time--;            // decrement time
                     publishProgress();          // trigger onProgressUpdate()
+                    Thread.sleep(1000);         // one second sleep
+
+
                 } catch(InterruptedException e) {
                     Log.i("GUN", Log.getStackTraceString(e));
                     return RESULT_FAIL;
