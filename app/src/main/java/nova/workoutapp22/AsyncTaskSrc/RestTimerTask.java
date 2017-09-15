@@ -12,6 +12,7 @@ import nova.workoutapp22.R;
 import nova.workoutapp22.subSources.KeySet;
 
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
+import static nova.workoutapp22.PlayWorkoutActivity.stopWatchTask;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
 import static nova.workoutapp22.PlayWorkoutActivity.workoutTimerTask;
 
@@ -140,11 +141,28 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
             buttonStart.setVisibility(View.VISIBLE);
             buttonSetDone.setVisibility(View.INVISIBLE);
 
+
             workoutTimerTask = new WorkoutTimerTask();
             workoutTimerTask.setView();
             workoutTimerTask.setWorkoutTime(totalWorkoutTime);
             workoutTimerTask.execute();
 
+        } else if (timerSetting.equals(KeySet.STRING_STOPWATCH)) {
+
+            tvTimer.setText("GO!!!");
+
+            currentSet++;
+            woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
+            buttonStart.setText(currentSet + "세트 운동 시작!");
+
+            tvTitle.setText(currentSet + "세트를 준비하세요!");
+
+
+            buttonStart.setVisibility(View.INVISIBLE);
+            buttonSetDone.setVisibility(View.VISIBLE);
+            stopWatchTask = new StopWatchTask();
+            stopWatchTask.setView();
+            stopWatchTask.execute();
 
         }
 
@@ -177,8 +195,8 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         return time;
     }
 
-    public void setIsCountdone(Boolean bool){
-        this.isCountDone= bool;
+    public void setIsCountdone(Boolean bool) {
+        this.isCountDone = bool;
     }
 
 }
