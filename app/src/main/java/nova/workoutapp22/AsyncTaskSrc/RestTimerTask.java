@@ -1,4 +1,4 @@
-package nova.workoutapp22;
+package nova.workoutapp22.AsyncTaskSrc;
 
 
 import android.media.MediaPlayer;
@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import nova.workoutapp22.PlayWorkoutActivity;
+import nova.workoutapp22.R;
 
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
 

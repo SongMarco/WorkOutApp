@@ -28,6 +28,7 @@ import android.widget.Toast;
 import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.R.id.spinnerTimerSetting;
+import static nova.workoutapp22.subSources.KeySet.MODE_NULL;
 import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
 import static nova.workoutapp22.subSources.KeySet.key_currentSet;
 import static nova.workoutapp22.subSources.KeySet.key_hour;
@@ -35,6 +36,7 @@ import static nova.workoutapp22.subSources.KeySet.key_min;
 import static nova.workoutapp22.subSources.KeySet.key_restMin;
 import static nova.workoutapp22.subSources.KeySet.key_restSec;
 import static nova.workoutapp22.subSources.KeySet.key_sec;
+import static nova.workoutapp22.subSources.KeySet.key_timerMode;
 import static nova.workoutapp22.subSources.KeySet.key_timerSetting;
 import static nova.workoutapp22.subSources.KeySet.key_workoutName;
 import static nova.workoutapp22.subSources.KeySet.key_workoutNum;
@@ -55,6 +57,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
     // EditText etWoName, etWoNum, etWoSet, etTimerSetting;
 
     int mIDForTransport;
+
+    int timerMode = -1;
 
     String strAddWoMode;
 
@@ -175,6 +179,9 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
 
                 intentPlayWo.putExtra(key_boolTimeSet, isTimeSet);
+                intentPlayWo.putExtra(key_timerMode, timerMode);
+
+
 
                 //시간을 세팅하였다면 시간을 보내줘!
                 if(isTimeSet == true){
@@ -491,6 +498,9 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                 break;
             case spinnerTimerSetting:
 
+                timerMode = position;
+
+
                 timerSetting = (String) parent.getItemAtPosition(position);
 
                 break;
@@ -504,6 +514,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
             case spinnerTimerSetting:
 
                 timerSetting = (String) parent.getItemAtPosition(2);
+                timerMode = MODE_NULL;
 
                 break;
         }

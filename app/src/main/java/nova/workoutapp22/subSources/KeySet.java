@@ -17,6 +17,10 @@ public class KeySet {
     public static final String key_min = "min";
     public static final String key_sec = "sec";
 
+    public static final String key_timerMode = "timerMode";
+
+
+
     public static final String key_restMin = "restMin";
     public static final String key_restSec = "restSec";
 
@@ -29,9 +33,14 @@ public class KeySet {
 
 
     /////Keyset for TimerTask Mode
+    public static final int MODE_STOPWATCH = 0;
 
-    public static final int MODE_REST = 0;
     public static final int MODE_TIMER = 1;
+    public static final int MODE_NULL = 2;
+    public static final int MODE_REST_TIMER = 3;
+
+
+
 
 
 

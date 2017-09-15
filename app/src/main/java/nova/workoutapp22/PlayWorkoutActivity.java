@@ -13,9 +13,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import nova.workoutapp22.AsyncTaskSrc.RestTimerTask;
+
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_FAIL;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_SUCCESS;
-import static nova.workoutapp22.subSources.KeySet.MODE_REST;
+import static nova.workoutapp22.subSources.KeySet.MODE_NULL;
+import static nova.workoutapp22.subSources.KeySet.MODE_STOPWATCH;
+import static nova.workoutapp22.subSources.KeySet.MODE_TIMER;
 import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
 import static nova.workoutapp22.subSources.KeySet.key_currentSet;
 import static nova.workoutapp22.subSources.KeySet.key_hour;
@@ -23,6 +27,7 @@ import static nova.workoutapp22.subSources.KeySet.key_min;
 import static nova.workoutapp22.subSources.KeySet.key_restMin;
 import static nova.workoutapp22.subSources.KeySet.key_restSec;
 import static nova.workoutapp22.subSources.KeySet.key_sec;
+import static nova.workoutapp22.subSources.KeySet.key_timerMode;
 import static nova.workoutapp22.subSources.KeySet.key_workoutName;
 import static nova.workoutapp22.subSources.KeySet.key_workoutNum;
 import static nova.workoutapp22.subSources.KeySet.key_workoutSet;
@@ -48,6 +53,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     int restSec = 0;
     int totalRestSec = 0;
 
+    int timerMode = -1;
 
     Boolean isTimeSet;
 
@@ -86,6 +92,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
         woNamePl.setText( intentReceived.getStringExtra(key_workoutName) + " : " );
+
+
+
 
 
 
@@ -153,6 +162,19 @@ public class PlayWorkoutActivity extends AppCompatActivity {
             woNumTimePl.setText( "세트 당 "+outputTime+" 운동"  );
         }
 
+        timerMode = intentReceived.getIntExtra(key_timerMode, MODE_NULL );
+        if( timerMode== MODE_TIMER ){
+            tvTimer.setText();
+        }
+        else if(timerMode == MODE_STOPWATCH){
+
+        }
+        else{
+
+        }
+
+
+
 
 
         //갯수 세팅이다.
@@ -179,6 +201,10 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
             switch (v.getId()) {
                 case R.id.buttonStartWoPl:
+
+
+
+
 
 
                   new CountdownTask().execute(Long.parseLong("3"));
@@ -211,7 +237,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         RestTimerTask restTimer = new RestTimerTask();
                         restTimer.setView();
                         restTimer.setTime(totalRestSec);
-                        restTimer.setTimerMode(MODE_REST);
+
                         restTimer.execute();
 
 
@@ -256,12 +282,17 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Long result) {
             super.onPostExecute(result);
-            tvTimer.setText("운동시간 세팅 안함");
-            tvTitle.setText("운동하세요!!!");
 
-            buttonSetDone.setText(currentSet+"세트 완료!");
-            buttonStart.setVisibility(View.INVISIBLE);
-            buttonSetDone.setVisibility(View.VISIBLE);
+            if(true){
+                tvTimer.setText("운동시간 세팅 안함");
+                tvTitle.setText("운동하세요!!!");
+
+                buttonSetDone.setText(currentSet+"세트 완료!");
+                buttonStart.setVisibility(View.INVISIBLE);
+                buttonSetDone.setVisibility(View.VISIBLE);
+            }
+
+
 
         }
 
