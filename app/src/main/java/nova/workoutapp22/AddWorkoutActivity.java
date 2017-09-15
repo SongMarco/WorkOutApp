@@ -139,7 +139,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
 
                     saveAndSetResult();
-                    Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.", Toast.LENGTH_SHORT).show();
+         //           Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             });
@@ -682,7 +682,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
     public void saveAndSetResult() {
         clearMyPrefs();
 
-        Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.", Toast.LENGTH_SHORT).show();
 
         Intent intentForSave = new Intent();
 

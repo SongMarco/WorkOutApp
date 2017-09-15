@@ -18,297 +18,305 @@
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="match_parent"
-        android:layout_height="223dp"
+        android:layout_height="185dp"
         app:srcCompat="@drawable/schedule" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textView51"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="운동 이름 :"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/editTextWorkOutName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="운동 이름 입력"
-            android:inputType="text"
-            android:textAlignment="center" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
-        <TextView
-            android:id="@+id/textViewNumOrTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-
-
-
-            android:text="횟수/시간 :"
-            android:textSize="18sp" />
-
-        <Spinner
-            android:id="@+id/spinnerNumOrTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            >
-
-
-            <FrameLayout
-                android:id="@+id/FrameForTime"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:visibility="visible">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/editTextHour"
-                        android:layout_width="56dp"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="00"
-                        android:inputType="number"
-                        android:textAlignment="center" />
-
-                    <TextView
-                        android:id="@+id/textView12"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="시간"
-                        android:textSize="10sp" />
-
-                    <EditText
-                        android:id="@+id/editTextMin"
-                        android:layout_width="56dp"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="00"
-                        android:inputType="number"
-                        android:textAlignment="center" />
-
-                    <TextView
-                        android:id="@+id/textView15"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="분"
-                        android:textSize="10sp" />
-
-                    <EditText
-                        android:id="@+id/editTextSec"
-                        android:layout_width="56dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="00"
-                        android:inputType="number"
-                        android:textAlignment="center" />
-
-                    <TextView
-                        android:id="@+id/textView16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="초"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:id="@+id/textView17"
-                        android:layout_width="108dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="8dp"
-
-                        android:layout_weight="707.68"
-                        android:text="시간을 정해 운동시\n타이머 사용으로 고정됩니다."
-
-                        android:textColor="@color/colorAccent"
-                        android:textSize="10dp" />
-                </LinearLayout>
-
-            </FrameLayout>
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/FrameForNum"
-                android:layout_width="218dp"
+                android:id="@+id/linearForRestTime"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:visibility="visible">
+                <TextView
+
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="세트 간 휴식시간 :"
+                    android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/editTextWNum"
-                    android:layout_width="100dp"
+
+                    android:id="@+id/editTextRestMin"
+                    android:layout_width="56dp"
                     android:layout_height="wrap_content"
-
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="2dp"
                     android:ems="10"
-
-
-                    android:hint="횟수 입력"
+                    android:hint="00"
                     android:inputType="number"
                     android:textAlignment="center" />
 
                 <TextView
-                    android:id="@+id/textViewNum"
+                    android:id="@+id/textView15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="분"
+                    android:textSize="10sp" />
 
+                <EditText
 
-                    android:text="회"
-                    android:textSize="18sp" />
+                    android:id="@+id/editTextRestSec"
+                    android:layout_width="56dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="초"
+                    android:textSize="10sp" />
 
             </LinearLayout>
 
-        </FrameLayout>
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="세트 수 :"
+                    android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="세트 수 :"
-            android:textSize="18sp" />
+                <EditText
+                    android:id="@+id/editTextWSet"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.32"
+                    android:ems="10"
+                    android:hint="세트 수 입력"
+                    android:inputType="number"
+                    android:textAlignment="center" />
 
-        <EditText
-            android:id="@+id/editTextWSet"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.32"
-            android:ems="10"
-            android:hint="세트 수 입력"
-            android:inputType="number"
-            android:textAlignment="center" />
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="세트"
 
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="세트"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
-            android:textSize="18sp" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
+                <TextView
+                    android:id="@+id/textViewNumOrTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
 
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="타이머 / 스톱워치 사용여부 :"
-            android:textSize="18sp" />
 
-        <Spinner
-            android:id="@+id/spinnerTimerSetting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    android:text="횟수/시간 :"
+                    android:textSize="18sp" />
 
-            android:layout_gravity="center"
-            android:layout_marginLeft="15dp"
+                <Spinner
+                    android:id="@+id/spinnerNumOrTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            android:layout_weight="0.66" />
 
-    </LinearLayout>
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearForRestTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-        <TextView
 
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="세트 간 휴식시간 :"
-            android:textSize="18sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-        <EditText
 
-            android:id="@+id/editTextRestMin"
-            android:layout_width="56dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="00"
-            android:inputType="number"
-            android:textAlignment="center" />
+                    <LinearLayout
+                        android:id="@+id/FrameForNum"
+                        android:layout_width="218dp"
+                        android:layout_height="wrap_content"
 
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="분"
-            android:textSize="10sp" />
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
 
-        <EditText
+                        <EditText
+                            android:id="@+id/editTextWNum"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
 
-            android:id="@+id/editTextRestSec"
-            android:layout_width="56dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="00"
-            android:inputType="number"
-            android:textAlignment="center" />
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="2dp"
+                            android:ems="10"
 
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="초"
-            android:textSize="10sp" />
 
-    </LinearLayout>
+                            android:hint="횟수 입력"
+                            android:inputType="number"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:id="@+id/textViewNum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+
+                            android:text="회"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:id="@+id/FrameForTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/editTextHour"
+                                android:layout_width="56dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="00"
+                                android:inputType="number"
+                                android:textAlignment="center" />
+
+                            <TextView
+                                android:id="@+id/textView12"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="시간"
+                                android:textSize="10sp" />
+
+                            <EditText
+                                android:id="@+id/editTextMin"
+                                android:layout_width="56dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="00"
+                                android:inputType="number"
+                                android:textAlignment="center" />
+
+                            <TextView
+                                android:id="@+id/textView15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="분"
+                                android:textSize="10sp" />
+
+                            <EditText
+                                android:id="@+id/editTextSec"
+                                android:layout_width="56dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:ems="10"
+                                android:hint="00"
+                                android:inputType="number"
+                                android:textAlignment="center" />
+
+                            <TextView
+                                android:id="@+id/textView16"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="초"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:id="@+id/textView17"
+                                android:layout_width="108dp"
+                                android:layout_height="25dp"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="8dp"
+
+                                android:layout_weight="707.68"
+                                android:text="시간을 정해 운동시\n타이머 사용으로 고정됩니다."
+
+                                android:textColor="@color/colorAccent"
+                                android:textSize="10dp" />
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView51"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="운동 이름 :"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/editTextWorkOutName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="운동 이름 입력"
+                    android:inputType="text"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="타이머 / 스톱워치 사용여부 :"
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerTimerSetting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+
+                    android:layout_weight="0.66" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

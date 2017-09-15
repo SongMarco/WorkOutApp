@@ -469,8 +469,6 @@ public class WorkoutActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                //todo 어댑터가 woadapter아닌 그냥 adapter써도 되는지 확인할 것. 추후 버그 가능성
-
                 WorkoutItem item = (WorkoutItem) adapter.getItem(position);
 
                 // 수정 -- 메모 보기 액티비티 띄우기 -> 액티비티 따라 달라짐
@@ -539,7 +537,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
 
-                Toast.makeText(getApplicationContext(), "리스트뷰에 내용 추가합니다", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "리스트뷰에 내용 추가합니다", Toast.LENGTH_SHORT).show();
 
                 // 리스트뷰에 해당 내용을 담아 추가한다.
 
@@ -561,7 +559,7 @@ public class WorkoutActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
                 //수정된 데이터를 삽입
-                Toast.makeText(getApplicationContext(), "리스트뷰 수정 완료", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "리스트뷰 수정 완료", Toast.LENGTH_SHORT).show();
 //////////////////////주의 주의 3시간 이상 삽질한 문제 : new 아이템 만들고 ID를 초기화 안함
                 // -> 계쏙해서 잘못된 mID를 전달하게 됨.
                 // 인텐트의 전달이 계속 잘못되면 인텐트 관련 메소드를 살피자. 이것도 인텐트 관련 메소드다.
@@ -811,7 +809,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
     public void restoreStateWithGson() {
-        Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
 
         SharedPreferences prefForWo = getSharedPreferences("prefForWo", Activity.MODE_PRIVATE);
 
@@ -848,7 +846,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
     protected void clearMyPrefs() {
-        Toast.makeText(getApplicationContext(), "pref cleared", Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(getApplicationContext(), "pref cleared", Toast.LENGTH_SHORT).show();
 
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();

@@ -107,6 +107,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         isTimeSet = intentReceived.getBooleanExtra(key_boolTimeSet, false);
 
+        timerMode = intentReceived.getIntExtra(key_timerMode, MODE_NULL );
+//        Toast.makeText(instance, "timermode = "+timerMode, Toast.LENGTH_SHORT).show();
+
         //쉬는 시간 세팅이다.
 
         restMin = intentReceived.getIntExtra(key_restMin, 0);
@@ -135,15 +138,14 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
 
-
-
-        //시간 세팅이다.
+        //시간운동 세팅이다.
         if(isTimeSet == true) {
 
             hour = intentReceived.getIntExtra(key_hour, 0);
             min = intentReceived.getIntExtra(key_min, 0);
             sec = intentReceived.getIntExtra(key_sec, 0);
 
+//            Toast.makeText(instance, "hour min sec = "+hour+min+sec, Toast.LENGTH_SHORT).show();
             String outputTime = "";
 
             if( hour != 0){
@@ -161,24 +163,31 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
             woNumTimePl.setText( "세트 당 "+outputTime+" 운동"  );
         }
-
-        timerMode = intentReceived.getIntExtra(key_timerMode, MODE_NULL );
-        if( timerMode== MODE_TIMER ){
-            tvTimer.setText();
-        }
-        else if(timerMode == MODE_STOPWATCH){
-
-        }
-        else{
-
-        }
-
-
-
-
-
         //갯수 세팅이다.
+        //TODO 갯수 세팅이어도 갈라져야 한다. - 어떻게? SW/TMR/아무것도 X
         else{
+
+            if(timerMode == MODE_TIMER){
+
+                hour = intentReceived.getIntExtra(key_hour, 0);
+                min = intentReceived.getIntExtra(key_min, 0);
+                sec = intentReceived.getIntExtra(key_sec, 0);
+
+                Toast.makeText(instance, "hour min sec = "+hour+min+sec, Toast.LENGTH_SHORT).show();
+
+                tvTimer.setText(hour+min+sec);
+
+            }
+            else if(timerMode == MODE_STOPWATCH){
+
+            }
+            else{
+
+            }
+
+
+
+
 
             woNumTimePl.setText( "세트 당 "+intentReceived.getStringExtra(key_workoutNum) +"회 운동" );
         }
