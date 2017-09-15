@@ -29,6 +29,7 @@ import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.R.id.spinnerTimerSetting;
 import static nova.workoutapp22.subSources.KeySet.MODE_NULL;
+import static nova.workoutapp22.subSources.KeySet.MODE_TIMER;
 import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
 import static nova.workoutapp22.subSources.KeySet.key_currentSet;
 import static nova.workoutapp22.subSources.KeySet.key_hour;
@@ -180,6 +181,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
                 intentPlayWo.putExtra(key_boolTimeSet, isTimeSet);
                 intentPlayWo.putExtra(key_timerMode, timerMode);
+
 
 
 
@@ -470,7 +472,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                 //if numOrTime이 시간설정일 경우
                 if (numOrTime.equals(getResources().getStringArray(R.array.numOrTime)[1])) {
                     frameTime.setVisibility(View.VISIBLE);
-                    linearNum.setVisibility(View.INVISIBLE);
+                    linearNum.setVisibility(View.GONE);
 
                     spinnerTimer.setSelection(1);
                     spinnerTimer.setEnabled(false);
@@ -487,9 +489,10 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
                         spinnerTimer.setEnabled(true);
                     }
 
-
-                    frameTime.setVisibility(View.INVISIBLE);
                     linearNum.setVisibility(View.VISIBLE);
+                    if(!(timerMode == MODE_TIMER) ){
+                        frameTime.setVisibility(View.GONE);
+                    }
 
                     isTimeSet = false;
                 }
@@ -500,8 +503,18 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
                 timerMode = position;
 
-
+                if(timerMode == MODE_TIMER){
+                    frameTime.setVisibility(View.VISIBLE);
+                }
+                else{
+                    frameTime.setVisibility(View.GONE);
+                }
                 timerSetting = (String) parent.getItemAtPosition(position);
+
+
+
+
+
 
                 break;
         }

@@ -136,6 +136,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.textViewRestTimePl) ).setText( "쉬는시간 : "+outputRestTime );
 
 
+        Toast.makeText(instance, "isTimeset ="+isTimeSet, Toast.LENGTH_SHORT).show();
 
 
         //시간운동 세팅이다.
