@@ -124,4 +124,16 @@
             android:visibility="invisible" />
     </FrameLayout>
 
+    <Button
+        android:id="@+id/buttonPausePl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="일시정지" />
+
+    <Button
+        android:id="@+id/buttonResetPl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="초기화" />
+
 </LinearLayout>

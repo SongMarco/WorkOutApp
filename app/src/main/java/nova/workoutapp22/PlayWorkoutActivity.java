@@ -48,6 +48,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
     TextView tvTitle, tvTimer;
 
+    public static WorkoutTimerTask workoutTimerTask;
+    public static RestTimerTask restTimerTask;
     public static int currentSet, totalSet;
     int hour, min, sec;
 
@@ -64,7 +66,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     Boolean isTimeSet;
 
     Button buttonStart;
-    Button buttonSetDone;
+    Button buttonSetDone, buttonPause, buttonReset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,10 +194,14 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         buttonStart = (Button) findViewById(R.id.buttonStartWoPl);
         buttonSetDone = (Button) findViewById(R.id.buttonSetDonePl);
+        buttonReset = (Button)findViewById(R.id.buttonResetPl);
+        buttonPause = (Button)findViewById(R.id.buttonPausePl);
+
 
         findViewById(R.id.buttonStartWoPl).setOnClickListener(plClickListener);
         findViewById(R.id.buttonSetDonePl).setOnClickListener(plClickListener);
-
+        findViewById(R.id.buttonPausePl).setOnClickListener(plClickListener);
+        findViewById(R.id.buttonResetPl).setOnClickListener(plClickListener);
 
     }
 
@@ -260,10 +266,46 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
                     break;
+                //일시정지
+                case R.id.buttonPausePl:
+
+
+
+
+                    break;
+
+                case R.id.buttonResetPl:
+
+                    Toast.makeText(PlayWorkoutActivity.this, "buttonResetDone", Toast.LENGTH_SHORT).show();
+                   initiationUI();
+                    workoutTimerTask.cancel(true);
+
+                    if(restTimerTask!=null) restTimerTask.cancel(true);
+
+
+
+                    break;
 
             }
         }
     };
+
+    public void initiationUI(){
+        currentSet = 1;
+        woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
+
+        //타이머를 사용한 횟수운동
+        if (timerSetting.equals(STRING_TIMER)) {
+
+            String sEll = String.format("%02d:%02d:%02d", totalWorkoutTime / 3600, totalWorkoutTime / 60, totalWorkoutTime % 60);
+            tvTimer.setText(sEll);
+        }
+
+        buttonStart.setVisibility(View.VISIBLE);
+        buttonSetDone.setVisibility(View.INVISIBLE);
+
+
+    }
     //endregion
 
     //region 툴바 아이템 선택 관련 구역
@@ -302,7 +344,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
 
-                WorkoutTimerTask workoutTimerTask = new WorkoutTimerTask();
+                workoutTimerTask = new WorkoutTimerTask();
                 workoutTimerTask.setView();
                 workoutTimerTask.setWorkoutTime(totalWorkoutTime);
                 workoutTimerTask.execute();

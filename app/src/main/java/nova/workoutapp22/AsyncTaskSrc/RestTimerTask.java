@@ -13,6 +13,7 @@ import nova.workoutapp22.subSources.KeySet;
 
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
+import static nova.workoutapp22.PlayWorkoutActivity.workoutTimerTask;
 
 public class RestTimerTask extends AsyncTask<Void, Void, String> {
     private static final String RESULT_SUCCESS = "1";
@@ -138,7 +139,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
             buttonStart.setVisibility(View.VISIBLE);
             buttonSetDone.setVisibility(View.INVISIBLE);
 
-            WorkoutTimerTask workoutTimerTask = new WorkoutTimerTask();
+            workoutTimerTask = new WorkoutTimerTask();
             workoutTimerTask.setView();
             workoutTimerTask.setWorkoutTime(totalWorkoutTime);
             workoutTimerTask.execute();

@@ -11,6 +11,7 @@ import nova.workoutapp22.PlayWorkoutActivity;
 import nova.workoutapp22.R;
 
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
+import static nova.workoutapp22.PlayWorkoutActivity.restTimerTask;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
 import static nova.workoutapp22.subSources.KeySet.key_workoutName;
 
@@ -145,11 +146,11 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
             buttonSetDone.setVisibility(View.INVISIBLE);
 
 
-            RestTimerTask restTimer = new RestTimerTask();
-            restTimer.setViewAndTimerSetting();
-            restTimer.setTime(totalRestSec);
+            restTimerTask = new RestTimerTask();
+            restTimerTask.setViewAndTimerSetting();
+            restTimerTask.setTime(totalRestSec);
 
-            restTimer.execute();
+            restTimerTask.execute();
         }
 
 
