@@ -583,8 +583,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
                 WorkoutItem newmit = setItemFromIntent(data);
-
-                Toast.makeText(this, "hour min sec = "+newmit.getHour()+newmit.getMin()+newmit.getSec(), Toast.LENGTH_SHORT).show();
+//
+//                Toast.makeText(this, "hour min sec = "+newmit.getHour()+newmit.getMin()+newmit.getSec(), Toast.LENGTH_SHORT).show();
 
                 int mmID = data.getExtras().getInt("mID");
 

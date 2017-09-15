@@ -5,11 +5,14 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import nova.workoutapp22.PlayWorkoutActivity;
 import nova.workoutapp22.R;
 
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
+import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
+import static nova.workoutapp22.subSources.KeySet.key_workoutName;
 
 /**
  * Created by Administrator on 2017-09-15.
@@ -25,6 +28,10 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     private TextView timer = null;
     private TextView countDown = null;
 
+    private TextView woSetPl = null;
+    private TextView tvTitle = null;
+    private int totalRestSec = 0;
+
     private Button buttonStart, buttonSetDone;
 
 
@@ -32,6 +39,8 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     private int time = -1;
 
     private int timerMode = -1;
+
+    private String timerSetting;
 
     boolean isFirst = true;
     boolean isCountDone = false;
@@ -51,9 +60,13 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         buttonStart = (Button)PlayWorkoutActivity.getInstance().findViewById(R.id.buttonStartWoPl);
         buttonSetDone = (Button)PlayWorkoutActivity.getInstance().findViewById(R.id.buttonSetDonePl);
 
+        woSetPl = (TextView)PlayWorkoutActivity.getInstance().findViewById(R.id.textViewSetPl);
+        tvTitle = (TextView)PlayWorkoutActivity.getInstance().findViewById(R.id.textViewCountDown);
+        totalRestSec = PlayWorkoutActivity.getInstance().getTotalRestSec();
+
     }
 
-    public void setTime(int time) {
+    public void setWorkoutTime(int time) {
         this.time = time;
     }
 
@@ -66,6 +79,9 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
+
+
+
         while (time > 0) {
             try {
 
@@ -86,7 +102,8 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     protected void onProgressUpdate(Void... values) {
 
         if (time <= 3 && !isCountDone) {
-            MediaPlayer.create(PlayWorkoutActivity.getInstance(), R.raw.go3).start();
+            //TODO 3 2 1 삐삐삐소리 추가해주기
+
             isCountDone = true;
         }
 
@@ -95,24 +112,46 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 //        }
         if(time ==0){
 
-            countDown.setText( "운동하세요!!!");
 
-            timer.setText("운동시간 세팅 안함");
+            timer.setText("쉬는 시간!");
+
+
+
             return;
 
         }
 
 
-        timer.setText("쉬는 시간 \n" + formatTime(time));
+        timer.setText("운동 시간 \n" + formatTime(time));
 
     }
 
     @Override
     protected void onPostExecute(String result) {
 
-        buttonSetDone.setText(currentSet+"세트 완료!");
-        buttonStart.setVisibility(View.INVISIBLE);
-        buttonSetDone.setVisibility(View.VISIBLE);
+
+
+        if(currentSet == totalSet){
+
+
+            Toast.makeText(PlayWorkoutActivity.getInstance(), PlayWorkoutActivity.getInstance().
+                    getIntent().getStringExtra(key_workoutName) + " 운동 프로그램이 끝났습니다.", Toast.LENGTH_LONG).show();
+            PlayWorkoutActivity.getInstance().finish();
+
+        }
+        else{
+            buttonSetDone.setText(currentSet+"세트 완료!");
+            buttonStart.setVisibility(View.INVISIBLE);
+            buttonSetDone.setVisibility(View.INVISIBLE);
+
+
+            RestTimerTask restTimer = new RestTimerTask();
+            restTimer.setViewAndTimerSetting();
+            restTimer.setTime(totalRestSec);
+
+            restTimer.execute();
+        }
+
 
 //        if (result.equals(RESULT_SUCCESS))
 //            timer.setTextColor(TEXT_COLOR_FINISHED);
