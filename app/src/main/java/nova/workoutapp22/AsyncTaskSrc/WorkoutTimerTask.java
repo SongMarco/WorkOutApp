@@ -73,7 +73,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPreExecute() {
-        timer.setText("타이머 \n" + formatTime(time));
+//        timer.setText("타이머 \n" + formatTime(time));
         timer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
     }
@@ -123,7 +123,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         }
 
 
-        timer.setText("운동 시간 \n" + formatTime(time));
+        timer.setText(formatTime(time));
 
     }
 

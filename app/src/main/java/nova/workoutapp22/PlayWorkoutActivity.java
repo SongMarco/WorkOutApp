@@ -50,6 +50,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
     public static WorkoutTimerTask workoutTimerTask;
     public static RestTimerTask restTimerTask;
+    WorkoutStartTask startTask;
+
+
     public static int currentSet, totalSet;
     int hour, min, sec;
 
@@ -59,6 +62,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     int totalRestSec = 0;
     int totalWorkoutTime = 0;
     int timerMode = -1;
+    int pauseWoTime = -1;
+    int pauseRestTime = -1;
 
     String timerSetting;
 
@@ -66,7 +71,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     Boolean isTimeSet;
 
     Button buttonStart;
-    Button buttonSetDone, buttonPause, buttonReset;
+    Button buttonSetDone, buttonPause, buttonReset, buttonResume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,15 +199,16 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         buttonStart = (Button) findViewById(R.id.buttonStartWoPl);
         buttonSetDone = (Button) findViewById(R.id.buttonSetDonePl);
-        buttonReset = (Button)findViewById(R.id.buttonResetPl);
-        buttonPause = (Button)findViewById(R.id.buttonPausePl);
+        buttonReset = (Button) findViewById(R.id.buttonResetPl);
+        buttonPause = (Button) findViewById(R.id.buttonPausePl);
+        buttonResume = (Button) findViewById(R.id.buttonResumePl);
 
 
         findViewById(R.id.buttonStartWoPl).setOnClickListener(plClickListener);
         findViewById(R.id.buttonSetDonePl).setOnClickListener(plClickListener);
         findViewById(R.id.buttonPausePl).setOnClickListener(plClickListener);
         findViewById(R.id.buttonResetPl).setOnClickListener(plClickListener);
-
+        buttonResume.setOnClickListener(plClickListener);
     }
 
 
@@ -217,14 +223,14 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 case R.id.buttonStartWoPl:
 
 
-
                     buttonStart.setOnTouchListener(null);
                     buttonStart.setFocusable(false);
 
+                    tvTitle.setText("NO PAIN, NO GAIN");
 
                     //카운트다운 태스크에서 운동을 시작해준다.
-                    new WorkoutStartTask().execute(Long.parseLong("3"));
-
+                    startTask = new WorkoutStartTask();
+                    startTask.execute(Long.parseLong("3"));
 
 
                     break;
@@ -254,6 +260,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                         RestTimerTask restTimer = new RestTimerTask();
                         restTimer.setViewAndTimerSetting();
+
                         restTimer.setTime(totalRestSec);
 
                         restTimer.execute();
@@ -270,27 +277,84 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 case R.id.buttonPausePl:
 
 
+                    startTask.cancel(true);
 
+                    //
+                    if (workoutTimerTask != null) {
+                        Log.wtf("adad", "woTask canceled");
+
+                        pauseWoTime = workoutTimerTask.getTime();
+                        workoutTimerTask.cancel(true);
+
+
+                    }
+                    Log.wtf("adad", "restTask canceled");
+                    if(restTimerTask!=null){
+
+                        pauseRestTime = restTimerTask.getTime();
+
+                        restTimerTask.cancel(true);
+                    }
+
+
+                    break;
+
+                case R.id.buttonResumePl:
+
+                    Toast.makeText(PlayWorkoutActivity.this, "운동이 일시정지되었습니다.", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(PlayWorkoutActivity.this, "pausewotime = "+pauseWoTime, Toast.LENGTH_SHORT).show();
+                    if (pauseWoTime != -1 && pauseWoTime !=0) {
+
+                        Log.wtf("adad", "woTask resumed");
+
+                        workoutTimerTask = new WorkoutTimerTask();
+                        workoutTimerTask.setView();
+                        workoutTimerTask.setWorkoutTime(pauseWoTime);
+                        workoutTimerTask.execute();
+
+                        pauseWoTime = -1;
+                    } else if (pauseRestTime != -1) {
+
+                        Log.wtf("adad", "restTask resumed");
+
+
+
+                        restTimerTask = new RestTimerTask();
+                        restTimerTask.setViewAndTimerSetting();
+
+                        restTimerTask.setTime(pauseRestTime);
+
+                        if(pauseRestTime <= 3){
+                            restTimerTask.setIsCountdone(true);
+                        }
+
+                        restTimerTask.execute();
+
+                        pauseRestTime = -1;
+                    }
 
                     break;
 
                 case R.id.buttonResetPl:
 
-                    Toast.makeText(PlayWorkoutActivity.this, "buttonResetDone", Toast.LENGTH_SHORT).show();
-                   initiationUI();
-                    workoutTimerTask.cancel(true);
+                    Toast.makeText(PlayWorkoutActivity.this, "운동이 리셋되었습니다.", Toast.LENGTH_SHORT).show();
 
-                    if(restTimerTask!=null) restTimerTask.cancel(true);
+                    startTask.cancel(true);
+                    if (workoutTimerTask != null) workoutTimerTask.cancel(true);
 
+
+                    if (restTimerTask != null) restTimerTask.cancel(true);
+                    initiationUI();
 
 
                     break;
+
 
             }
         }
     };
 
-    public void initiationUI(){
+    public void initiationUI() {
         currentSet = 1;
         woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
 
@@ -300,6 +364,11 @@ public class PlayWorkoutActivity extends AppCompatActivity {
             String sEll = String.format("%02d:%02d:%02d", totalWorkoutTime / 3600, totalWorkoutTime / 60, totalWorkoutTime % 60);
             tvTimer.setText(sEll);
         }
+
+        tvTitle.setText("운동을 시작하세요!");
+
+        buttonStart.setText("1세트 운동 시작!");
+        buttonSetDone.setText("1세트 완료!");
 
         buttonStart.setVisibility(View.VISIBLE);
         buttonSetDone.setVisibility(View.INVISIBLE);
@@ -325,9 +394,13 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         long time;
 
+        MediaPlayer mp;
+
         @Override
         protected void onCancelled() {
             super.onCancelled();
+            mp.release();
+
         }
 
         @Override
@@ -335,21 +408,21 @@ public class PlayWorkoutActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             //여기서 타이머 모드 / 스탑워치 모드에 따라 다르게 뿌려줄 것이다.
-            if(timerSetting.equals(STRING_TIMER)){
+            if (timerSetting.equals(STRING_TIMER)) {
 //
 //                tvTitle.setText("운동하세요!!!");
 //                buttonSetDone.setText(currentSet + "세트 완료!");
 //                buttonStart.setVisibility(View.INVISIBLE);
 //                buttonSetDone.setVisibility(View.VISIBLE);
 
+                tvTimer.setText("GO!!!");
 
 
                 workoutTimerTask = new WorkoutTimerTask();
                 workoutTimerTask.setView();
                 workoutTimerTask.setWorkoutTime(totalWorkoutTime);
                 workoutTimerTask.execute();
-            }
-            else{
+            } else {
                 tvTimer.setText("운동시간 세팅 안함");
                 tvTitle.setText("운동하세요!!!");
 
@@ -377,7 +450,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         protected Long doInBackground(Long... params) {
             time = params[0] + 1;
 
-            MediaPlayer.create(getApplicationContext(), R.raw.go).start();
+            mp = MediaPlayer.create(getApplicationContext(), R.raw.go);
+            mp.start();
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -410,14 +484,15 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     }
     //endregion
 
-    public int getTotalRestSec(){
+    public int getTotalRestSec() {
         return totalRestSec;
     }
 
-    public int getTotalWorkoutTime(){
+    public int getTotalWorkoutTime() {
         return totalWorkoutTime;
     }
-    public String getTimerSetting(){
+
+    public String getTimerSetting() {
         return timerSetting;
     }
 }

@@ -22,7 +22,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     private static final int TEXT_COLOR_FINISHED = 0XFFFF0000;
 
 
-    private TextView timer = null;
+    private TextView tvTimer = null;
     private TextView countDown = null;
 
     TextView woSetPl;
@@ -50,7 +50,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     //쉬는 시간의 경우 타이머 / 스톱워치 / 아무것도 안씀을 구분해야!!
     public void setViewAndTimerSetting() {
-        timer = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewTimerSetPl);
+        tvTimer = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewTimerSetPl);
         countDown = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewCountDown);
 
         buttonStart = (Button) PlayWorkoutActivity.getInstance().findViewById(R.id.buttonStartWoPl);
@@ -69,8 +69,8 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPreExecute() {
-        timer.setText("쉬는 시간 \n" + formatTime(time));
-        timer.setTextColor(TEXT_COLOR_NORMAL);
+        tvTimer.setText("쉬는 시간 \n" + formatTime(time));
+        tvTimer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
     }
 
@@ -107,13 +107,13 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
             countDown.setText("운동하세요!!!");
 
-            timer.setText("운동시간 세팅 안함");
+
             return;
 
         }
 
 
-        timer.setText("쉬는 시간 \n" + formatTime(time));
+        tvTimer.setText("쉬는 시간 \n" + formatTime(time));
 
     }
 
@@ -129,6 +129,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
             //아직 운동중이다!
 
+            tvTimer.setText("GO!!!");
 
             currentSet++;
             woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
@@ -149,7 +150,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
 
 //        if (result.equals(RESULT_SUCCESS))
-//            timer.setTextColor(TEXT_COLOR_FINISHED);
+//            tvTimer.setTextColor(TEXT_COLOR_FINISHED);
     }
 
     public void makeBeep() {
@@ -174,6 +175,10 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     public int getTime() {
         return time;
+    }
+
+    public void setIsCountdone(Boolean bool){
+        this.isCountDone= bool;
     }
 
 }
