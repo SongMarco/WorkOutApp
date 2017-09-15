@@ -31,113 +31,26 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/linearForRestTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <TextView
-
-                    android:id="@+id/textView3"
+                    android:id="@+id/textView51"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="세트 간 휴식시간 :"
+                    android:text="운동 이름 :"
                     android:textSize="18sp" />
 
                 <EditText
-
-                    android:id="@+id/editTextRestMin"
-                    android:layout_width="56dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="00"
-                    android:inputType="number"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/textView15"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="분"
-                    android:textSize="10sp" />
-
-                <EditText
-
-                    android:id="@+id/editTextRestSec"
-                    android:layout_width="56dp"
+                    android:id="@+id/editTextWorkOutName"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="00"
-                    android:inputType="number"
+                    android:hint="운동 이름 입력"
+                    android:inputType="text"
                     android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/textView16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="초"
-                    android:textSize="10sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="세트 수 :"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/editTextWSet"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.32"
-                    android:ems="10"
-                    android:hint="세트 수 입력"
-                    android:inputType="number"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="세트"
-
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textViewNumOrTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-
-
-                    android:text="횟수/시간 :"
-                    android:textSize="18sp" />
-
-                <Spinner
-                    android:id="@+id/spinnerNumOrTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-
             </LinearLayout>
 
             <LinearLayout
@@ -274,21 +187,108 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView51"
+                    android:id="@+id/textViewNumOrTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="운동 이름 :"
+                    android:layout_marginRight="10dp"
+
+
+                    android:text="횟수/시간 :"
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerNumOrTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearForRestTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="세트 간 휴식시간 :"
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/editTextWorkOutName"
-                    android:layout_width="match_parent"
+
+                    android:id="@+id/editTextRestMin"
+                    android:layout_width="56dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="분"
+                    android:textSize="10sp" />
+
+                <EditText
+
+                    android:id="@+id/editTextRestSec"
+                    android:layout_width="56dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="운동 이름 입력"
-                    android:inputType="text"
+                    android:hint="00"
+                    android:inputType="number"
                     android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="초"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="세트 수 :"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/editTextWSet"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.32"
+                    android:ems="10"
+                    android:hint="세트 수 입력"
+                    android:inputType="number"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="세트"
+
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout

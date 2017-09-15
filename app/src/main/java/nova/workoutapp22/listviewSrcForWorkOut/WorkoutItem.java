@@ -90,6 +90,20 @@ public class WorkoutItem {
         this.restSec = restSec;
     }
 
+    public WorkoutItem(String woName, String woSet, String woNum,  int hour, int min, int sec ,String timerSetting, boolean boolTimeSet, int restMin, int restSec){
+        this.woName = woName;
+        this.timerSetting = timerSetting;
+        this.woSet = woSet;
+        this.woNum = woNum;
+        this.hour = hour;
+        this.min = min;
+        this.sec = sec;
+        this.boolTimeSet = boolTimeSet;
+
+        this.restMin = restMin;
+        this.restSec = restSec;
+    }
+
 
 
 

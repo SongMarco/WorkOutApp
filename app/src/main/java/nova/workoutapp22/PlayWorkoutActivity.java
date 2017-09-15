@@ -174,9 +174,13 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 min = intentReceived.getIntExtra(key_min, 0);
                 sec = intentReceived.getIntExtra(key_sec, 0);
 
+                int time = 3600*hour+60*min+sec;
                 Toast.makeText(instance, "hour min sec = "+hour+min+sec, Toast.LENGTH_SHORT).show();
 
-                tvTimer.setText(hour+min+sec);
+
+
+                String sEll = String.format("%02d:%02d:%02d", time/3600, time / 60, time % 60);
+                tvTimer.setText(sEll);
 
             }
             else if(timerMode == MODE_STOPWATCH){

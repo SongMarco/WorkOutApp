@@ -39,6 +39,12 @@ public class KeySet {
     public static final int MODE_NULL = 2;
     public static final int MODE_REST_TIMER = 3;
 
+    //////////Keyset for timerMode
+
+    public static final String STRING_TIMER = "타이머";
+    public static final String STRING_STOPWATCH = "스톱워치";
+    public static final String STRING_NOTIMER = "시간 측정 안함";
+
 
 
 

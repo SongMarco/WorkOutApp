@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 import nova.workoutapp22.R;
+import nova.workoutapp22.subSources.KeySet;
 
 /**
  * Created by Administrator on 2017-09-02.
@@ -114,12 +115,16 @@ public class WorkoutAdapter extends BaseAdapter {
         //시간이 세팅되어있지 않을 경우(횟수 운동)
         if (item.boolTimeSet == false) {
 
+            //횟수운동이지만 타이머 세팅이야.
+            if(item.getTimerSetting() == KeySet.STRING_TIMER){
 
+                view.setWoNumAndTimeInLayout( item.getWoNum(), item.getHour(), item.getMin(), item.getSec() );
+            }
+            else{
+                view.setWoNumInLayout( item.getWoNum() );
+            }
             view.setWoSetInLayout( item.getWoSet() );
-            view.setWoNumInLayout( item.getWoNum() );
 
-
-            view.setWoNumInLayout( item.getWoNum() );
 
             view.setTimerSettingInLayout( item.getTimerSetting() );
 

@@ -45,6 +45,7 @@ import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_WORKOUT;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_WORKOUT;
+import static nova.workoutapp22.subSources.KeySet.STRING_TIMER;
 import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
 import static nova.workoutapp22.subSources.KeySet.key_hour;
 import static nova.workoutapp22.subSources.KeySet.key_mID;
@@ -608,10 +609,20 @@ public class WorkoutActivity extends AppCompatActivity {
         boolean boolTimeSet = data.getBooleanExtra("boolTimeSet", false);
 
 
-        String timerSetting = data.getExtras().getString("timerSetting");
+        String timerSetting = data.getExtras().getString(key_timerSetting);
 
         //시간을 세팅하지 않아서 hour가 -1인 상태 -> 횟수 세트만 전달해주면 OK
         if (boolTimeSet == false) {
+
+            if(timerSetting == STRING_TIMER){
+                Toast.makeText(this, "I'm here!!", Toast.LENGTH_SHORT).show();
+                int loadedHour = data.getIntExtra("hour", -1);
+                int loadedMin = data.getIntExtra("min", -1);
+                int loadedSec = data.getIntExtra("sec", -1);
+
+                return new WorkoutItem(woName, woSet, woNum, loadedHour, loadedMin, loadedSec, timerSetting, boolTimeSet, restMin, restSec);
+
+            }
 
             return new WorkoutItem(woName, woNum, woSet, timerSetting, boolTimeSet, restMin, restSec);
 

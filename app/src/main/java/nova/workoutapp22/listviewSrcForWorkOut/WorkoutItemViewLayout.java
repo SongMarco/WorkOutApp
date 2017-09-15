@@ -98,6 +98,26 @@ public class WorkoutItemViewLayout extends LinearLayout implements Checkable {
     public void setWoNumInLayout(String wNum){
         woNum.setText(wNum + "회");}
 
+    public void setWoNumAndTimeInLayout(String wNum, int hour, int min, int sec){
+
+
+        String outputTime = "";
+        if( hour != 0){
+            outputTime = outputTime+hour+"시간";
+        }
+
+        if( min != 0){
+            outputTime = outputTime+min+"분";
+        }
+
+        if( sec != 0){
+            outputTime = outputTime+sec+"초";
+        }
+
+        woNum.setText(wNum + "회 / " +outputTime);
+    }
+
+
     public void setWoSetInLayout(String wSet){woSet.setText(wSet + "세트");}
 
 
