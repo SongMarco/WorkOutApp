@@ -495,9 +495,24 @@ public class WorkoutActivity extends AppCompatActivity {
                 //시간을 세팅하지 않았다면 횟수와 세트만 전달하자.
                 if (item.getBoolTimeSet() == false) {
 
-                    intent.putExtra(key_boolTimeSet, item.getBoolTimeSet());
-                    intent.putExtra(key_workoutNum, item.getWoNum());
-                    intent.putExtra(key_workoutSet, item.getWoSet());
+                    if (item.getTimerSetting().equals(STRING_TIMER) ){
+
+                        intent.putExtra(key_hour, item.getHour());
+                        intent.putExtra(key_min, item.getMin());
+                        intent.putExtra(key_sec, item.getSec());
+
+                        intent.putExtra(key_boolTimeSet, item.getBoolTimeSet());
+                        intent.putExtra(key_workoutNum, item.getWoNum());
+                        intent.putExtra(key_workoutSet, item.getWoSet());
+
+                    }
+                    else{
+                        intent.putExtra(key_boolTimeSet, item.getBoolTimeSet());
+                        intent.putExtra(key_workoutNum, item.getWoNum());
+                        intent.putExtra(key_workoutSet, item.getWoSet());
+
+                    }
+
 
 
                 }
@@ -542,6 +557,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
                 // 리스트뷰에 해당 내용을 담아 추가한다.
 
+                //todo addworkout에도 횟수-시간운동시 시간이 추가되도록 할것
                 WorkoutItem newmit = setItemFromIntent(data);
 
                 workoutAdapter.addItem(newmit);
@@ -567,6 +583,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
                 WorkoutItem newmit = setItemFromIntent(data);
+
+                Toast.makeText(this, "hour min sec = "+newmit.getHour()+newmit.getMin()+newmit.getSec(), Toast.LENGTH_SHORT).show();
 
                 int mmID = data.getExtras().getInt("mID");
 
@@ -608,14 +626,13 @@ public class WorkoutActivity extends AppCompatActivity {
 
         boolean boolTimeSet = data.getBooleanExtra("boolTimeSet", false);
 
-
         String timerSetting = data.getExtras().getString(key_timerSetting);
 
         //시간을 세팅하지 않아서 hour가 -1인 상태 -> 횟수 세트만 전달해주면 OK
         if (boolTimeSet == false) {
 
-            if(timerSetting == STRING_TIMER){
-                Toast.makeText(this, "I'm here!!", Toast.LENGTH_SHORT).show();
+            if(timerSetting.equals(STRING_TIMER) ){
+
                 int loadedHour = data.getIntExtra("hour", -1);
                 int loadedMin = data.getIntExtra("min", -1);
                 int loadedSec = data.getIntExtra("sec", -1);

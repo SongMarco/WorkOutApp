@@ -616,7 +616,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         workoutName.setText(intent.getExtras().getString("workoutName"));
 
         timerSetting = intent.getStringExtra(key_timerSetting);
-        int timerMode = 2;
+        timerMode = MODE_NULL;
 
         if( timerSetting.equals("스톱워치") ){
             timerMode = MODE_STOPWATCH;
@@ -636,15 +636,33 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         etRestSec.setText( String.valueOf (intent.getIntExtra(key_restSec,0) ) );
 
 
-        //횟수 세팅이다. //  횟수와 세트만 받아 뿌려준다.
+        //횟수 세팅이다. // 타이머 세팅 유무에 따라 세팅이 달라진다.
         if(boolTimeSet == false){
-            spinnerNumOrTime.setSelection(0);
-            spinnerTimer.setSelection(timerMode);
-            spinnerTimer.setEnabled(false);
-          //  Toast.makeText(this, "timer :: "+spinnerTimer.isEnabled(), Toast.LENGTH_SHORT).show();
 
-            workoutNum.setText(intent.getExtras().getString("workoutNum"));
-            workoutSet.setText(intent.getExtras().getString("workoutSet"));
+            if(timerMode == MODE_TIMER){
+
+                spinnerNumOrTime.setSelection(0);
+                spinnerTimer.setSelection(timerMode);
+                spinnerTimer.setEnabled(false);
+
+                workoutNum.setText(intent.getExtras().getString("workoutNum"));
+                workoutSet.setText(intent.getExtras().getString("workoutSet"));
+
+
+                etHour.setText( String.valueOf( intent.getIntExtra("hour", -1) )  );
+                etMin.setText( String.valueOf( intent.getIntExtra("min", -1) ));
+                etSec.setText( String.valueOf( intent.getIntExtra("sec", -1) ));
+            }
+            else{
+                spinnerNumOrTime.setSelection(0);
+                spinnerTimer.setSelection(timerMode);
+                spinnerTimer.setEnabled(false);
+                //  Toast.makeText(this, "timer :: "+spinnerTimer.isEnabled(), Toast.LENGTH_SHORT).show();
+
+                workoutNum.setText(intent.getExtras().getString("workoutNum"));
+                workoutSet.setText(intent.getExtras().getString("workoutSet"));
+            }
+
         }
 
         //시간이 세팅된 상태이다. 시간을 뿌려준다. 시간/넘 스피너를 시간으로 해둔다.

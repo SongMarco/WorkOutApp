@@ -116,7 +116,7 @@ public class WorkoutAdapter extends BaseAdapter {
         if (item.boolTimeSet == false) {
 
             //횟수운동이지만 타이머 세팅이야.
-            if(item.getTimerSetting() == KeySet.STRING_TIMER){
+            if(item.getTimerSetting().equals(KeySet.STRING_TIMER) ){
 
                 view.setWoNumAndTimeInLayout( item.getWoNum(), item.getHour(), item.getMin(), item.getSec() );
             }
