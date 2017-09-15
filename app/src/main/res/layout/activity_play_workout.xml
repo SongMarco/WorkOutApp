@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="시간 세팅 안함"
+            android:text="운동시간 세팅 안함"
             android:textSize="30sp" />
 
         <TextView
@@ -109,14 +109,14 @@
         >
 
         <Button
-            android:id="@+id/buttonStartWo"
+            android:id="@+id/buttonStartWoPl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="1세트 운동 시작!" />
 
         <Button
-            android:id="@+id/buttonSetDone"
+            android:id="@+id/buttonSetDonePl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

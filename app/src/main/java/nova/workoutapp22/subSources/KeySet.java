@@ -27,4 +27,12 @@ public class KeySet {
 
 
 
+
+    /////Keyset for TimerTask Mode
+
+    public static final int MODE_REST = 0;
+    public static final int MODE_TIMER = 1;
+
+
+
 }

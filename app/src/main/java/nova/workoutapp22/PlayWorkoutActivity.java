@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_FAIL;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_SUCCESS;
+import static nova.workoutapp22.subSources.KeySet.MODE_REST;
 import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
 import static nova.workoutapp22.subSources.KeySet.key_currentSet;
 import static nova.workoutapp22.subSources.KeySet.key_hour;
@@ -37,9 +38,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
     TextView woNamePl, woNumTimePl, woSetPl;
 
-    TextView tvCountDown;
+    TextView tvTitle, tvTimer;
 
-    int currentSet, totalSet;
+    public static int currentSet, totalSet;
     int hour, min, sec;
 
 
@@ -75,8 +76,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         woSetPl = (TextView)findViewById(R.id.textViewSetPl);
         woNumTimePl = (TextView)findViewById(R.id.textViewNumPl);
 
-        tvCountDown = (TextView)findViewById(R.id.textViewCountDown);
-
+        tvTitle = (TextView)findViewById(R.id.textViewCountDown);
+        tvTimer = (TextView)findViewById(R.id.textViewTimerSetPl);
 
 
 
@@ -161,11 +162,11 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         }
         //endregion
 
-        buttonStart = (Button)findViewById(R.id.buttonStartWo);
-        buttonSetDone = (Button)findViewById(R.id.buttonSetDone);
+        buttonStart = (Button)findViewById(R.id.buttonStartWoPl);
+        buttonSetDone = (Button)findViewById(R.id.buttonSetDonePl);
 
-        findViewById(R.id.buttonStartWo).setOnClickListener(plClickListener);
-        findViewById(R.id.buttonSetDone).setOnClickListener(plClickListener);
+        findViewById(R.id.buttonStartWoPl).setOnClickListener(plClickListener);
+        findViewById(R.id.buttonSetDonePl).setOnClickListener(plClickListener);
 
 
 
@@ -177,13 +178,13 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         public void onClick(View v) {
 
             switch (v.getId()) {
-                case R.id.buttonStartWo:
+                case R.id.buttonStartWoPl:
 
 
                   new CountdownTask().execute(Long.parseLong("3"));
 
                   break;
-                case R.id.buttonSetDone:
+                case R.id.buttonSetDonePl:
 
                     //current = total이라면 운동이 완료된 것이다. 운동을 마치고 운동 화면으로 돌아가자.
                     if(currentSet == totalSet){
@@ -202,19 +203,22 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         woSetPl.setText("세트 : "+ currentSet + "/" + totalSet );
                         buttonStart.setText(currentSet+"세트 운동 시작!");
 
-                        tvCountDown.setText(currentSet+"세트를 준비하세요!");
+                        tvTitle.setText(currentSet+"세트를 준비하세요!");
 
                         buttonStart.setVisibility(View.VISIBLE);
                         buttonSetDone.setVisibility(View.INVISIBLE);
 
-                        TimerTask restTimer = new TimerTask();
-                        restTimer.setTextView(R.id.textViewTimerSetPl);
+                        RestTimerTask restTimer = new RestTimerTask();
+                        restTimer.setView();
                         restTimer.setTime(totalRestSec);
+                        restTimer.setTimerMode(MODE_REST);
                         restTimer.execute();
 
 
-                        //todo restTimer가 끝나면 바로 운동 시작이다다
-                       while(restTimer.)
+                        //TODO restTimer가 끝나면 바로 운동 시작이다
+
+
+
 
 
 
@@ -241,7 +245,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     //endregion
 
     //region 카운트 다운 어싱크 관련 구역
-    class CountdownTask extends AsyncTask<Long, Long, Long> {
+    public class CountdownTask extends AsyncTask<Long, Long, Long> {
 
         long time;
         @Override
@@ -252,7 +256,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Long result) {
             super.onPostExecute(result);
-            tvCountDown.setText("GO !!!");
+            tvTimer.setText("운동시간 세팅 안함");
+            tvTitle.setText("운동하세요!!!");
 
             buttonSetDone.setText(currentSet+"세트 완료!");
             buttonStart.setVisibility(View.INVISIBLE);
@@ -268,7 +273,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         protected void onProgressUpdate(Long... values) {
             super.onProgressUpdate(values);
 
-            tvCountDown.setText(""+time);
+           tvTimer.setText(""+time);
 
         }
 
