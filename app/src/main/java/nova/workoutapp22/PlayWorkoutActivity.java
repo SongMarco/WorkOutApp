@@ -67,6 +67,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     int timerMode = -1;
     int pauseWoTime = -1;
     int pauseRestTime = -1;
+    int pauseSwTime = -1;
 
     String timerSetting;
 
@@ -212,6 +213,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         findViewById(R.id.buttonPausePl).setOnClickListener(plClickListener);
         findViewById(R.id.buttonResetPl).setOnClickListener(plClickListener);
         buttonResume.setOnClickListener(plClickListener);
+
+        initiationUI();
     }
 
 
@@ -304,8 +307,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     break;
                 //일시정지
                 case R.id.buttonPausePl:
-
-
+//
+//                    Toast.makeText(PlayWorkoutActivity.this, "운동이 .", Toast.LENGTH_SHORT).show();
                     startTask.cancel(true);
 
                     //
@@ -325,13 +328,25 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         restTimerTask.cancel(true);
                     }
 
+                    if(stopWatchTask != null){
+
+                        pauseSwTime = stopWatchTask.getTime();
+
+                        stopWatchTask.cancel(true);
+
+                    }
+
+
+
+
 
                     break;
 
                 case R.id.buttonResumePl:
 
-                    Toast.makeText(PlayWorkoutActivity.this, "운동이 일시정지되었습니다.", Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(PlayWorkoutActivity.this, "pausewotime = "+pauseWoTime, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlayWorkoutActivity.this, "운동이 재개됩니다.", Toast.LENGTH_SHORT).show();
+
+
                     if (pauseWoTime != -1 && pauseWoTime != 0) {
 
                         Log.wtf("adad", "woTask resumed");
@@ -360,6 +375,16 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                         pauseRestTime = -1;
                     }
+                    // 스톱워치를 재개함
+
+                    if(pauseSwTime != -1){
+                        Log.wtf("adad", "stopWatch resumed");
+
+                        stopWatchTask = new StopWatchTask();
+                        stopWatchTask.setView();
+                        stopWatchTask.setWorkoutTime(pauseSwTime);
+                        stopWatchTask.execute();
+                    }
 
                     break;
 
@@ -368,11 +393,19 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     Toast.makeText(PlayWorkoutActivity.this, "운동이 리셋되었습니다.", Toast.LENGTH_SHORT).show();
 
                     startTask.cancel(true);
+
                     if (workoutTimerTask != null) workoutTimerTask.cancel(true);
 
 
                     if (restTimerTask != null) restTimerTask.cancel(true);
+
+                    if(stopWatchTask != null)  stopWatchTask.cancel(true);
+
+
+
+
                     initiationUI();
+
 
 
                     break;
@@ -392,6 +425,10 @@ public class PlayWorkoutActivity extends AppCompatActivity {
             String sEll = String.format("%02d:%02d:%02d", totalWorkoutTime / 3600, totalWorkoutTime / 60, totalWorkoutTime % 60);
             tvTimer.setText(sEll);
         }
+        else if(timerSetting.equals(STRING_STOPWATCH)){
+
+            tvTimer.setText("스톱워치 사용");
+        }
 
 
         tvTitle.setText("운동을 시작하세요!");
@@ -401,7 +438,6 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         buttonStart.setVisibility(View.VISIBLE);
         buttonSetDone.setVisibility(View.INVISIBLE);
-
 
     }
     //endregion
