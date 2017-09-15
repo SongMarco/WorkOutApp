@@ -18,7 +18,7 @@
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="match_parent"
-        android:layout_height="281dp"
+        android:layout_height="223dp"
         app:srcCompat="@drawable/schedule" />
 
     <LinearLayout
