@@ -34,9 +34,9 @@ public class KeySet {
 
     /////Keyset for TimerTask Mode
     public static final int MODE_STOPWATCH = 0;
-
     public static final int MODE_TIMER = 1;
     public static final int MODE_NULL = 2;
+
     public static final int MODE_REST_TIMER = 3;
 
     //////////Keyset for timerMode
@@ -46,6 +46,11 @@ public class KeySet {
     public static final String STRING_NOTIMER = "시간 측정 안함";
 
 
+
+
+    ////////KeySet for Thread
+
+    public static final int INT_SECOND = 500;
 
 
 

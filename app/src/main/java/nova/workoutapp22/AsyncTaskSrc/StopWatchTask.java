@@ -7,9 +7,13 @@ import android.widget.TextView;
 
 import nova.workoutapp22.PlayWorkoutActivity;
 import nova.workoutapp22.R;
+import nova.workoutapp22.subSources.KeySet;
 
 import static nova.workoutapp22.PlayWorkoutActivity.buttonPause;
+import static nova.workoutapp22.PlayWorkoutActivity.buttonReset;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
+import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
+import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
 
 /**
  * Created by jamsy on 2017-09-16.
@@ -59,10 +63,13 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPreExecute() {
+
+        taskMode = KeySet.MODE_STOPWATCH;
 //        timer.setText("타이머 \n" + formatTime(time));
         timer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
 
+        buttonReset.setVisibility(View.VISIBLE);
         buttonPause.setVisibility(View.VISIBLE);
         buttonResume.setVisibility(View.INVISIBLE);
         buttonSetDone.setVisibility(View.VISIBLE);
@@ -77,7 +84,7 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
             try {
 
 
-                Thread.sleep(1000);
+                Thread.sleep(INT_SECOND);
                 time++;
 
 

@@ -16,8 +16,10 @@ import static nova.workoutapp22.PlayWorkoutActivity.buttonReset;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
 import static nova.workoutapp22.PlayWorkoutActivity.stopWatchTask;
+import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
 import static nova.workoutapp22.PlayWorkoutActivity.workoutTimerTask;
+import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
 
 public class RestTimerTask extends AsyncTask<Void, Void, String> {
     private static final String RESULT_SUCCESS = "1";
@@ -75,13 +77,14 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPreExecute() {
-        tvTimeTitle.setText("쉬는 시간");
-        tvTimer.setText(formatTime(time));
+
+        taskMode = KeySet.MODE_REST_TIMER;
         tvTimer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
 
 
         MediaPlayer mp;
+        tvTimeTitle.setText("쉬는 시간");
         buttonResume.setVisibility(View.GONE);
         buttonPause.setVisibility(View.VISIBLE);
         buttonReset.setVisibility(View.VISIBLE);
@@ -97,7 +100,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
             try {
 
 //todo sleepthread 1000으로 고칠것, mp.start 주석 해제할것
-                Thread.sleep(500);
+                Thread.sleep(INT_SECOND);
                 time--;
 
 
@@ -160,10 +163,9 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
             tvTimer.setText("GO!!!");
 
             woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
-            buttonStart.setText(currentSet + "세트 운동 시작!");
+//            buttonStart.setText(currentSet + "세트 운동 시작!");
 
 
-            buttonStart.setVisibility(View.VISIBLE);
             buttonSetDone.setVisibility(View.GONE);
 
 

@@ -9,10 +9,16 @@ import android.widget.Toast;
 
 import nova.workoutapp22.PlayWorkoutActivity;
 import nova.workoutapp22.R;
+import nova.workoutapp22.subSources.KeySet;
 
+import static nova.workoutapp22.PlayWorkoutActivity.buttonPause;
+import static nova.workoutapp22.PlayWorkoutActivity.buttonReset;
+import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
 import static nova.workoutapp22.PlayWorkoutActivity.restTimerTask;
+import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
+import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
 import static nova.workoutapp22.subSources.KeySet.key_workoutName;
 
 /**
@@ -26,11 +32,12 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     private static final int TEXT_COLOR_FINISHED = 0XFFFF0000;
 
 
-    private TextView timer = null;
+    private TextView tvTimer = null;
     private TextView countDown = null;
 
     private TextView woSetPl = null;
     private TextView tvTitle = null;
+    TextView tvTimeTitle;
     private int totalRestSec = 0;
 
     private Button buttonStart, buttonSetDone;
@@ -55,7 +62,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
 
     public void setView() {
-        timer = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewTimerSetPl);
+        tvTimer = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewTimerSetPl);
         countDown = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewCountDown);
 
         buttonStart = (Button)PlayWorkoutActivity.getInstance().findViewById(R.id.buttonStartWoPl);
@@ -65,6 +72,9 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         tvTitle = (TextView)PlayWorkoutActivity.getInstance().findViewById(R.id.textViewCountDown);
         totalRestSec = PlayWorkoutActivity.getInstance().getTotalRestSec();
 
+        tvTimeTitle = (TextView)PlayWorkoutActivity.getInstance().findViewById(R.id.textViewTimeTitlePl);
+
+
     }
 
     public void setWorkoutTime(int time) {
@@ -73,9 +83,18 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPreExecute() {
-//        timer.setText("타이머 \n" + formatTime(time));
-        timer.setTextColor(TEXT_COLOR_NORMAL);
+
+        taskMode = KeySet.MODE_TIMER;
+        tvTimeTitle.setText("타이머");
+        tvTimer.setText(formatTime(time));
+//        tvTimer.setText("타이머 \n" + formatTime(time));
+        tvTimer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
+
+        buttonResume.setVisibility(View.GONE);
+        buttonPause.setVisibility(View.VISIBLE);
+        buttonReset.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -87,7 +106,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
             try {
 
 
-                Thread.sleep(1000);
+                Thread.sleep(INT_SECOND);
                 time--;
 
 
@@ -114,7 +133,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         if(time ==0){
 
 
-            timer.setText("쉬는 시간!");
+            tvTimer.setText("쉬는 시간!");
 
 
 
@@ -123,7 +142,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         }
 
 
-        timer.setText(formatTime(time));
+        tvTimer.setText(formatTime(time));
 
     }
 
@@ -155,7 +174,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
 
 //        if (result.equals(RESULT_SUCCESS))
-//            timer.setTextColor(TEXT_COLOR_FINISHED);
+//            tvTimer.setTextColor(TEXT_COLOR_FINISHED);
     }
 
     public void makeBeep() {
