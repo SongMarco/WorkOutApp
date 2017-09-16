@@ -15,6 +15,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.buttonPause;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonReset;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
+import static nova.workoutapp22.PlayWorkoutActivity.donutProgress;
 import static nova.workoutapp22.PlayWorkoutActivity.restTimerTask;
 import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
@@ -46,6 +47,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     private int time = -1;
 
+    private int totalTime = -1;
     private int timerMode = -1;
 
     private String timerSetting;
@@ -78,6 +80,8 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     }
 
     public void setWorkoutTime(int time) {
+
+        this.totalTime = time;
         this.time = time;
     }
 
@@ -95,6 +99,12 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         buttonPause.setVisibility(View.VISIBLE);
         buttonReset.setVisibility(View.VISIBLE);
 
+        ///////////도넛츠 초기화
+        Toast.makeText(PlayWorkoutActivity.getInstance(), "donut set", Toast.LENGTH_SHORT).show();
+        donutProgress.setProgress(100);
+        donutProgress.setVisibility(View.VISIBLE);
+
+
     }
 
     @Override
@@ -110,16 +120,21 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
                 time--;
 
 
+
+
                 publishProgress();
             } catch (InterruptedException e) {
                 return RESULT_FAIL;
             }
         }
+
         return RESULT_SUCCESS;
     }
 
     @Override
     protected void onProgressUpdate(Void... values) {
+
+        donutProgress.setProgress( ((float)time/(float)totalTime)*100 );
 
         if (time <= 3 && !isCountDone) {
             //TODO 3 2 1 삐삐삐소리 추가해주기

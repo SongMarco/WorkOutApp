@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import nova.workoutapp22.PlayWorkoutActivity;
 import nova.workoutapp22.R;
@@ -15,6 +16,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.buttonPause;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonReset;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
+import static nova.workoutapp22.PlayWorkoutActivity.donutProgress;
 import static nova.workoutapp22.PlayWorkoutActivity.stopWatchTask;
 import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
@@ -37,6 +39,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
 
     private int time = -1;
+    private int totalRestTime = -1;
 
     private int timerMode = -1;
 
@@ -72,6 +75,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     }
 
     public void setTime(int time) {
+        this.totalRestTime = time;
         this.time = time;
     }
 
@@ -92,6 +96,12 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
         currentSet++;
         tvTitle.setText(currentSet + "세트를 준비하세요!");
+
+        ///////////도넛츠 초기화
+        Toast.makeText(PlayWorkoutActivity.getInstance(), "donut set", Toast.LENGTH_SHORT).show();
+        donutProgress.setProgress(100);
+        donutProgress.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -114,7 +124,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onProgressUpdate(Void... values) {
-
+        donutProgress.setProgress( ((float)time/(float)totalRestTime)*100 );
         if (time <= 3 && !isCountDone && (currentSet <= totalSet)) {
 //            mp = MediaPlayer.create(PlayWorkoutActivity.getInstance(), R.raw.go3);
 //            mp.start();

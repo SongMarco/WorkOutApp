@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.lzyzsd.circleprogress.DonutProgress;
+
 import nova.workoutapp22.AsyncTaskSrc.RestTimerTask;
 import nova.workoutapp22.AsyncTaskSrc.StopWatchTask;
 import nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask;
@@ -55,6 +57,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     public static WorkoutTimerTask workoutTimerTask;
     public static RestTimerTask restTimerTask;
     public static StopWatchTask stopWatchTask;
+
+    public static DonutProgress donutProgress;
+
     WorkoutStartTask startTask;
 
     public static int taskMode = -1;
@@ -114,6 +119,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         currentSet = intentReceived.getIntExtra(key_currentSet, 0);
         totalSet = Integer.valueOf(intentReceived.getStringExtra(key_workoutSet));
+
+        donutProgress = (DonutProgress)findViewById(R.id.donut_progress);
 
 
         woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
