@@ -66,7 +66,7 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
 
         taskMode = KeySet.MODE_STOPWATCH;
 //        timer.setText("타이머 \n" + formatTime(time));
-        timer.setTextColor(TEXT_COLOR_NORMAL);
+//        timer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
 
         buttonReset.setVisibility(View.VISIBLE);

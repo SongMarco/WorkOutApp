@@ -79,7 +79,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     protected void onPreExecute() {
 
         taskMode = KeySet.MODE_REST_TIMER;
-        tvTimer.setTextColor(TEXT_COLOR_NORMAL);
+//        tvTimer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
 
 

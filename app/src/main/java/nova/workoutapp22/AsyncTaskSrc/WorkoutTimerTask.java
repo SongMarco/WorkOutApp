@@ -88,7 +88,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         tvTimeTitle.setText("타이머");
         tvTimer.setText(formatTime(time));
 //        tvTimer.setText("타이머 \n" + formatTime(time));
-        tvTimer.setTextColor(TEXT_COLOR_NORMAL);
+//        tvTimer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
 
         buttonResume.setVisibility(View.GONE);
