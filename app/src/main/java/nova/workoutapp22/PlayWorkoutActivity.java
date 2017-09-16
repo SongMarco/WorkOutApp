@@ -75,7 +75,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     Boolean isTimeSet;
 
     Button buttonStart;
-    Button buttonSetDone, buttonPause, buttonReset, buttonResume;
+    Button buttonSetDone,  buttonReset;
+    public static Button buttonPause,    buttonResume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

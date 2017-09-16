@@ -113,7 +113,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         if (time == 0) {
 
 
-            countDown.setText("운동하세요!!!");
+            countDown.setText(currentSet + "세트 운동하세요!!!");
 
 
             return;
