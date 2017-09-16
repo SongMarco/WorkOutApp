@@ -75,9 +75,10 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="250dp"
-        android:background="@color/colorLBlue">
+        android:background="@color/colorLBlue"
+        android:layout_gravity="center">
 
 
         <FrameLayout
@@ -94,6 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:donut_progress="0"
+                app:donut_finished_color="@color/colorPrimary"
                 app:donut_show_text="false" />
 
         </FrameLayout>
@@ -117,18 +119,19 @@
             android:text="00:00:00"
             android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/textViewCountDown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="운동을 시작하세요!"
-            android:textAllCaps="false"
-            android:textColor="@color/colorAccent"
-            android:textSize="25sp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
-
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textViewCountDown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="운동을 시작하세요!"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccent"
+        android:textSize="25sp" />
 
     <FrameLayout
         android:layout_width="match_parent"

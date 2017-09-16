@@ -17,6 +17,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
 import static nova.workoutapp22.PlayWorkoutActivity.donutProgress;
 import static nova.workoutapp22.PlayWorkoutActivity.restTimerTask;
+import static nova.workoutapp22.PlayWorkoutActivity.stTotalWorkoutTime;
 import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
 import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
@@ -47,7 +48,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     private int time = -1;
 
-    private int totalTime = -1;
+    private int totalWorkoutTime = -1;
     private int timerMode = -1;
 
     private String timerSetting;
@@ -80,8 +81,14 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     }
 
     public void setWorkoutTime(int time) {
+        stTotalWorkoutTime = time;
+        this.totalWorkoutTime = time;
+        this.time = time;
+    }
 
-        this.totalTime = time;
+    public void resumeWorkoutTime(int time){
+
+        this.totalWorkoutTime = stTotalWorkoutTime;
         this.time = time;
     }
 
@@ -100,8 +107,8 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         buttonReset.setVisibility(View.VISIBLE);
 
         ///////////도넛츠 초기화
-        Toast.makeText(PlayWorkoutActivity.getInstance(), "donut set", Toast.LENGTH_SHORT).show();
-        donutProgress.setProgress(100);
+
+        donutProgress.setProgress( ((float)time/(float) totalWorkoutTime)*100  );
         donutProgress.setVisibility(View.VISIBLE);
 
 
@@ -134,7 +141,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onProgressUpdate(Void... values) {
 
-        donutProgress.setProgress( ((float)time/(float)totalTime)*100 );
+        donutProgress.setProgress( ((float)time/(float) totalWorkoutTime)*100 );
 
         if (time <= 3 && !isCountDone) {
             //TODO 3 2 1 삐삐삐소리 추가해주기
@@ -214,6 +221,14 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     public int getTime() {
         return time;
+    }
+
+    public void setDonutProgress(int pauseWoTime){
+
+
+        donutProgress.setProgress( ((float)pauseWoTime/(float) stTotalWorkoutTime)*100 );
+
+
     }
 
 }

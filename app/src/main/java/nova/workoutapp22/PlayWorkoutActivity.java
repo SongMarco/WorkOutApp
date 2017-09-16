@@ -65,6 +65,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     public static int taskMode = -1;
 
     public static int currentSet, totalSet;
+
+    public static int stTotalWorkoutTime, stTotalRestTime;
+
     int hour, min, sec;
 
 
@@ -429,10 +432,15 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
                     if (pauseWoTime != -1 && pauseWoTime != 0) {
-
+                        Toast.makeText(PlayWorkoutActivity.this, "운동이 재개됩니다.", Toast.LENGTH_SHORT).show();
                         workoutTimerTask = new WorkoutTimerTask();
                         workoutTimerTask.setView();
-                        workoutTimerTask.setWorkoutTime(pauseWoTime);
+
+                        //운동을 재개할 땐 시간 세팅이 약간 달라진다.
+
+                        workoutTimerTask.resumeWorkoutTime(pauseWoTime);
+
+
                         workoutTimerTask.execute();
 
                         pauseWoTime = -1;
@@ -446,7 +454,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         restTimerTask = new RestTimerTask();
                         restTimerTask.setViewAndTimerSetting();
 
-                        restTimerTask.setTime(pauseRestTime);
+                        restTimerTask.resumeRestTime(pauseRestTime);
 
                         if (pauseRestTime <= 3) {
                             restTimerTask.setIsCountdone(true);
@@ -545,6 +553,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         buttonPause.setVisibility(View.GONE);
         buttonResume.setVisibility(View.GONE);
 
+        //////////도너츠 초기화
+        donutProgress.setProgress(0);
+        donutProgress.setVisibility(View.VISIBLE);
 
     }
     //endregion
