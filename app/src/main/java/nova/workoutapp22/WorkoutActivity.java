@@ -637,7 +637,8 @@ public class WorkoutActivity extends AppCompatActivity {
                 int loadedMin = data.getIntExtra("min", -1);
                 int loadedSec = data.getIntExtra("sec", -1);
 
-                return new WorkoutItem(woName, woSet, woNum, loadedHour, loadedMin, loadedSec, timerSetting, boolTimeSet, restMin, restSec);
+                WorkoutItem result = new WorkoutItem(woName, woSet, woNum, loadedHour, loadedMin, loadedSec, timerSetting, boolTimeSet, restMin, restSec);
+                return result;
 
             }
 
