@@ -491,6 +491,11 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     startTask.cancel(true);
 
                     clearTask();
+                    beforeRecord = "";
+                    recordNum = 1;
+                    tvRecord.setText("");
+
+                    buttonRecord.setVisibility(View.GONE);
 
 
                     initiationUI();
@@ -502,7 +507,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 case R.id.buttonRecordPl:
 
                     int recTime = stopWatchTask.getTime();
-                    String record = String.format("%d -- %02d:%02d \n\n"+beforeRecord, recordNum, recTime/60,recTime);
+
+                    String record = String.format("%d -- %02d:%02d \n\n"+beforeRecord, recordNum, recTime/100,recTime%100);
                     tvRecord.setText(record);
 
                     beforeRecord = record;
