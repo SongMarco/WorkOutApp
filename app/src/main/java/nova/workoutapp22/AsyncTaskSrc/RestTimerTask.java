@@ -94,6 +94,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
         MediaPlayer mp;
         tvTimeTitle.setText("쉬는 시간");
+        tvTimer.setText(formatTime(time));
         buttonResume.setVisibility(View.GONE);
         buttonPause.setVisibility(View.VISIBLE);
         buttonReset.setVisibility(View.VISIBLE);
@@ -131,8 +132,8 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     protected void onProgressUpdate(Void... values) {
         donutProgress.setProgress( ((float)time/(float)totalRestTime)*100 );
         if (time <= 3 && !isCountDone && (currentSet <= totalSet)) {
-//            mp = MediaPlayer.create(PlayWorkoutActivity.getInstance(), R.raw.go3);
-//            mp.start();
+            mp = MediaPlayer.create(PlayWorkoutActivity.getInstance(), R.raw.go3);
+            mp.start();
             isCountDone = true;
         }
 

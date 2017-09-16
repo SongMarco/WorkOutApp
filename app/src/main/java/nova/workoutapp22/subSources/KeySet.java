@@ -50,7 +50,7 @@ public class KeySet {
 
     ////////KeySet for Thread
 
-    public static final int INT_SECOND = 500;
+    public static final int INT_SECOND = 1000;
 
 
 

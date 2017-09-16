@@ -77,7 +77,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="250dp"
-        android:background="@color/colorLBlue"
+
         android:layout_gravity="center">
 
 

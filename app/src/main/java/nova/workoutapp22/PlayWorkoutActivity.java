@@ -21,6 +21,7 @@ import nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask;
 
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_FAIL;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_SUCCESS;
+import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
 import static nova.workoutapp22.subSources.KeySet.MODE_NULL;
 import static nova.workoutapp22.subSources.KeySet.MODE_REST_TIMER;
 import static nova.workoutapp22.subSources.KeySet.MODE_STOPWATCH;
@@ -645,8 +646,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         protected Long doInBackground(Long... params) {
             time = params[0] + 1;
 
-           // mp = MediaPlayer.create(getApplicationContext(), R.raw.go);
-//            mp.start();
+            mp = MediaPlayer.create(getApplicationContext(), R.raw.go);
+            mp.start();
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -659,7 +660,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     publishProgress();          // trigger onProgressUpdate()
 
                     //todo theread.sleep 1000으로 고칠 것(빠른 시연 위해), mediapleyer.start해줄 것
-                    Thread.sleep(10);         // one second sleep
+                    Thread.sleep(INT_SECOND);         // one second sleep
 
 
                 } catch (InterruptedException e) {
