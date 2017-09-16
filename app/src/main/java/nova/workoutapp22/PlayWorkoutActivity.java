@@ -48,7 +48,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
     TextView woNamePl, woNumTimePl, woSetPl;
 
-    TextView tvTitle, tvTimer;
+    TextView tvTitle, tvTimer, tvTimeTitle;
 
     public static WorkoutTimerTask workoutTimerTask;
     public static RestTimerTask restTimerTask;
@@ -100,7 +100,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         tvTitle = (TextView) findViewById(R.id.textViewCountDown);
         tvTimer = (TextView) findViewById(R.id.textViewTimerSetPl);
-
+        tvTimeTitle = (TextView)findViewById(R.id.textViewTimeTitlePl);
 
         Intent intentReceived = getIntent();
 
@@ -229,8 +229,11 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 case R.id.buttonStartWoPl:
 
 
-                    buttonStart.setOnTouchListener(null);
-                    buttonStart.setFocusable(false);
+//                    buttonStart.setOnTouchListener(null);
+//                    buttonStart.setFocusable(false);
+
+                    buttonStart.setVisibility(View.INVISIBLE);
+
 
                     tvTitle.setText("NO PAIN, NO GAIN");
 
@@ -245,16 +248,20 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                     //current = total이라면 운동이 완료된 것이다. 운동을 마치고 운동 화면으로 돌아가자.
                     if (currentSet == totalSet) {
-                        buttonStart.setVisibility(View.VISIBLE);
+
                         buttonSetDone.setVisibility(View.INVISIBLE);
 
                         Toast.makeText(PlayWorkoutActivity.this, getIntent().getStringExtra(key_workoutName) + " 운동 프로그램이 끝났습니다.", Toast.LENGTH_LONG).show();
+
+                        initiationUI();
                         finish();
+
+
 
                     }
 
 
-                    //아직 운동이 진행중이다.
+                    //아직 운동이 진행중이다. -> 스톱워치 운동
                     else if (timerSetting.equals(STRING_STOPWATCH)) {
 
                         if(stopWatchTask!=null){
@@ -271,32 +278,41 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         buttonStart.setVisibility(View.INVISIBLE);
                         buttonSetDone.setVisibility(View.INVISIBLE);
 
-                        RestTimerTask restTimer = new RestTimerTask();
-                        restTimer.setViewAndTimerSetting();
 
-                        restTimer.setTime(totalRestSec);
+                        if(totalRestSec !=0){
+                            RestTimerTask restTimer = new RestTimerTask();
+                            restTimer.setViewAndTimerSetting();
 
-                        restTimer.execute();
+                            restTimer.setTime(totalRestSec);
+
+                            restTimer.execute();
+
+                        }
 
 
 
-                    } else {
-                        currentSet++;
+                    }
+                    // 타이머 / 시간세팅 안한 운동인데 운동이 계속됨
+                    else {
+
                         woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
                         buttonStart.setText(currentSet + "세트 운동 시작!");
 
                         tvTitle.setText(currentSet + "세트를 준비하세요!");
 
-                        buttonStart.setVisibility(View.VISIBLE);
+                        buttonStart.setVisibility(View.INVISIBLE);
                         buttonSetDone.setVisibility(View.INVISIBLE);
 
-                        RestTimerTask restTimer = new RestTimerTask();
-                        restTimer.setViewAndTimerSetting();
 
-                        restTimer.setTime(totalRestSec);
+                        if(totalRestSec !=0){
+                            RestTimerTask restTimer = new RestTimerTask();
+                            restTimer.setViewAndTimerSetting();
 
-                        restTimer.execute();
+                            restTimer.setTime(totalRestSec);
 
+                            restTimer.execute();
+
+                        }
 
                         //TODO restTimer가 끝나면 바로 운동 시작이다
 
@@ -424,12 +440,21 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
             String sEll = String.format("%02d:%02d:%02d", totalWorkoutTime / 3600, totalWorkoutTime / 60, totalWorkoutTime % 60);
             tvTimer.setText(sEll);
+
         }
+        //스톱워치 운동
         else if(timerSetting.equals(STRING_STOPWATCH)){
 
             tvTimer.setText("스톱워치 사용");
         }
+        //타이머 안쓰는 운동
+        else{
 
+            tvTimer.setText("");
+
+        }
+
+        tvTimeTitle.setText(timerSetting);
 
         tvTitle.setText("운동을 시작하세요!");
 
@@ -438,6 +463,10 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         buttonStart.setVisibility(View.VISIBLE);
         buttonSetDone.setVisibility(View.INVISIBLE);
+        buttonReset.setVisibility(View.GONE);
+        buttonPause.setVisibility(View.GONE);
+        buttonResume.setVisibility(View.GONE);
+
 
     }
     //endregion
@@ -500,7 +529,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
             } else {
-                tvTimer.setText("운동시간 세팅 안함");
+//                tvTimer.setText("운동시간 세팅 안함");
                 tvTitle.setText("운동하세요!!!");
 
                 buttonSetDone.setText(currentSet + "세트 완료!");

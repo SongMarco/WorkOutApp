@@ -76,31 +76,39 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="287dp"
-        android:layout_weight="0.19"
-        android:background="@color/colorLBlue"
-        >
+        android:layout_height="250dp"
+        android:background="@color/colorLBlue">
 
+
+        <TextView
+            android:id="@+id/textViewTimeTitlePl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+
+            android:text="운동시간 세팅 제목"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/textViewTimerSetPl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewTimeTitlePl"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="운동시간 세팅 안함"
+            android:text="00:00:00"
             android:textSize="30sp" />
 
         <TextView
             android:id="@+id/textViewCountDown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:text="운동을 시작하세요!"
             android:textAllCaps="false"
             android:textColor="@color/colorAccent"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
     <FrameLayout

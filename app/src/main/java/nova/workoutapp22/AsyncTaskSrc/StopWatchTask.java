@@ -22,7 +22,7 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
     private TextView countDown = null;
 
     private TextView woSetPl = null;
-    private TextView tvTitle = null;
+    private TextView tvTitle, tvTimeTitle;
     private int totalRestSec = 0;
 
     private Button buttonStart, buttonSetDone;
@@ -46,7 +46,7 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
         woSetPl = (TextView)PlayWorkoutActivity.getInstance().findViewById(R.id.textViewSetPl);
         tvTitle = (TextView)PlayWorkoutActivity.getInstance().findViewById(R.id.textViewCountDown);
         totalRestSec = PlayWorkoutActivity.getInstance().getTotalRestSec();
-
+        tvTimeTitle = (TextView)PlayWorkoutActivity.getInstance().findViewById(R.id.textViewTimeTitlePl);
     }
 
     public void setWorkoutTime(int time) {

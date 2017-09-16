@@ -120,7 +120,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         // 기존 내용을 먼저 그려주고, 사용자의 입력을 저장해준다
         if (strAddWoMode.equals(BasicInfo.MODE_MODIFY) || strAddWoMode.equals(BasicInfo.MODE_VIEW)) {
 
-
+            Toast.makeText(this, "운동을 편집하려면 우측 상단의 연필버튼을 눌러주세요", Toast.LENGTH_SHORT).show();
 
 
             //processIntent가 정상적으로 끝나면 텍스트의 변화를 감지하여, editFlag를 변경한다 -> 이후 저장여부 결정함

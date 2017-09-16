@@ -27,7 +27,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     private TextView countDown = null;
 
     TextView woSetPl;
-    TextView tvTitle;
+    TextView tvTitle, tvTimeTitle;
     private Button buttonStart, buttonSetDone;
 
 
@@ -60,6 +60,8 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         woSetPl = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewSetPl);
         tvTitle = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewCountDown);
 
+        tvTimeTitle = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewTimeTitlePl);
+
         totalWorkoutTime = PlayWorkoutActivity.getInstance().getTotalWorkoutTime();
         timerSetting = PlayWorkoutActivity.getInstance().getTimerSetting();
     }
@@ -70,9 +72,13 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPreExecute() {
-        tvTimer.setText("쉬는 시간 \n" + formatTime(time));
+        tvTimeTitle.setText("쉬는 시간");
+        tvTimer.setText(formatTime(time));
         tvTimer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
+
+        currentSet++;
+        tvTitle.setText(currentSet + "세트를 준비하세요!");
     }
 
     @Override
@@ -96,7 +102,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onProgressUpdate(Void... values) {
 
-        if (time <= 3 && !isCountDone && (currentSet != totalSet)) {
+        if (time <= 3 && !isCountDone && (currentSet <= totalSet)) {
             MediaPlayer.create(PlayWorkoutActivity.getInstance(), R.raw.go3).start();
             isCountDone = true;
         }
@@ -106,6 +112,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 //        }
         if (time == 0) {
 
+
             countDown.setText("운동하세요!!!");
 
 
@@ -114,14 +121,21 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         }
 
 
-        tvTimer.setText("쉬는 시간 \n" + formatTime(time));
+        tvTimer.setText(formatTime(time));
 
     }
 
     @Override
     protected void onPostExecute(String result) {
 
+        tvTimer.setText("GO!!!");
+
+        woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
+
+
+
         if (timerSetting.equals(KeySet.STRING_NOTIMER)) {
+
             buttonSetDone.setText(currentSet + "세트 완료!");
             buttonStart.setVisibility(View.INVISIBLE);
             buttonSetDone.setVisibility(View.VISIBLE);
@@ -136,7 +150,6 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
             woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
             buttonStart.setText(currentSet + "세트 운동 시작!");
 
-            tvTitle.setText(currentSet + "세트를 준비하세요!");
 
             buttonStart.setVisibility(View.VISIBLE);
             buttonSetDone.setVisibility(View.INVISIBLE);
@@ -149,13 +162,9 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
         } else if (timerSetting.equals(KeySet.STRING_STOPWATCH)) {
 
-            tvTimer.setText("GO!!!");
 
-            currentSet++;
-            woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
             buttonStart.setText(currentSet + "세트 운동 시작!");
 
-            tvTitle.setText(currentSet + "세트를 준비하세요!");
 
 
             buttonStart.setVisibility(View.INVISIBLE);

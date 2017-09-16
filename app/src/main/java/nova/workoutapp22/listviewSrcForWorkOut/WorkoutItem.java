@@ -90,7 +90,8 @@ public class WorkoutItem {
         this.restSec = restSec;
     }
 
-    public WorkoutItem(String woName, String woSet, String woNum,  int hour, int min, int sec ,String timerSetting, boolean boolTimeSet, int restMin, int restSec){
+    // 숫자 + 시간을 가짐. 횟수 + 시간 운동에 사용된다.
+    public WorkoutItem(String woName, String woNum, String woSet,   int hour, int min, int sec ,String timerSetting, boolean boolTimeSet, int restMin, int restSec){
         this.woName = woName;
         this.timerSetting = timerSetting;
         this.woSet = woSet;
@@ -103,6 +104,23 @@ public class WorkoutItem {
         this.restMin = restMin;
         this.restSec = restSec;
     }
+
+    //숫자 + 시간 가지는 것 초기화를 위한 생성자(초기값- 벤치)
+    public WorkoutItem(int mID, String woName, String woNum, String woSet,   int hour, int min, int sec ,String timerSetting, boolean boolTimeSet, int restMin, int restSec){
+        this.mID = mID;
+        this.woName = woName;
+        this.timerSetting = timerSetting;
+        this.woSet = woSet;
+        this.woNum = woNum;
+        this.hour = hour;
+        this.min = min;
+        this.sec = sec;
+        this.boolTimeSet = boolTimeSet;
+
+        this.restMin = restMin;
+        this.restSec = restSec;
+    }
+
 
 
 

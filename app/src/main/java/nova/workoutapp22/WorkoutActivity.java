@@ -45,6 +45,8 @@ import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_WORKOUT;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_WORKOUT;
+import static nova.workoutapp22.subSources.KeySet.STRING_NOTIMER;
+import static nova.workoutapp22.subSources.KeySet.STRING_STOPWATCH;
 import static nova.workoutapp22.subSources.KeySet.STRING_TIMER;
 import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
 import static nova.workoutapp22.subSources.KeySet.key_hour;
@@ -97,9 +99,9 @@ public class WorkoutActivity extends AppCompatActivity {
         listViewForWorkout = (ListView) findViewById(R.id.listViewForWorkout);
         listViewForWorkout.setAdapter(workoutAdapter);
 
-        workoutAdapter.addItem(new WorkoutItem(0, "벤치 프레스", "50", "3", "타이머 사용"));
-        workoutAdapter.addItem(new WorkoutItem(1, "팔굽혀 펴기", "20", "5", "스톱워치 사용"));
-        workoutAdapter.addItem(new WorkoutItem(2, "스쿼트", "100", "2", "사용 안함"));
+            workoutAdapter.addItem(new WorkoutItem(0, "벤치 프레스", "50", "3",0,1,10, STRING_TIMER, false, 1,15));
+        workoutAdapter.addItem(new WorkoutItem(1, "팔굽혀 펴기", "20", "5", STRING_STOPWATCH));
+        workoutAdapter.addItem(new WorkoutItem(2, "스쿼트", "100", "2", STRING_NOTIMER));
 
         workoutAdapter.notifyDataSetChanged();
 
@@ -637,7 +639,7 @@ public class WorkoutActivity extends AppCompatActivity {
                 int loadedMin = data.getIntExtra("min", -1);
                 int loadedSec = data.getIntExtra("sec", -1);
 
-                WorkoutItem result = new WorkoutItem(woName, woSet, woNum, loadedHour, loadedMin, loadedSec, timerSetting, boolTimeSet, restMin, restSec);
+                WorkoutItem result = new WorkoutItem(woName,  woNum, woSet, loadedHour, loadedMin, loadedSec, timerSetting, boolTimeSet, restMin, restSec);
                 return result;
 
             }
