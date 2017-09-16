@@ -53,7 +53,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
     TextView woNamePl, woNumTimePl, woSetPl;
 
-    TextView tvTitle, tvTimer, tvTimeTitle;
+    TextView tvTitle, tvTimer, tvTimeTitle, tvRecord;
 
     public static WorkoutTimerTask workoutTimerTask;
     public static RestTimerTask restTimerTask;
@@ -72,6 +72,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     int hour, min, sec;
 
 
+    int recordNum = 1;
     int restMin = 0;
     int restSec = 0;
     int totalRestSec = 0;
@@ -81,6 +82,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     int pauseRestTime = -1;
     int pauseSwTime = -1;
 
+    String beforeRecord = "";
     String timerSetting;
 
 
@@ -88,7 +90,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
     Button buttonStart;
     Button buttonSetDone;
-    public static Button buttonPause, buttonResume, buttonReset;
+    public static Button buttonPause, buttonResume, buttonReset, buttonRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +136,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         timerMode = intentReceived.getIntExtra(key_timerMode, MODE_NULL);
         timerSetting = intentReceived.getStringExtra(key_timerSetting);
+
+        tvRecord = (TextView)findViewById(R.id.textViewRecordPl);
 
 //        Toast.makeText(instance, "timermode = "+timerMode, Toast.LENGTH_SHORT).show();
 
@@ -221,12 +225,14 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         buttonReset = (Button) findViewById(R.id.buttonResetPl);
         buttonPause = (Button) findViewById(R.id.buttonPausePl);
         buttonResume = (Button) findViewById(R.id.buttonResumePl);
+        buttonRecord = (Button)findViewById(R.id.buttonRecordPl);
 
 
         findViewById(R.id.buttonStartWoPl).setOnClickListener(plClickListener);
         findViewById(R.id.buttonSetDonePl).setOnClickListener(plClickListener);
         findViewById(R.id.buttonPausePl).setOnClickListener(plClickListener);
         findViewById(R.id.buttonResetPl).setOnClickListener(plClickListener);
+        buttonRecord.setOnClickListener(plClickListener);
         buttonResume.setOnClickListener(plClickListener);
 
         initiationUI();
@@ -493,7 +499,23 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     break;
 
 
+                case R.id.buttonRecordPl:
+
+                    int recTime = stopWatchTask.getTime();
+                    String record = String.format("%d -- %02d:%02d \n\n"+beforeRecord, recordNum, recTime/60,recTime);
+                    tvRecord.setText(record);
+
+                    beforeRecord = record;
+                    recordNum ++;
+
+
+
+                    break;
             }
+
+
+
+
         }
     };
 

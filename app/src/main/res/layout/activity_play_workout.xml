@@ -188,13 +188,34 @@
                 android:text="일시정지" />
 
         </FrameLayout>
+
+        <Button
+            android:id="@+id/buttonRecordPl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="기록하기"
+            android:visibility="gone" />
+
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewRecordPl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

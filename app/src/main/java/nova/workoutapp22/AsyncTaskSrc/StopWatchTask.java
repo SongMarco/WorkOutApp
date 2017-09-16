@@ -10,6 +10,7 @@ import nova.workoutapp22.R;
 import nova.workoutapp22.subSources.KeySet;
 
 import static nova.workoutapp22.PlayWorkoutActivity.buttonPause;
+import static nova.workoutapp22.PlayWorkoutActivity.buttonRecord;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonReset;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
 import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
@@ -73,6 +74,8 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
         buttonPause.setVisibility(View.VISIBLE);
         buttonResume.setVisibility(View.INVISIBLE);
         buttonSetDone.setVisibility(View.VISIBLE);
+
+        buttonRecord.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -107,6 +110,7 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String result) {
 
 
+        buttonRecord.setVisibility(View.GONE);
 
 
 
@@ -128,7 +132,7 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
     String formatTime(int time) {
 
 
-        String sEll = String.format("%02d:%02d", time / 60, time % 60);
+        String sEll = String.format("%02d:%02d:%02d", time / 60, time % 60);
 
         return sEll;
 
