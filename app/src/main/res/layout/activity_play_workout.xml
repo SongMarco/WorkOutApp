@@ -130,33 +130,49 @@
             android:layout_gravity="center"
             android:text="1세트 완료!"
             android:visibility="invisible" />
+
     </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonResetPl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:text="초기화" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/buttonResumePl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Resume" />
+
+            <Button
+                android:id="@+id/buttonPausePl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="일시정지" />
+
+        </FrameLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/buttonResumePl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Resume" />
-
-        <Button
-            android:id="@+id/buttonPausePl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="일시정지" />
-
-        <Button
-            android:id="@+id/buttonResetPl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="초기화" />
     </LinearLayout>
 
 </LinearLayout>

@@ -11,6 +11,9 @@ import nova.workoutapp22.PlayWorkoutActivity;
 import nova.workoutapp22.R;
 import nova.workoutapp22.subSources.KeySet;
 
+import static nova.workoutapp22.PlayWorkoutActivity.buttonPause;
+import static nova.workoutapp22.PlayWorkoutActivity.buttonReset;
+import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
 import static nova.workoutapp22.PlayWorkoutActivity.stopWatchTask;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
@@ -77,6 +80,13 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         tvTimer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
 
+
+        MediaPlayer mp;
+        buttonResume.setVisibility(View.GONE);
+        buttonPause.setVisibility(View.VISIBLE);
+        buttonReset.setVisibility(View.VISIBLE);
+
+
         currentSet++;
         tvTitle.setText(currentSet + "세트를 준비하세요!");
     }
@@ -86,8 +96,8 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         while (time > 0) {
             try {
 
-
-                Thread.sleep(1000);
+//todo sleepthread 1000으로 고칠것, mp.start 주석 해제할것
+                Thread.sleep(500);
                 time--;
 
 
@@ -103,7 +113,8 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     protected void onProgressUpdate(Void... values) {
 
         if (time <= 3 && !isCountDone && (currentSet <= totalSet)) {
-            MediaPlayer.create(PlayWorkoutActivity.getInstance(), R.raw.go3).start();
+//            mp = MediaPlayer.create(PlayWorkoutActivity.getInstance(), R.raw.go3);
+//            mp.start();
             isCountDone = true;
         }
 
@@ -132,12 +143,14 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
         woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
 
-
+        buttonResume.setVisibility(View.GONE);
+        buttonPause.setVisibility(View.GONE);
+        buttonReset.setVisibility(View.GONE);
 
         if (timerSetting.equals(KeySet.STRING_NOTIMER)) {
 
             buttonSetDone.setText(currentSet + "세트 완료!");
-            buttonStart.setVisibility(View.INVISIBLE);
+            buttonStart.setVisibility(View.GONE);
             buttonSetDone.setVisibility(View.VISIBLE);
         } else if (timerSetting.equals(KeySet.STRING_TIMER)) {
 
@@ -146,13 +159,12 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
             tvTimer.setText("GO!!!");
 
-            currentSet++;
             woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
             buttonStart.setText(currentSet + "세트 운동 시작!");
 
 
             buttonStart.setVisibility(View.VISIBLE);
-            buttonSetDone.setVisibility(View.INVISIBLE);
+            buttonSetDone.setVisibility(View.GONE);
 
 
             workoutTimerTask = new WorkoutTimerTask();
@@ -163,11 +175,13 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         } else if (timerSetting.equals(KeySet.STRING_STOPWATCH)) {
 
 
+            tvTimeTitle.setText(KeySet.STRING_STOPWATCH);
+
             buttonStart.setText(currentSet + "세트 운동 시작!");
 
 
 
-            buttonStart.setVisibility(View.INVISIBLE);
+            buttonStart.setVisibility(View.GONE);
             buttonSetDone.setVisibility(View.VISIBLE);
             stopWatchTask = new StopWatchTask();
             stopWatchTask.setView();
@@ -206,6 +220,10 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     public void setIsCountdone(Boolean bool) {
         this.isCountDone = bool;
+    }
+
+    public void pauseMp(){
+//        mp.release();
     }
 
 }

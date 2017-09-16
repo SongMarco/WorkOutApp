@@ -1,11 +1,15 @@
 package nova.workoutapp22.AsyncTaskSrc;
 
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import nova.workoutapp22.PlayWorkoutActivity;
 import nova.workoutapp22.R;
+
+import static nova.workoutapp22.PlayWorkoutActivity.buttonPause;
+import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
 
 /**
  * Created by jamsy on 2017-09-16.
@@ -58,6 +62,10 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
 //        timer.setText("타이머 \n" + formatTime(time));
         timer.setTextColor(TEXT_COLOR_NORMAL);
         isFirst = true;
+
+        buttonPause.setVisibility(View.VISIBLE);
+        buttonResume.setVisibility(View.INVISIBLE);
+        buttonSetDone.setVisibility(View.VISIBLE);
     }
 
     @Override
