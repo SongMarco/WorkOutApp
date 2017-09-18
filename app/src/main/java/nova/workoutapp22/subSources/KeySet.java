@@ -53,6 +53,8 @@ public class KeySet {
     public static final int INT_SECOND = 1000;
     public static final int INT_SWSECOND = 10;
 
+    public static final int LIMIT_ZERO = 30;
+
 
 
 

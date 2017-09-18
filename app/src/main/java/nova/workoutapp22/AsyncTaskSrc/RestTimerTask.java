@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
 import static nova.workoutapp22.PlayWorkoutActivity.workoutTimerTask;
 import static nova.workoutapp22.subSources.KeySet.INT_SWSECOND;
+import static nova.workoutapp22.subSources.KeySet.LIMIT_ZERO;
 
 public class RestTimerTask extends AsyncTask<Void, Void, String> {
     private static final String RESULT_SUCCESS = "1";
@@ -53,7 +55,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
 
 
-    boolean isCountDone = false;
+    boolean isRestCountDone = false;
     boolean isResumed = false;
 
     String timerSetting;
@@ -94,12 +96,12 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setTime(int timeInSec) {
-        stTotalRestTime = timeInSec*100;
-        this.totalRestTime = timeInSec*100;
-        this.time = timeInSec*100;
+        stTotalRestTime = timeInSec*1000;
+        this.totalRestTime = timeInSec*1000;
+        this.time = timeInSec*1000;
 
         if(animatorRest !=null && !animatorRest.isPaused()){
-            animatorRest.setDuration(totalRestTime*10+100);
+            animatorRest.setDuration(timeInSec*1000);
         }
 
     }
@@ -142,12 +144,13 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        while (time > 0) {
+
+
+        while (time > LIMIT_ZERO) {
             try {
 
-//todo sleepthread 1000으로 고칠것, mp.start 주석 해제할것
                 Thread.sleep(INT_SWSECOND);
-                time--;
+                time = (int)(totalRestTime - animatorRest.getCurrentPlayTime() );
 
 
                 publishProgress();
@@ -162,13 +165,12 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     protected void onProgressUpdate(Void... values) {
 
 
+        Log.v("restTag", "restIsf = "+restIsFirst);
+        if (time <= 3000 && !isRestCountDone && (currentSet <= totalSet) ) {
 
-
-        if (time <= 300 && !isCountDone && (currentSet <= totalSet) && restIsFirst==true) {
             mp = MediaPlayer.create(PlayWorkoutActivity.getInstance(), R.raw.go3);
             mp.start();
-            isCountDone = true;
-
+            isRestCountDone = true;
         }
 
 
@@ -273,8 +275,8 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     String formatTime(int time) {
 
 
-        String sEll = String.format("%02d:%02d:%02d",  time/100/60, time / 100, time % 100);
-
+        //분:초:0.몇초
+        String sEll = String.format("%02d:%02d:%02d", time/1000/60, time/1000, (time%1000)/10  );
         return sEll;
 
     }
@@ -284,7 +286,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     }
 
     public void setIsCountdone(Boolean bool) {
-        this.isCountDone = bool;
+        this.isRestCountDone = bool;
     }
 
     public void pauseMp(){

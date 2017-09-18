@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
@@ -26,6 +27,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
 import static nova.workoutapp22.PlayWorkoutActivity.workoutIsFirst;
 import static nova.workoutapp22.subSources.KeySet.INT_SWSECOND;
+import static nova.workoutapp22.subSources.KeySet.LIMIT_ZERO;
 import static nova.workoutapp22.subSources.KeySet.key_workoutName;
 
 /**
@@ -93,7 +95,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
         woSetPl = (TextView)PlayWorkoutActivity.getInstance().findViewById(R.id.textViewSetPl);
         tvTitle = (TextView)PlayWorkoutActivity.getInstance().findViewById(R.id.textViewCountDown);
-        totalRestSec = PlayWorkoutActivity.getInstance().getTotalRestSec();
+
 
         tvTimeTitle = (TextView)PlayWorkoutActivity.getInstance().findViewById(R.id.textViewTimeTitlePl);
 
@@ -102,12 +104,12 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setWorkoutTime(int time) {
-        stTotalWorkoutTime = time*100;
-        this.totalWorkoutTime = time*100;
-        this.time = time*100;
+        stTotalWorkoutTime = time*1000;
+        this.totalWorkoutTime = stTotalWorkoutTime;
+        this.time = stTotalWorkoutTime;
 
         if(animatorWorkout != null && !animatorWorkout.isPaused()){
-            animatorWorkout.setDuration(totalWorkoutTime*10);
+            animatorWorkout.setDuration(stTotalWorkoutTime);
 
         }
 
@@ -157,13 +159,14 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
 
 
-        while (time > 0) {
+        while (time > LIMIT_ZERO) {
             try {
 
 
 
                 Thread.sleep(INT_SWSECOND);
-                time--;
+                Log.wtf("timeTag", "time = "+time);
+                time = (int)(totalWorkoutTime - animatorWorkout.getCurrentPlayTime() );
 
 
 
@@ -201,9 +204,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 
-        animatorWorkout.end();
         if(currentSet == totalSet){
-
 
             Toast.makeText(PlayWorkoutActivity.getInstance(), PlayWorkoutActivity.getInstance().
                     getIntent().getStringExtra(key_workoutName) + " 운동 프로그램이 끝났습니다.", Toast.LENGTH_LONG).show();
@@ -216,8 +217,11 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
             buttonSetDone.setVisibility(View.INVISIBLE);
 
 
+            Toast.makeText(PlayWorkoutActivity.getInstance(), "rest start", Toast.LENGTH_SHORT).show();
             restTimerTask = new RestTimerTask();
             restTimerTask.setViewAndTimerSetting();
+            totalRestSec = PlayWorkoutActivity.getInstance().getTotalRestSec();
+            Log.v("tsc", "workout::restsec ="+totalRestSec);
             restTimerTask.setTime(totalRestSec);
 
             restTimerTask.execute();
@@ -244,10 +248,10 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
 //        String sEll = String.format("%02d:%02d:%02d",  time/100/60, time / 100, time % 100);
 
-        long syncTimeMil = (totalWorkoutTime*10 - animatorWorkout.getCurrentPlayTime() );
+
 
         //분:초:0.몇초
-        String sEll = String.format("%02d:%02d:%02d", syncTimeMil/1000/60, syncTimeMil/1000, (syncTimeMil%1000)/10  );
+        String sEll = String.format("%02d:%02d:%02d", time/1000/60, time/1000, (time%1000)/10  );
         return sEll;
 
     }

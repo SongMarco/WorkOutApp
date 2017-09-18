@@ -152,6 +152,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         restMin = intentReceived.getIntExtra(key_restMin, 0);
         restSec = intentReceived.getIntExtra(key_restSec, 0);
         totalRestSec = 60 * restMin + restSec;
+        Log.v("restSec", "restsec = "+totalRestSec);
 
 
         String outputRestTime = "";
@@ -436,7 +437,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                     ///애니메이션을 pause한다
                     if(animatorWorkout!=null && animatorWorkout.isRunning()){
-                        Toast.makeText(PlayWorkoutActivity.this, "anim paused Wo", Toast.LENGTH_SHORT).show();
+
                         animatorWorkout.pause();
                     }
                     if(animatorRest!=null &&animatorRest.isRunning()){
@@ -460,7 +461,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
                     if (pauseWoTime != -1 && pauseWoTime != 0) {
-                        Toast.makeText(PlayWorkoutActivity.this, "운동이 재개됩니다.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(PlayWorkoutActivity.this, "운동이 재개됩니다.", Toast.LENGTH_SHORT).show();
                         workoutTimerTask = new WorkoutTimerTask();
 
                         workoutTimerTask.setView();
@@ -487,7 +488,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                         restTimerTask.resumeRestTime(pauseRestTime);
 
-                        if (pauseRestTime <= 3) {
+                        if (pauseRestTime <= 3000) {
                             restTimerTask.setIsCountdone(true);
                         }
 
@@ -653,6 +654,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected void onPostExecute(Long result) {
             super.onPostExecute(result);
