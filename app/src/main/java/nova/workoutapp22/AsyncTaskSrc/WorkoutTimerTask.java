@@ -107,7 +107,8 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         this.time = time*100;
 
         if(animatorWorkout != null && !animatorWorkout.isPaused()){
-            animatorWorkout.setDuration(totalWorkoutTime*10+100);
+            animatorWorkout.setDuration(totalWorkoutTime*10);
+
         }
 
 
@@ -241,8 +242,12 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     String formatTime(int time) {
 
 
-        String sEll = String.format("%02d:%02d:%02d",  time/100/60, time / 100, time % 100);
+//        String sEll = String.format("%02d:%02d:%02d",  time/100/60, time / 100, time % 100);
 
+        long syncTimeMil = (totalWorkoutTime*10 - animatorWorkout.getCurrentPlayTime() );
+
+        //분:초:0.몇초
+        String sEll = String.format("%02d:%02d:%02d", syncTimeMil/1000/60, syncTimeMil/1000, (syncTimeMil%1000)/10  );
         return sEll;
 
     }
