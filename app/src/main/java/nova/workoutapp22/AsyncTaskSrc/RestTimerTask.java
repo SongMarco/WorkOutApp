@@ -50,7 +50,8 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     int totalWorkoutTime;
 
-    boolean isFirst = true;
+
+    public static boolean restIsFirst = true;
     boolean isCountDone = false;
     boolean isResumed = false;
 
@@ -67,7 +68,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setViewAndTimerSetting() {
 
-        if(!animatorRest.isPaused()){
+        if(animatorRest ==null || !animatorRest.isPaused()){
             animatorRest = ObjectAnimator.ofFloat(donutProgress, "progress", 100, 0);
             animatorRest.setInterpolator(new LinearInterpolator());
         }
@@ -90,24 +91,29 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         timerSetting = PlayWorkoutActivity.getInstance().getTimerSetting();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setTime(int timeInSec) {
         stTotalRestTime = timeInSec*100;
         this.totalRestTime = timeInSec*100;
         this.time = timeInSec*100;
 
-        animatorRest.setDuration(totalRestTime*10);
+        if(animatorRest !=null && !animatorRest.isPaused()){
+            animatorRest.setDuration(totalRestTime*10);
+        }
+
     }
     public void resumeRestTime(int time){
 
         this.totalRestTime = stTotalRestTime;
         this.time = time;
     }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onPreExecute() {
 
         taskMode = KeySet.MODE_REST_TIMER;
 //        tvTimer.setTextColor(TEXT_COLOR_NORMAL);
-        isFirst = true;
+        restIsFirst = true;
 
 
         MediaPlayer mp;
@@ -124,7 +130,12 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         ///////////도넛츠 초기화
 
 //        donutProgress.setProgress( ((float)time/(float) totalRestTime)*100  );
+
         donutProgress.setVisibility(View.VISIBLE);
+        if(animatorRest!=null && animatorRest.isPaused()){
+            animatorRest.resume();
+        }
+
 
     }
 
@@ -157,9 +168,9 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
             mp.start();
             isCountDone = true;
         }
-        if(!animatorRest.isRunning()){
+        if(!animatorRest.isStarted() && restIsFirst){
             animatorRest.start();
-
+            restIsFirst = false;
         }
 
 
@@ -185,6 +196,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String result) {
 
+        animatorRest.end();
         tvTimer.setText("GO!!!");
 
         woSetPl.setText("세트 : " + currentSet + "/" + totalSet);

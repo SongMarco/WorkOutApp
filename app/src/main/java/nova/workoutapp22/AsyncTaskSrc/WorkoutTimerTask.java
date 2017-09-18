@@ -57,7 +57,8 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     private String timerSetting;
 
-    boolean isFirst = true;
+
+    public static boolean workoutIsFirst = true;
     boolean isCountDone = false;
     boolean isResumed = false;
 
@@ -126,7 +127,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         tvTimer.setText(formatTime(time));
 //        tvTimer.setText("타이머 \n" + formatTime(time));
 //        tvTimer.setTextColor(TEXT_COLOR_NORMAL);
-        isFirst = true;
+        workoutIsFirst = true;
 
         buttonResume.setVisibility(View.GONE);
         buttonPause.setVisibility(View.VISIBLE);
@@ -143,6 +144,9 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         }
 
 
+
+
+
     }
 
     @Override
@@ -152,6 +156,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
         while (time > 0) {
             try {
+
 
 
                 Thread.sleep(INT_SWSECOND);
@@ -171,44 +176,28 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onProgressUpdate(Void... values) {
+        if(!animatorWorkout.isStarted() && workoutIsFirst ){
 
-//        donutProgress.setProgress( ((float)time/(float) totalWorkoutTime)*100 );
-
-
-        if(isFirst && animatorWorkout!=null && !animatorWorkout.isRunning()){
+            Toast.makeText(PlayWorkoutActivity.getInstance(), "workout anim start", Toast.LENGTH_SHORT).show();
             animatorWorkout.start();
 
+            workoutIsFirst = false;
         }
 
-        if (time <= 3 && !isCountDone) {
-            //TODO 3 2 1 삐삐삐소리 추가해주기
-
-            isCountDone = true;
-        }
-
-//        if(time>0 && time <=3){
-//            countDown.setText( String.valueOf(time));
-//        }
         if(time ==0){
-
-
             tvTimer.setText("쉬는 시간!");
-
-
-
             return;
-
         }
-
 
         tvTimer.setText(formatTime(time));
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onPostExecute(String result) {
 
-
+        animatorWorkout.end();
         if(currentSet == totalSet){
 
 
@@ -257,13 +246,6 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     public int getTime() {
         return time;
-    }
-
-    public void setResumed(){
-
-        isResumed = true;
-
-
     }
 
 }

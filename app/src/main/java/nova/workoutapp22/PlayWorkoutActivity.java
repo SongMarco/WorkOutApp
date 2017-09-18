@@ -22,7 +22,9 @@ import nova.workoutapp22.AsyncTaskSrc.StopWatchTask;
 import nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask;
 
 import static nova.workoutapp22.AsyncTaskSrc.RestTimerTask.animatorRest;
+import static nova.workoutapp22.AsyncTaskSrc.RestTimerTask.restIsFirst;
 import static nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask.animatorWorkout;
+import static nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask.workoutIsFirst;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_FAIL;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_SUCCESS;
 import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
@@ -278,6 +280,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         clearTask();
 
 
+                        animatorWorkout.end();
+
 
                         buttonSetDone.setVisibility(View.INVISIBLE);
 
@@ -381,6 +385,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                             restTimerTask.pauseMp();
 
+
                             restTimerTask.cancel(true);
 
                         }
@@ -457,7 +462,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     if (pauseWoTime != -1 && pauseWoTime != 0) {
                         Toast.makeText(PlayWorkoutActivity.this, "운동이 재개됩니다.", Toast.LENGTH_SHORT).show();
                         workoutTimerTask = new WorkoutTimerTask();
-                        workoutTimerTask.setResumed();
+
                         workoutTimerTask.setView();
 
                         //운동을 재개할 땐 시간 세팅이 약간 달라진다.
@@ -465,7 +470,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         workoutTimerTask.resumeWorkoutTime(pauseWoTime);
 
 
-
+                        workoutIsFirst = false;
                         workoutTimerTask.execute();
 
                         pauseWoTime = -1;
@@ -477,7 +482,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         currentSet--;
 
                         restTimerTask = new RestTimerTask();
-                        restTimerTask.setResumed();
+
                         restTimerTask.setViewAndTimerSetting();
 
                         restTimerTask.resumeRestTime(pauseRestTime);
@@ -486,6 +491,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                             restTimerTask.setIsCountdone(true);
                         }
 
+                        restIsFirst = false;
                         restTimerTask.execute();
 
                         pauseRestTime = -1;
@@ -497,7 +503,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                         stopWatchTask = new StopWatchTask();
                         stopWatchTask.setView();
+
                         stopWatchTask.setWorkoutTime(pauseSwTime);
+
                         stopWatchTask.execute();
                     }
 
@@ -641,6 +649,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected void onPostExecute(Long result) {
             super.onPostExecute(result);
@@ -658,8 +667,10 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
                 workoutTimerTask = new WorkoutTimerTask();
-                workoutTimerTask.setView();
+
                 workoutTimerTask.setWorkoutTime(totalWorkoutTime);
+                workoutTimerTask.setView();
+
                 workoutTimerTask.execute();
             } else if (timerSetting.equals(STRING_STOPWATCH)) {
 
