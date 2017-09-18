@@ -667,10 +667,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
                 workoutTimerTask = new WorkoutTimerTask();
-
-                workoutTimerTask.setWorkoutTime(totalWorkoutTime);
                 workoutTimerTask.setView();
-
+                workoutTimerTask.setWorkoutTime(totalWorkoutTime);
                 workoutTimerTask.execute();
             } else if (timerSetting.equals(STRING_STOPWATCH)) {
 
