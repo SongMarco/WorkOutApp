@@ -1,9 +1,13 @@
 package nova.workoutapp22.AsyncTaskSrc;
 
 
+import android.animation.ObjectAnimator;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -21,7 +25,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.stopWatchTask;
 import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
 import static nova.workoutapp22.PlayWorkoutActivity.workoutTimerTask;
-import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
+import static nova.workoutapp22.subSources.KeySet.INT_SWSECOND;
 
 public class RestTimerTask extends AsyncTask<Void, Void, String> {
     private static final String RESULT_SUCCESS = "1";
@@ -29,6 +33,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     private static final int TEXT_COLOR_NORMAL = 0xFF000000;
     private static final int TEXT_COLOR_FINISHED = 0XFFFF0000;
 
+    public static ObjectAnimator animatorRest ;
 
     private TextView tvTimer = null;
     private TextView countDown = null;
@@ -47,6 +52,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     boolean isFirst = true;
     boolean isCountDone = false;
+    boolean isResumed = false;
 
     String timerSetting;
 
@@ -58,7 +64,17 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     }
 
     //쉬는 시간의 경우 타이머 / 스톱워치 / 아무것도 안씀을 구분해야!!
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setViewAndTimerSetting() {
+
+        if(!animatorRest.isPaused()){
+            animatorRest = ObjectAnimator.ofFloat(donutProgress, "progress", 100, 0);
+            animatorRest.setInterpolator(new LinearInterpolator());
+        }
+
+
+
+
         tvTimer = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewTimerSetPl);
         countDown = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewCountDown);
 
@@ -74,10 +90,12 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         timerSetting = PlayWorkoutActivity.getInstance().getTimerSetting();
     }
 
-    public void setTime(int time) {
-        stTotalRestTime = time;
-        this.totalRestTime = time;
-        this.time = time;
+    public void setTime(int timeInSec) {
+        stTotalRestTime = timeInSec*100;
+        this.totalRestTime = timeInSec*100;
+        this.time = timeInSec*100;
+
+        animatorRest.setDuration(totalRestTime*10);
     }
     public void resumeRestTime(int time){
 
@@ -105,7 +123,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
         ///////////도넛츠 초기화
 
-        donutProgress.setProgress( ((float)time/(float) totalRestTime)*100  );
+//        donutProgress.setProgress( ((float)time/(float) totalRestTime)*100  );
         donutProgress.setVisibility(View.VISIBLE);
 
     }
@@ -116,7 +134,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
             try {
 
 //todo sleepthread 1000으로 고칠것, mp.start 주석 해제할것
-                Thread.sleep(INT_SECOND);
+                Thread.sleep(INT_SWSECOND);
                 time--;
 
 
@@ -130,12 +148,21 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onProgressUpdate(Void... values) {
-        donutProgress.setProgress( ((float)time/(float)totalRestTime)*100 );
-        if (time <= 3 && !isCountDone && (currentSet <= totalSet)) {
+
+
+
+
+        if (time <= 300 && !isCountDone && (currentSet <= totalSet)) {
             mp = MediaPlayer.create(PlayWorkoutActivity.getInstance(), R.raw.go3);
             mp.start();
             isCountDone = true;
         }
+        if(!animatorRest.isRunning()){
+            animatorRest.start();
+
+        }
+
+
 
 //        if(time>0 && time <=3){
 //            countDown.setText( String.valueOf(time));
@@ -226,7 +253,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     String formatTime(int time) {
 
 
-        String sEll = String.format("%02d:%02d", time / 60, time % 60);
+        String sEll = String.format("%02d:%02d:%02d",  time/100/60, time / 100, time % 100);
 
         return sEll;
 
@@ -242,6 +269,13 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     public void pauseMp(){
 //        mp.release();
+    }
+
+    public void setResumed(){
+
+        isResumed = true;
+
+
     }
 
 }

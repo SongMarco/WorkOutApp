@@ -3,7 +3,9 @@ package nova.workoutapp22;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,6 +21,8 @@ import nova.workoutapp22.AsyncTaskSrc.RestTimerTask;
 import nova.workoutapp22.AsyncTaskSrc.StopWatchTask;
 import nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask;
 
+import static nova.workoutapp22.AsyncTaskSrc.RestTimerTask.animatorRest;
+import static nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask.animatorWorkout;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_FAIL;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_SUCCESS;
 import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
@@ -241,6 +245,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
     //region 버튼 클릭 관련 구역
     Button.OnClickListener plClickListener = new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         public void onClick(View v) {
 
             switch (v.getId()) {
@@ -424,6 +429,17 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                     }
 
+                    ///애니메이션을 pause한다
+                    if(animatorWorkout!=null && animatorWorkout.isRunning()){
+                        Toast.makeText(PlayWorkoutActivity.this, "anim paused Wo", Toast.LENGTH_SHORT).show();
+                        animatorWorkout.pause();
+                    }
+                    if(animatorRest!=null &&animatorRest.isRunning()){
+                        animatorRest.pause();
+                    }
+
+
+
 
 
 
@@ -441,11 +457,13 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     if (pauseWoTime != -1 && pauseWoTime != 0) {
                         Toast.makeText(PlayWorkoutActivity.this, "운동이 재개됩니다.", Toast.LENGTH_SHORT).show();
                         workoutTimerTask = new WorkoutTimerTask();
+                        workoutTimerTask.setResumed();
                         workoutTimerTask.setView();
 
                         //운동을 재개할 땐 시간 세팅이 약간 달라진다.
 
                         workoutTimerTask.resumeWorkoutTime(pauseWoTime);
+
 
 
                         workoutTimerTask.execute();
@@ -459,6 +477,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         currentSet--;
 
                         restTimerTask = new RestTimerTask();
+                        restTimerTask.setResumed();
                         restTimerTask.setViewAndTimerSetting();
 
                         restTimerTask.resumeRestTime(pauseRestTime);
@@ -482,6 +501,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         stopWatchTask.execute();
                     }
 
+
+
                     break;
 
                 case R.id.buttonResetPl:
@@ -499,7 +520,12 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
                     initiationUI();
-
+                    if(animatorWorkout != null && animatorWorkout.isRunning()){
+                        animatorWorkout.end();
+                    }
+                    if(animatorRest != null && animatorRest.isRunning()){
+                        animatorRest.end();
+                    }
 
                     break;
 

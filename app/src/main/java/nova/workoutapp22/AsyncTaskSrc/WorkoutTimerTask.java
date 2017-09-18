@@ -3,8 +3,10 @@ package nova.workoutapp22.AsyncTaskSrc;
 import android.animation.ObjectAnimator;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +24,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.restTimerTask;
 import static nova.workoutapp22.PlayWorkoutActivity.stTotalWorkoutTime;
 import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
-import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
+import static nova.workoutapp22.subSources.KeySet.INT_SWSECOND;
 import static nova.workoutapp22.subSources.KeySet.key_workoutName;
 
 /**
@@ -35,7 +37,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     private static final int TEXT_COLOR_NORMAL = 0xFF000000;
     private static final int TEXT_COLOR_FINISHED = 0XFFFF0000;
 
-    public static ObjectAnimator anim = ObjectAnimator.ofFloat(donutProgress, "progress", 100, 0);
+    public static ObjectAnimator animatorWorkout ;
     private TextView tvTimer = null;
     private TextView countDown = null;
 
@@ -57,6 +59,8 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     boolean isFirst = true;
     boolean isCountDone = false;
+    boolean isResumed = false;
+
 
     MediaPlayer mp;
 
@@ -66,9 +70,18 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setView() {
+        //퍼즈되지 않았다면 새로만들라 / 일시정지 -> 안만듬
 
-        anim.setInterpolator(new DecelerateInterpolator());
+        //시작되었다면 -> 안들어감 시작 안됨 -> 들어감
+        if( animatorWorkout==null || !animatorWorkout.isStarted()){
+            animatorWorkout= ObjectAnimator.ofFloat(donutProgress, "progress", 100, 0);
+            animatorWorkout.setInterpolator(new LinearInterpolator());
+        }
+
+
+
         tvTimer = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewTimerSetPl);
         countDown = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewCountDown);
 
@@ -84,20 +97,27 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void setWorkoutTime(int time) {
-        stTotalWorkoutTime = time;
-        this.totalWorkoutTime = time;
-        this.time = time;
+        stTotalWorkoutTime = time*100;
+        this.totalWorkoutTime = time*100;
+        this.time = time*100;
 
-        anim.setDuration(totalWorkoutTime*1000);
+        if(animatorWorkout != null && !animatorWorkout.isPaused()){
+            animatorWorkout.setDuration(totalWorkoutTime*10);
+        }
+
+
     }
 
     public void resumeWorkoutTime(int time){
 
         this.totalWorkoutTime = stTotalWorkoutTime;
         this.time = time;
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onPreExecute() {
 
@@ -117,7 +137,12 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 //        donutProgress.setProgress( ((float)time/(float) totalWorkoutTime)*100  );
         donutProgress.setVisibility(View.VISIBLE);
 
-        anim.start();
+        if(animatorWorkout!=null && animatorWorkout.isPaused()){
+            animatorWorkout.resume();
+
+        }
+
+
     }
 
     @Override
@@ -129,7 +154,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
             try {
 
 
-                Thread.sleep(INT_SECOND);
+                Thread.sleep(INT_SWSECOND);
                 time--;
 
 
@@ -150,7 +175,10 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 //        donutProgress.setProgress( ((float)time/(float) totalWorkoutTime)*100 );
 
 
+        if(isFirst && animatorWorkout!=null && !animatorWorkout.isRunning()){
+            animatorWorkout.start();
 
+        }
 
         if (time <= 3 && !isCountDone) {
             //TODO 3 2 1 삐삐삐소리 추가해주기
@@ -179,7 +207,6 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-
 
 
         if(currentSet == totalSet){
@@ -222,7 +249,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     String formatTime(int time) {
 
 
-        String sEll = String.format("%02d:%02d", time / 60, time % 60);
+        String sEll = String.format("%02d:%02d:%02d",  time/100/60, time / 100, time % 100);
 
         return sEll;
 
@@ -232,10 +259,9 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         return time;
     }
 
-    public void setDonutProgress(int pauseWoTime){
+    public void setResumed(){
 
-
-        donutProgress.setProgress( ((float)pauseWoTime/(float) stTotalWorkoutTime)*100 );
+        isResumed = true;
 
 
     }
