@@ -80,7 +80,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         if( animatorWorkout==null || !animatorWorkout.isStarted()){
             animatorWorkout= ObjectAnimator.ofFloat(donutProgress, "progress", 100, 0);
             animatorWorkout.setInterpolator(new LinearInterpolator());
-            animatorWorkout.setFloatValues();
+
         }
 
 
@@ -107,7 +107,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         this.time = time*100;
 
         if(animatorWorkout != null && !animatorWorkout.isPaused()){
-            animatorWorkout.setDuration(totalWorkoutTime*10);
+            animatorWorkout.setDuration(totalWorkoutTime*10+100);
         }
 
 
@@ -184,6 +184,8 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
             workoutIsFirst = false;
         }
+
+
 
         if(time ==0){
             tvTimer.setText("쉬는 시간!");

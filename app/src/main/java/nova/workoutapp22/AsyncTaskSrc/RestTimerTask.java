@@ -99,7 +99,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         this.time = timeInSec*100;
 
         if(animatorRest !=null && !animatorRest.isPaused()){
-            animatorRest.setDuration(totalRestTime*10);
+            animatorRest.setDuration(totalRestTime*10+100);
         }
 
     }
