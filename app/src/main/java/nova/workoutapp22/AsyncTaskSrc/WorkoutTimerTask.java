@@ -147,7 +147,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         }
 
 
-
+//todo animation 시간 기준으로 sync 맞추기
 
 
     }
