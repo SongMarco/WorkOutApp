@@ -1,8 +1,10 @@
 package nova.workoutapp22.AsyncTaskSrc;
 
+import android.animation.ObjectAnimator;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +35,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     private static final int TEXT_COLOR_NORMAL = 0xFF000000;
     private static final int TEXT_COLOR_FINISHED = 0XFFFF0000;
 
-
+    public static ObjectAnimator anim = ObjectAnimator.ofFloat(donutProgress, "progress", 100, 0);
     private TextView tvTimer = null;
     private TextView countDown = null;
 
@@ -65,6 +67,8 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
 
     public void setView() {
+
+        anim.setInterpolator(new DecelerateInterpolator());
         tvTimer = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewTimerSetPl);
         countDown = (TextView) PlayWorkoutActivity.getInstance().findViewById(R.id.textViewCountDown);
 
@@ -84,6 +88,8 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         stTotalWorkoutTime = time;
         this.totalWorkoutTime = time;
         this.time = time;
+
+        anim.setDuration(totalWorkoutTime*1000);
     }
 
     public void resumeWorkoutTime(int time){
@@ -108,10 +114,10 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
         ///////////도넛츠 초기화
 
-        donutProgress.setProgress( ((float)time/(float) totalWorkoutTime)*100  );
+//        donutProgress.setProgress( ((float)time/(float) totalWorkoutTime)*100  );
         donutProgress.setVisibility(View.VISIBLE);
 
-
+        anim.start();
     }
 
     @Override
@@ -141,7 +147,10 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onProgressUpdate(Void... values) {
 
-        donutProgress.setProgress( ((float)time/(float) totalWorkoutTime)*100 );
+//        donutProgress.setProgress( ((float)time/(float) totalWorkoutTime)*100 );
+
+
+
 
         if (time <= 3 && !isCountDone) {
             //TODO 3 2 1 삐삐삐소리 추가해주기

@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -51,6 +52,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
     EditText etHour, etMin, etSec;
 
     EditText etRestMin, etRestSec;
+
+    ScrollView scrollView;
 
     String timerSetting, numOrTime;
     Spinner spinnerTimer, spinnerNumOrTime;
@@ -90,6 +93,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         setSupportActionBar(myToolbar);
 
         editFlag = false;
+
+
         workoutName = (EditText) findViewById(R.id.editTextWorkOutName);
         workoutNum = (EditText) findViewById(R.id.editTextWNum);
         workoutSet = (EditText) findViewById(R.id.editTextWSet);
@@ -120,7 +125,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
         // 기존 내용을 먼저 그려주고, 사용자의 입력을 저장해준다
         if (strAddWoMode.equals(BasicInfo.MODE_MODIFY) || strAddWoMode.equals(BasicInfo.MODE_VIEW)) {
 
-            Toast.makeText(this, "운동을 편집하려면 우측 상단의 연필버튼을 눌러주세요", Toast.LENGTH_SHORT).show();
+
 
 
             //processIntent가 정상적으로 끝나면 텍스트의 변화를 감지하여, editFlag를 변경한다 -> 이후 저장여부 결정함
@@ -147,6 +152,12 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
             });
             workoutName.addTextChangedListener( new CustomTextWatcher(workoutName) );
         }
+
+
+
+
+
+
 
         //TODO 스타트 버튼 눌럿을 때 필수정보를 확인하고 넘어가도록 세팅해야 한다.
         //region 스타트 버튼 세팅 부분
@@ -280,7 +291,6 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
 
         spinnerNumOrTime.setEnabled(false);
         spinnerTimer.setEnabled(false);
-
         isEditable = false;
     }
 
@@ -704,13 +714,6 @@ public class AddWorkoutActivity extends AppCompatActivity implements AdapterView
             etSec.setText( String.valueOf( intent.getIntExtra("sec", -1) ));
 
         }
-
-
-
-
-
-
-
 
 
         mIDForTransport = intent.getIntExtra("mID", 1);
