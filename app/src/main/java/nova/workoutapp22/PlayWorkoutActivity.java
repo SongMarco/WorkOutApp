@@ -22,9 +22,7 @@ import nova.workoutapp22.AsyncTaskSrc.StopWatchTask;
 import nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask;
 
 import static nova.workoutapp22.AsyncTaskSrc.RestTimerTask.animatorRest;
-import static nova.workoutapp22.AsyncTaskSrc.RestTimerTask.restIsFirst;
 import static nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask.animatorWorkout;
-import static nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask.workoutIsFirst;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_FAIL;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_SUCCESS;
 import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
@@ -97,6 +95,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
     Button buttonStart;
     Button buttonSetDone;
     public static Button buttonPause, buttonResume, buttonReset, buttonRecord;
+    public static boolean workoutIsFirst = true;
+    public static boolean restIsFirst = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -582,6 +582,10 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         currentSet = 1;
         woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
 
+        workoutIsFirst = true;
+        restIsFirst = true;
+
+
         clearTask();
 
         //타이머를 사용한 횟수운동
@@ -649,7 +653,6 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected void onPostExecute(Long result) {
             super.onPostExecute(result);

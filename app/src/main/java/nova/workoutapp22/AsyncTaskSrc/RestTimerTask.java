@@ -20,6 +20,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.buttonReset;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
 import static nova.workoutapp22.PlayWorkoutActivity.donutProgress;
+import static nova.workoutapp22.PlayWorkoutActivity.restIsFirst;
 import static nova.workoutapp22.PlayWorkoutActivity.stTotalRestTime;
 import static nova.workoutapp22.PlayWorkoutActivity.stopWatchTask;
 import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
@@ -51,7 +52,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
     int totalWorkoutTime;
 
 
-    public static boolean restIsFirst = true;
+
     boolean isCountDone = false;
     boolean isResumed = false;
 
@@ -113,7 +114,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
         taskMode = KeySet.MODE_REST_TIMER;
 //        tvTimer.setTextColor(TEXT_COLOR_NORMAL);
-        restIsFirst = true;
+
 
 
         MediaPlayer mp;
@@ -163,12 +164,16 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
 
 
-        if (time <= 300 && !isCountDone && (currentSet <= totalSet)) {
+        if (time <= 300 && !isCountDone && (currentSet <= totalSet) && restIsFirst==true) {
             mp = MediaPlayer.create(PlayWorkoutActivity.getInstance(), R.raw.go3);
             mp.start();
             isCountDone = true;
+
         }
-        if(!animatorRest.isStarted() && restIsFirst){
+
+
+        if( !animatorRest.isStarted() && restIsFirst ){
+
             animatorRest.start();
             restIsFirst = false;
         }
@@ -193,9 +198,11 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onPostExecute(String result) {
 
+        restIsFirst = true;
         animatorRest.end();
         tvTimer.setText("GO!!!");
 
@@ -243,6 +250,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
             stopWatchTask = new StopWatchTask();
             stopWatchTask.setView();
             stopWatchTask.execute();
+
 
         }
 

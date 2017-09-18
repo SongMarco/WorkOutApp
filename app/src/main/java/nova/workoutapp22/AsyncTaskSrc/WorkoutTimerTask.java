@@ -24,6 +24,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.restTimerTask;
 import static nova.workoutapp22.PlayWorkoutActivity.stTotalWorkoutTime;
 import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
+import static nova.workoutapp22.PlayWorkoutActivity.workoutIsFirst;
 import static nova.workoutapp22.subSources.KeySet.INT_SWSECOND;
 import static nova.workoutapp22.subSources.KeySet.key_workoutName;
 
@@ -58,7 +59,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     private String timerSetting;
 
 
-    public static boolean workoutIsFirst = true;
+
     boolean isCountDone = false;
     boolean isResumed = false;
 
@@ -79,6 +80,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         if( animatorWorkout==null || !animatorWorkout.isStarted()){
             animatorWorkout= ObjectAnimator.ofFloat(donutProgress, "progress", 100, 0);
             animatorWorkout.setInterpolator(new LinearInterpolator());
+            animatorWorkout.setFloatValues();
         }
 
 
@@ -127,7 +129,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
         tvTimer.setText(formatTime(time));
 //        tvTimer.setText("타이머 \n" + formatTime(time));
 //        tvTimer.setTextColor(TEXT_COLOR_NORMAL);
-        workoutIsFirst = true;
+
 
         buttonResume.setVisibility(View.GONE);
         buttonPause.setVisibility(View.VISIBLE);
@@ -178,7 +180,6 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
     protected void onProgressUpdate(Void... values) {
         if(!animatorWorkout.isStarted() && workoutIsFirst ){
 
-            Toast.makeText(PlayWorkoutActivity.getInstance(), "workout anim start", Toast.LENGTH_SHORT).show();
             animatorWorkout.start();
 
             workoutIsFirst = false;
@@ -219,7 +220,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
             restTimerTask.execute();
         }
 
-
+        workoutIsFirst = true;
 //        if (result.equals(RESULT_SUCCESS))
 //            tvTimer.setTextColor(TEXT_COLOR_FINISHED);
     }
