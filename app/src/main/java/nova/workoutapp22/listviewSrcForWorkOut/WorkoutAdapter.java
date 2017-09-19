@@ -65,6 +65,7 @@ public class WorkoutAdapter extends BaseAdapter {
 
         /////// 1, 2, 3, 4, 5에서 3을 지우면 1, 2, 4, 5가 된다. -> 추후 어레이리스트 관리에 문제 발생
         /// 끝자락이 아니라면 무조건 mID를 재정렬해주어야 한다...
+
         woItems.remove(item);
         if(item.mID != getCount() ){ // 3은 끝자락이 아니다. (4가 아님)
             //처음부터 끝(0부터 3까지 재정렬 해주면되겠네 .
@@ -95,6 +96,7 @@ public class WorkoutAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         WorkoutItemViewLayout view = new WorkoutItemViewLayout(viewGroup.getContext());
 
+
         WorkoutItem item = woItems.get(position);
         view.setWoNameInLayout( item.getWoName() );
         view.setRestTimeInLayout(item.getRestMin(), item.getRestSec());
@@ -102,6 +104,7 @@ public class WorkoutAdapter extends BaseAdapter {
 
         FrameLayout frameForTime = (FrameLayout)view.findViewById(R.id.frameForTime);
         LinearLayout frameForNum = (LinearLayout)view.findViewById(R.id.frameForNum);
+
 
 
         //woSet을 입력하지 않았으면 1로 세팅해준다.
@@ -118,7 +121,7 @@ public class WorkoutAdapter extends BaseAdapter {
         //시간이 세팅되어있지 않을 경우(횟수 운동)
         if (item.boolTimeSet == false) {
 
-            //횟수운동이지만 타이머 세팅이야.
+            //횟수운동이지만 타이머 세팅checkBox.setVisibility(View.VISIBLE);이야.
             if(item.getTimerSetting().equals(KeySet.STRING_TIMER) ){
 
                 view.setWoNumAndTimeInLayout( item.getWoNum(), item.getHour(), item.getMin(), item.getSec() );

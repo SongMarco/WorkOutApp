@@ -387,7 +387,19 @@ public class WorkoutActivity extends AppCompatActivity {
                     //int i = count - 1;  0<=i; i--
                     if (checkedItems.get(i)) {
                         WorkoutItem item = workoutAdapter.woItems.get(i);
-                        workoutAdapter.removeItem(item);
+
+
+//
+//                        workoutAdapter.removeItem(item);
+//                        workoutAdapter.notifyDataSetChanged();
+                        Animation anim = AnimationUtils.loadAnimation(
+                                getApplicationContext(), android.R.anim.fade_in
+                        );
+                        anim.setDuration(500);
+                        Log.v("dgdg", "getChild = "+listViewForWorkout.getChildAt( 0 ) );
+                       listViewForWorkout.startAnimation(fadeIn);
+
+
                     }
                 }
                 // 모든 선택 상태 초기화.
