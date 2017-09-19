@@ -23,6 +23,7 @@ import nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask;
 
 import static nova.workoutapp22.AsyncTaskSrc.RestTimerTask.animatorRest;
 import static nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask.animatorWorkout;
+import static nova.workoutapp22.WorkoutActivity.fadeIn;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_FAIL;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_SUCCESS;
 import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
@@ -265,6 +266,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
                     tvTitle.setText("NO PAIN, NO GAIN");
+                    tvTitle.startAnimation(fadeIn);
 
 
                     //카운트다운 태스크에서 운동을 시작해준다.
@@ -362,6 +364,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 case R.id.buttonPausePl:
 
                     buttonPause.setVisibility(View.INVISIBLE);
+                    buttonReset.setVisibility(View.VISIBLE);
                     buttonResume.setVisibility(View.VISIBLE);
 //
 //                    Toast.makeText(PlayWorkoutActivity.this, "운동이 .", Toast.LENGTH_SHORT).show();
@@ -454,7 +457,10 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 case R.id.buttonResumePl:
 
                     buttonPause.setVisibility(View.VISIBLE);
+
+                    buttonReset.setVisibility(View.GONE);
                     buttonResume.setVisibility(View.INVISIBLE);
+
 //                    Toast.makeText(PlayWorkoutActivity.this, "운동이 재개됩니다.", Toast.LENGTH_SHORT).show();
 
 
@@ -513,7 +519,12 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     break;
 
                 case R.id.buttonResetPl:
-
+                    if(animatorWorkout != null && animatorWorkout.isRunning()){
+                        animatorWorkout.end();
+                    }
+                    if(animatorRest != null && animatorRest.isRunning()){
+                        animatorRest.end();
+                    }
 //                    Toast.makeText(PlayWorkoutActivity.this, "운동이 리셋되었습니다.", Toast.LENGTH_SHORT).show();
 
                     startTask.cancel(true);
@@ -527,12 +538,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
                     initiationUI();
-                    if(animatorWorkout != null && animatorWorkout.isRunning()){
-                        animatorWorkout.end();
-                    }
-                    if(animatorRest != null && animatorRest.isRunning()){
-                        animatorRest.end();
-                    }
+
 
                     break;
 
@@ -660,6 +666,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
             tvTimer.setText("GO!!!");
 
 
+
             //여기서 타이머 모드 / 스탑워치 모드에 따라 다르게 뿌려줄 것이다.
             if (timerSetting.equals(STRING_TIMER)) {
 //
@@ -704,8 +711,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         protected void onProgressUpdate(Long... values) {
             super.onProgressUpdate(values);
 
-            tvTimer.setText("" + time);
 
+            tvTimer.setText("" + time);
+            tvTimer.startAnimation(fadeIn);
         }
 
         @Override

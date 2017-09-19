@@ -17,7 +17,6 @@ import nova.workoutapp22.R;
 import nova.workoutapp22.subSources.KeySet;
 
 import static nova.workoutapp22.PlayWorkoutActivity.buttonPause;
-import static nova.workoutapp22.PlayWorkoutActivity.buttonReset;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
 import static nova.workoutapp22.PlayWorkoutActivity.currentSet;
 import static nova.workoutapp22.PlayWorkoutActivity.donutProgress;
@@ -136,7 +135,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
         buttonResume.setVisibility(View.GONE);
         buttonPause.setVisibility(View.VISIBLE);
-        buttonReset.setVisibility(View.VISIBLE);
+
 
         ///////////도넛츠 초기화
 

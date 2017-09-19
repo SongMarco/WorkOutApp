@@ -124,7 +124,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         tvTimer.setText(formatTime(time));
         buttonResume.setVisibility(View.GONE);
         buttonPause.setVisibility(View.VISIBLE);
-        buttonReset.setVisibility(View.VISIBLE);
+
 
 
         currentSet++;
@@ -227,6 +227,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
             tvTimer.setText("GO!!!");
 
             woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
+            tvTitle.setText(currentSet+"세트를 수행하세요!");
 //            buttonStart.setText(currentSet + "세트 운동 시작!");
 
 

@@ -83,6 +83,7 @@ public class WorkoutActivity extends AppCompatActivity {
     boolean isMultMode = false;
     public static Animation fadeIn;
     public static Animation fadeOut;
+    public static Animation rotate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,7 @@ public class WorkoutActivity extends AppCompatActivity {
 /////////////////////////////////////////
          fadeIn= AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
         fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadeout);
+        rotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
 
         workoutAdapter = new WorkoutAdapter();
 

@@ -169,7 +169,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
 
-            android:text="초기화" />
+            android:text="초기화"
+            android:visibility="gone" />
 
         <FrameLayout
             android:layout_width="wrap_content"
