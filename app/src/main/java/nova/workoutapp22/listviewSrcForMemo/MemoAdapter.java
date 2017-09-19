@@ -102,13 +102,14 @@ public class MemoAdapter extends BaseAdapter {
         // 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
         if (mCheckBoxState == goneBox) {
 
-            checkBox.startAnimation(fadeOut);
+
             checkBox.setVisibility(View.GONE);
+            checkBox.startAnimation(fadeOut);
         }
         else {
-            checkBox.startAnimation(fadeIn);
-            checkBox.setVisibility(View.VISIBLE);
 
+            checkBox.setVisibility(View.VISIBLE);
+            checkBox.startAnimation(fadeIn);
         }
 
         return view;

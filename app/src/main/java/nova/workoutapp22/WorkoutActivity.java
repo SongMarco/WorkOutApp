@@ -250,9 +250,7 @@ public class WorkoutActivity extends AppCompatActivity {
         //싱글모드임임
         else {
 
-            for(int i = 0; toolbarWorkoutActivity.getChildAt(i)!=null ; i++){
-                Log.v("getchild", "getchildat("+i+")");
-            }
+
 
             toolbarWorkoutActivity.getChildAt(1).startAnimation(fadeIn);
             menu.findItem(R.id.action_addItem).setVisible(true);

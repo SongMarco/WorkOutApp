@@ -281,8 +281,6 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         clearTask();
 
 
-                        animatorWorkout.end();
-
 
                         buttonSetDone.setVisibility(View.INVISIBLE);
 

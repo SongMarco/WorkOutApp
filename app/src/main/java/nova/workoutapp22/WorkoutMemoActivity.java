@@ -39,6 +39,7 @@ import nova.workoutapp22.listviewSrcForMemo.MemoAdapter;
 import nova.workoutapp22.listviewSrcForMemo.MemoItem;
 import nova.workoutapp22.subSources.BasicInfo;
 
+import static nova.workoutapp22.WorkoutActivity.fadeIn;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_MEMO;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_MEMO;
 import static nova.workoutapp22.subSources.timeController.getTime;
@@ -201,12 +202,16 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
         if (memoMenuState.equals(BasicInfo.MENU_WO_MULT)) {
+
+            memoToolbar.getChildAt(1).startAnimation(fadeIn);
             menu.findItem(R.id.action_addItem).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_selectAll).setVisible(true);
             menu.findItem(R.id.action_clearSelection).setVisible(true);
 
         } else {
+
+            memoToolbar.getChildAt(1).startAnimation(fadeIn);
             menu.findItem(R.id.action_addItem).setVisible(true);
             menu.findItem(R.id.action_delete).setVisible(false);
             menu.findItem(R.id.action_selectAll).setVisible(false);
