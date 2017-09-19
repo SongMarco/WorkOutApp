@@ -56,6 +56,12 @@ public class KeySet {
     public static final int LIMIT_ZERO = 30;
 
 
+    ///////////Key for MenuItems in Toolbar
+
+    public static final int MENU_ADD = 1;
+    public static final int MENU_MULTI = 2;
+
+
 
 
 }

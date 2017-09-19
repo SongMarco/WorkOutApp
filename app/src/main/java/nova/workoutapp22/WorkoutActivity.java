@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -74,12 +76,13 @@ public class WorkoutActivity extends AppCompatActivity {
 
     ListView listViewForWorkout;
     WorkoutAdapter workoutAdapter;
-    Toolbar myToolbar;
+    Toolbar toolbarWorkoutActivity;
 
     String woMenuState = BasicInfo.MENU_WO_NORMAL;
 
     boolean isMultMode = false;
-
+    public static Animation fadeIn;
+    public static Animation fadeOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +91,11 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
         ///////////////////////툴바를 만듭니다
-        myToolbar = (Toolbar) findViewById(R.id.toolBarWoActivity);
-        setSupportActionBar(myToolbar);
+        toolbarWorkoutActivity = (Toolbar) findViewById(R.id.toolBarWoActivity);
+        setSupportActionBar(toolbarWorkoutActivity);
 /////////////////////////////////////////
-
+         fadeIn= AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
+        fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadeout);
 
         workoutAdapter = new WorkoutAdapter();
 
@@ -219,7 +223,7 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
 
-    //region @@@@@액션바 메뉴 관련 파트@@@@@
+    //region @@@@@툴바 메뉴 관련 파트@@@@@
     ///
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -227,13 +231,30 @@ public class WorkoutActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_workout, menu);
 
 
+
+
+
+        //멀미모드임
         if (woMenuState.equals(BasicInfo.MENU_WO_MULT)) {
+
+
+            toolbarWorkoutActivity.getChildAt(1).startAnimation(fadeIn);
             menu.findItem(R.id.action_addItem).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_selectAll).setVisible(true);
             menu.findItem(R.id.action_clearSelection).setVisible(true);
 
-        } else {
+
+
+        }
+        //싱글모드임임
+        else {
+
+            for(int i = 0; toolbarWorkoutActivity.getChildAt(i)!=null ; i++){
+                Log.v("getchild", "getchildat("+i+")");
+            }
+
+            toolbarWorkoutActivity.getChildAt(1).startAnimation(fadeIn);
             menu.findItem(R.id.action_addItem).setVisible(true);
             menu.findItem(R.id.action_delete).setVisible(false);
             menu.findItem(R.id.action_selectAll).setVisible(false);
@@ -271,6 +292,8 @@ public class WorkoutActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_selectMult:
+
+                toolbarWorkoutActivity.getChildAt(1).startAnimation(fadeOut);
 
 
                 //이미 멀티모드였다면 멀티모드를 비활성화하도록 할 것.
@@ -453,6 +476,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+
 
         workoutAdapter.setCheckBoxState(true);
 

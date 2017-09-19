@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import nova.workoutapp22.R;
 import nova.workoutapp22.subSources.KeySet;
 
+import static nova.workoutapp22.WorkoutActivity.fadeIn;
+import static nova.workoutapp22.WorkoutActivity.fadeOut;
+
 /**
  * Created by Administrator on 2017-09-02.
  */
@@ -160,10 +163,16 @@ public class WorkoutAdapter extends BaseAdapter {
         // 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
         if (mCheckBoxState == goneBox) {
 
+            checkBox.startAnimation(fadeOut);
             checkBox.setVisibility(View.GONE);
+
+
+
+
         }
         else {
             checkBox.setVisibility(View.VISIBLE);
+            checkBox.startAnimation(fadeIn);
 
         }
 
