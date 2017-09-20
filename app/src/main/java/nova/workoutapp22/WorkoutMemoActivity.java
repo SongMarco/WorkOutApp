@@ -39,7 +39,7 @@ import nova.workoutapp22.listviewSrcForMemo.MemoAdapter;
 import nova.workoutapp22.listviewSrcForMemo.MemoItem;
 import nova.workoutapp22.subSources.BasicInfo;
 
-import static nova.workoutapp22.WorkoutActivity.fadeIn;
+import static nova.workoutapp22.MainActivity.fadeIn;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_MEMO;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_MEMO;
 import static nova.workoutapp22.subSources.timeController.getTime;

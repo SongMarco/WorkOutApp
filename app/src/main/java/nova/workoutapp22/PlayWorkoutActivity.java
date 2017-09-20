@@ -23,7 +23,7 @@ import nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask;
 
 import static nova.workoutapp22.AsyncTaskSrc.RestTimerTask.animatorRest;
 import static nova.workoutapp22.AsyncTaskSrc.WorkoutTimerTask.animatorWorkout;
-import static nova.workoutapp22.WorkoutActivity.fadeIn;
+import static nova.workoutapp22.MainActivity.fadeIn;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_FAIL;
 import static nova.workoutapp22.subSources.BasicInfo.RESULT_SUCCESS;
 import static nova.workoutapp22.subSources.KeySet.INT_SECOND;
@@ -277,6 +277,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     break;
                 case R.id.buttonSetDonePl:
 
+                    buttonRecord.setVisibility(View.GONE);
                     //current = total이라면 운동이 완료된 것이다. 운동을 마치고 운동 화면으로 돌아가자.
                     if (currentSet == totalSet) {
 
@@ -545,9 +546,10 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                 case R.id.buttonRecordPl:
 
-                    int recTime = stopWatchTask.getTime();
 
-                    String record = String.format("%d -- %02d:%02d \n\n"+beforeRecord, recordNum, recTime/100,recTime%100);
+
+                    String record = stopWatchTask.formatTime(stopWatchTask.getTime());
+                    record = record+"\n\n"+beforeRecord;
                     tvRecord.setText(record);
 
                     beforeRecord = record;

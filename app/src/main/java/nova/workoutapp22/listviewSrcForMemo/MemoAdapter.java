@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import nova.workoutapp22.R;
 import nova.workoutapp22.subSources.MyApplication;
 
-import static nova.workoutapp22.WorkoutActivity.fadeIn;
-import static nova.workoutapp22.WorkoutActivity.fadeOut;
+import static nova.workoutapp22.MainActivity.fadeIn;
+import static nova.workoutapp22.MainActivity.fadeOut;
+
 
 /**
  * Created by Administrator on 2017-09-02.

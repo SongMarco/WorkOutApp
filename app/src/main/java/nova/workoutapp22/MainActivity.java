@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
@@ -12,6 +14,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_WORKOUT = 102;
     public static final int REQUEST_CODE_DIARY = 103;
 
+    public static Animation fadeIn;
+    public static Animation fadeOut;
+    public static Animation rotate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolBarMainActivity);
 
         setSupportActionBar(myToolbar);
+
+
+        fadeIn= AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
+        fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadeout);
+        rotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
 
         findViewById(R.id.mainToMotiveButton).setOnClickListener(mClickListener);
         findViewById(R.id.mainToWorkoutButton).setOnClickListener(mClickListener);

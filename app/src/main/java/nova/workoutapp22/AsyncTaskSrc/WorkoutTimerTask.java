@@ -25,7 +25,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.stTotalWorkoutTime;
 import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
 import static nova.workoutapp22.PlayWorkoutActivity.workoutIsFirst;
-import static nova.workoutapp22.subSources.KeySet.INT_SWSECOND;
+import static nova.workoutapp22.subSources.KeySet.INT_SENTISECOND;
 import static nova.workoutapp22.subSources.KeySet.LIMIT_ZERO;
 import static nova.workoutapp22.subSources.KeySet.key_workoutName;
 
@@ -163,7 +163,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
 
 
-                Thread.sleep(INT_SWSECOND);
+                Thread.sleep(INT_SENTISECOND);
                 Log.wtf("timeTag", "time = "+time);
                 time = (int)(totalWorkoutTime - animatorWorkout.getCurrentPlayTime() );
 

@@ -27,7 +27,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.stopWatchTask;
 import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
 import static nova.workoutapp22.PlayWorkoutActivity.totalSet;
 import static nova.workoutapp22.PlayWorkoutActivity.workoutTimerTask;
-import static nova.workoutapp22.subSources.KeySet.INT_SWSECOND;
+import static nova.workoutapp22.subSources.KeySet.INT_SENTISECOND;
 import static nova.workoutapp22.subSources.KeySet.LIMIT_ZERO;
 
 public class RestTimerTask extends AsyncTask<Void, Void, String> {
@@ -149,7 +149,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
         while (time > LIMIT_ZERO) {
             try {
 
-                Thread.sleep(INT_SWSECOND);
+                Thread.sleep(INT_SENTISECOND);
                 time = (int)(totalRestTime - animatorRest.getCurrentPlayTime() );
 
 

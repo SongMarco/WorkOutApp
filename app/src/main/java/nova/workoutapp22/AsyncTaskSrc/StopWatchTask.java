@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import nova.workoutapp22.PlayWorkoutActivity;
 import nova.workoutapp22.R;
@@ -14,7 +15,7 @@ import static nova.workoutapp22.PlayWorkoutActivity.buttonRecord;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonReset;
 import static nova.workoutapp22.PlayWorkoutActivity.buttonResume;
 import static nova.workoutapp22.PlayWorkoutActivity.taskMode;
-import static nova.workoutapp22.subSources.KeySet.INT_SWSECOND;
+import static nova.workoutapp22.subSources.KeySet.INT_DECISEOCND;
 
 /**
  * Created by jamsy on 2017-09-16.
@@ -87,7 +88,7 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
             try {
 
 
-                Thread.sleep(INT_SWSECOND);
+                Thread.sleep(INT_DECISEOCND);
                 time++;
 
 
@@ -110,7 +111,10 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String result) {
 
 
+
         buttonRecord.setVisibility(View.GONE);
+
+        Toast.makeText(PlayWorkoutActivity.getInstance(), "record =  "+buttonRecord.getVisibility() , Toast.LENGTH_SHORT).show();
 
 
 
@@ -129,10 +133,10 @@ public class StopWatchTask extends AsyncTask<Void, Void, String> {
 
     }
 
-    String formatTime(int time) {
+    public String formatTime(int time) {
 
 
-        String sEll = String.format("%02d:%02d", time/100, time%100);
+        String sEll = String.format("%d.%d", time/10, time%10);
 
         return sEll;
 

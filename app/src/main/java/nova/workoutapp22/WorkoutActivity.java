@@ -45,6 +45,8 @@ import nova.workoutapp22.listviewSrcForWorkOut.WorkoutAdapter;
 import nova.workoutapp22.listviewSrcForWorkOut.WorkoutItem;
 import nova.workoutapp22.subSources.BasicInfo;
 
+import static nova.workoutapp22.MainActivity.fadeIn;
+import static nova.workoutapp22.MainActivity.fadeOut;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_WORKOUT;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_WORKOUT;
 import static nova.workoutapp22.subSources.KeySet.STRING_NOTIMER;
@@ -81,9 +83,7 @@ public class WorkoutActivity extends AppCompatActivity {
     String woMenuState = BasicInfo.MENU_WO_NORMAL;
 
     boolean isMultMode = false;
-    public static Animation fadeIn;
-    public static Animation fadeOut;
-    public static Animation rotate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,9 +95,7 @@ public class WorkoutActivity extends AppCompatActivity {
         toolbarWorkoutActivity = (Toolbar) findViewById(R.id.toolBarWoActivity);
         setSupportActionBar(toolbarWorkoutActivity);
 /////////////////////////////////////////
-         fadeIn= AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
-        fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadeout);
-        rotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+
 
         workoutAdapter = new WorkoutAdapter();
 
