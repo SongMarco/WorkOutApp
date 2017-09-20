@@ -36,10 +36,15 @@
             android:label="일기 추가하기" />
         <activity
             android:name=".AddWorkoutActivity"
-            android:label="운동 추가하기"></activity>
+            android:label="운동 추가하기" />
         <activity
             android:name=".PlayWorkoutActivity"
-            android:label="운동중!"></activity>
+            android:label="운동중!" />
+
+        <activity
+            android:name=".GalleryActivity"
+            android:label="동기부여 갤러리">
+        </activity>
     </application>
 
 </manifest>

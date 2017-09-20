@@ -90,7 +90,7 @@ public class MemoItemViewLinearLayout extends LinearLayout implements Checkable 
 
 
 
-    public void setImageWithUri(Uri uri) {
+    public void setImageFromUri(Uri uri) {
 
         imageView.setImageURI(uri);
     }

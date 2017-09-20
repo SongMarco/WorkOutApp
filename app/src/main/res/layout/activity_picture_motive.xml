@@ -5,7 +5,7 @@
 
     <GridView
 
-        android:id="@+id/gridViewPicture"
+        android:id="@+id/gridViewPicture22"
 
         android:layout_width="match_parent"
 

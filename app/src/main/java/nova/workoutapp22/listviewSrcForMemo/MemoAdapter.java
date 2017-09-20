@@ -37,10 +37,7 @@ public class MemoAdapter extends BaseAdapter {
 
     public ArrayList<MemoItem> items = new ArrayList<>();
 
-    @Override
-    public int getCount() {
-        return items.size();
-    }
+
     ////////////////////////////////////////////////////////////
     public void addItem(MemoItem item) {
 
@@ -76,6 +73,11 @@ public class MemoAdapter extends BaseAdapter {
 
 
     @Override
+    public int getCount() {
+        return items.size();
+    }
+
+    @Override
     public Object getItem(int position) {
         return items.get(position);
     }
@@ -96,7 +98,7 @@ public class MemoAdapter extends BaseAdapter {
         MemoItem item = items.get(position);
         view.setMemoInLayout(item.getMemo());
         view.SetDateInLayout(item.getDate());
-        view.setImageWithUri(item.getUri());
+        view.setImageFromUri(item.getUri());
 
         CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkBox);
 

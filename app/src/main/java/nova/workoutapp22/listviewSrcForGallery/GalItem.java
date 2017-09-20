@@ -6,15 +6,18 @@ import android.net.Uri;
  * Created by Administrator on 2017-09-09.
  */
 
-public class PictureItem {
+public class GalItem {
 
     public int pictureID;
+
+
+    public int mID;
     Uri picturUri;
 
 
 
 
-    public PictureItem(Uri uri){
+    public GalItem(Uri uri){
 
         this.picturUri = uri;
 

@@ -92,7 +92,12 @@ public class WorkoutMemoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_workoutmemo);
 
 
+
+        ///리스트뷰의 어댑터 세팅하기.
         memoAdapter = new MemoAdapter();
+
+
+
 
         String resDrawableUri = "android.resource://" + getApplicationContext().getPackageName() + "/drawable/basicimage";
         memoAdapter.addItem(new MemoItem("메모내용 예시1", getTime(), Uri.parse(resDrawableUri)));
@@ -103,6 +108,9 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
 
         listViewForMemo.setAdapter(memoAdapter);
+        /////////////////////
+
+
         setItemClick();
         setItemLongClicker(listViewForMemo, memoAdapter);
 

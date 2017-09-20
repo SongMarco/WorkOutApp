@@ -103,26 +103,16 @@ public class WorkoutActivity extends AppCompatActivity {
         listViewForWorkout = (ListView) findViewById(R.id.listViewForWorkout);
         listViewForWorkout.setAdapter(workoutAdapter);
 
-            workoutAdapter.addItem(new WorkoutItem(0, "벤치 프레스", "50", "3",0,1,10, STRING_TIMER, false, 1,15));
+        workoutAdapter.addItem(new WorkoutItem(0, "벤치 프레스", "50", "3", 0, 1, 10, STRING_TIMER, false, 1, 15));
         workoutAdapter.addItem(new WorkoutItem(1, "팔굽혀 펴기", "20", "5", STRING_STOPWATCH));
         workoutAdapter.addItem(new WorkoutItem(2, "스쿼트", "100", "2", STRING_NOTIMER));
 
         workoutAdapter.notifyDataSetChanged();
 
-
-// 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
         workoutAdapter.setCheckBoxState(false);
 
         setItemClicker(listViewForWorkout, workoutAdapter);
         setItemLongClicker(listViewForWorkout);
-
-        //setSingleChoice(listViewForWorkout);
-
-
-/////////////////////////////// 메모아이템을 수정한다.
-
-///////////////롱클릭을 통한 수정 / 삭제 메뉴를 추가해야 한다.
-        //////*롱클릭시 다중메뉴 활성화시키고 아이템을 선택시키자.
 
 
     }
@@ -231,9 +221,6 @@ public class WorkoutActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_workout, menu);
 
 
-
-
-
         //멀미모드임
         if (woMenuState.equals(BasicInfo.MENU_WO_MULT)) {
 
@@ -245,11 +232,9 @@ public class WorkoutActivity extends AppCompatActivity {
             menu.findItem(R.id.action_clearSelection).setVisible(true);
 
 
-
         }
         //싱글모드임임
         else {
-
 
 
             toolbarWorkoutActivity.getChildAt(1).startAnimation(fadeIn);
@@ -394,8 +379,8 @@ public class WorkoutActivity extends AppCompatActivity {
                                 getApplicationContext(), android.R.anim.fade_in
                         );
                         anim.setDuration(500);
-                        Log.v("dgdg", "getChild = "+listViewForWorkout.getChildAt( 0 ) );
-                       listViewForWorkout.startAnimation(fadeIn);
+                        Log.v("dgdg", "getChild = " + listViewForWorkout.getChildAt(0));
+                        listViewForWorkout.startAnimation(fadeIn);
 
 
                     }
@@ -488,7 +473,6 @@ public class WorkoutActivity extends AppCompatActivity {
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 
-
         workoutAdapter.setCheckBoxState(true);
 
 
@@ -521,18 +505,16 @@ public class WorkoutActivity extends AppCompatActivity {
                 intent.putExtra(key_workoutName, item.getWoName().toString());
                 intent.putExtra(key_timerSetting, item.getTimerSetting().toString());
 
-                intent.putExtra(key_restMin, item.getRestMin() );
-                intent.putExtra(key_restSec, item.getRestSec() );
+                intent.putExtra(key_restMin, item.getRestMin());
+                intent.putExtra(key_restSec, item.getRestSec());
 
 //                Toast.makeText(WorkoutActivity.this, "getRest min sec = "+item.getRestMin()+item.getRestSec(), Toast.LENGTH_SHORT).show();
-
-
 
 
                 //시간을 세팅하지 않았다면 횟수와 세트만 전달하자.
                 if (item.getBoolTimeSet() == false) {
 
-                    if (item.getTimerSetting().equals(STRING_TIMER) ){
+                    if (item.getTimerSetting().equals(STRING_TIMER)) {
 
                         intent.putExtra(key_hour, item.getHour());
                         intent.putExtra(key_min, item.getMin());
@@ -542,14 +524,12 @@ public class WorkoutActivity extends AppCompatActivity {
                         intent.putExtra(key_workoutNum, item.getWoNum());
                         intent.putExtra(key_workoutSet, item.getWoSet());
 
-                    }
-                    else{
+                    } else {
                         intent.putExtra(key_boolTimeSet, item.getBoolTimeSet());
                         intent.putExtra(key_workoutNum, item.getWoNum());
                         intent.putExtra(key_workoutSet, item.getWoSet());
 
                     }
-
 
 
                 }
@@ -668,13 +648,13 @@ public class WorkoutActivity extends AppCompatActivity {
         //시간을 세팅하지 않아서 hour가 -1인 상태 -> 횟수 세트만 전달해주면 OK
         if (boolTimeSet == false) {
 
-            if(timerSetting.equals(STRING_TIMER) ){
+            if (timerSetting.equals(STRING_TIMER)) {
 
                 int loadedHour = data.getIntExtra("hour", -1);
                 int loadedMin = data.getIntExtra("min", -1);
                 int loadedSec = data.getIntExtra("sec", -1);
 
-                WorkoutItem result = new WorkoutItem(woName,  woNum, woSet, loadedHour, loadedMin, loadedSec, timerSetting, boolTimeSet, restMin, restSec);
+                WorkoutItem result = new WorkoutItem(woName, woNum, woSet, loadedHour, loadedMin, loadedSec, timerSetting, boolTimeSet, restMin, restSec);
                 return result;
 
             }
@@ -875,7 +855,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
     public void restoreStateWithGson() {
-     //   Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
+        //   Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
 
         SharedPreferences prefForWo = getSharedPreferences("prefForWo", Activity.MODE_PRIVATE);
 
@@ -912,7 +892,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
     protected void clearMyPrefs() {
-    //    Toast.makeText(getApplicationContext(), "pref cleared", Toast.LENGTH_SHORT).show();
+        //    Toast.makeText(getApplicationContext(), "pref cleared", Toast.LENGTH_SHORT).show();
 
         SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();

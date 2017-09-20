@@ -50,7 +50,7 @@
             android:textSize="24sp" />
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/buttonGallery"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_weight="8.45"
@@ -82,7 +82,7 @@
             android:textSize="24sp" />
 
         <ImageButton
-            android:id="@+id/imageButton4"
+            android:id="@+id/buttonVid"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="fitCenter"
