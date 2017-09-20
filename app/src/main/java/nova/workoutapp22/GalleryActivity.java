@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -416,7 +415,6 @@ public class GalleryActivity extends AppCompatActivity {
 
     public void saveStateWithGson() {
 
-        Toast.makeText(this, "saveCalled", Toast.LENGTH_SHORT).show();
         SharedPreferences prefForGal = getSharedPreferences(PREF_GAL, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefForGal.edit();
 
@@ -443,7 +441,6 @@ public class GalleryActivity extends AppCompatActivity {
 
 
     public void restoreStateWithGson() {
-          Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
 
 
         SharedPreferences prefForGal = getSharedPreferences(PREF_GAL, Activity.MODE_PRIVATE);

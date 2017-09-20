@@ -11,8 +11,10 @@
     <ImageView
         android:id="@+id/imageViewZoom"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_weight="1"
+        android:layout_height="400dp"
         android:background="@color/colorWhite"
-        app:srcCompat="@drawable/basicimage" />
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/basicimage"
+
+        />
 </LinearLayout>
