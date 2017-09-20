@@ -24,6 +24,7 @@ public class GalItem {
     }
 
 
+
     public int getPictureID(){ return pictureID; }
     public void setPictureID(int mID){ this.pictureID = mID;}
 
