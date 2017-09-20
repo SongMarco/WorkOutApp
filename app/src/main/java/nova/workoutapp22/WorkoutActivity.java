@@ -49,6 +49,7 @@ import static nova.workoutapp22.MainActivity.fadeIn;
 import static nova.workoutapp22.MainActivity.fadeOut;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_WORKOUT;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_WORKOUT;
+import static nova.workoutapp22.subSources.KeySet.PREF_WORKOUT;
 import static nova.workoutapp22.subSources.KeySet.STRING_NOTIMER;
 import static nova.workoutapp22.subSources.KeySet.STRING_STOPWATCH;
 import static nova.workoutapp22.subSources.KeySet.STRING_TIMER;
@@ -829,7 +830,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
     public void saveStateWithGson() {
 
-        SharedPreferences prefForWo = getSharedPreferences("prefForWo", Activity.MODE_PRIVATE);
+        SharedPreferences prefForWo = getSharedPreferences(PREF_WORKOUT, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefForWo.edit();
 
         Gson gson = new GsonBuilder()
@@ -857,7 +858,7 @@ public class WorkoutActivity extends AppCompatActivity {
     public void restoreStateWithGson() {
         //   Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
 
-        SharedPreferences prefForWo = getSharedPreferences("prefForWo", Activity.MODE_PRIVATE);
+        SharedPreferences prefForWo = getSharedPreferences(PREF_WORKOUT, Activity.MODE_PRIVATE);
 
 
         if ((prefForWo != null) && (prefForWo.contains("arrayList"))) {

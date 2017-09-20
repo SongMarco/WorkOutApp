@@ -34,8 +34,14 @@
 
         android:layout_alignParentTop="true"
 
+
         android:numColumns="3"
 
+
+        android:background="@color/colorHBlue"
+
+        android:verticalSpacing="3dp"
+        android:horizontalSpacing="3dp"
         android:stretchMode="columnWidth">
 
     </GridView>

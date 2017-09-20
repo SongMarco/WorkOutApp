@@ -39,6 +39,8 @@ public class GalViewGridLayout extends GridLayout implements Checkable {
 
         imageView = (ImageView)findViewById(R.id.imageViewGal);
 
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
 
 
     }

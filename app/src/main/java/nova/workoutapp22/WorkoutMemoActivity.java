@@ -42,6 +42,7 @@ import nova.workoutapp22.subSources.BasicInfo;
 import static nova.workoutapp22.MainActivity.fadeIn;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_MEMO;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_MEMO;
+import static nova.workoutapp22.subSources.KeySet.PREF_MEMO;
 import static nova.workoutapp22.subSources.timeController.getTime;
 
 
@@ -560,7 +561,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
     public void saveState() {
 
-        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences(PREF_MEMO, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
         Gson gson = new GsonBuilder()
@@ -581,7 +582,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     public void restoreState() {
         Toast.makeText(getApplicationContext(), "restore Called", Toast.LENGTH_SHORT).show();
 
-        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences(PREF_MEMO, Activity.MODE_PRIVATE);
 
         if ((pref != null) && (pref.contains("arrayList"))) {
 
@@ -614,7 +615,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
     protected void clearMyPrefs() {
         Toast.makeText(getApplicationContext(), "pref cleared", Toast.LENGTH_SHORT).show();
 
-        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences(PREF_MEMO, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();
         editor.commit();
