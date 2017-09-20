@@ -8,12 +8,17 @@
 
 
         <CheckBox
-            android:id="@+id/checkBox2"
+            android:id="@+id/checkBoxForGal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
 
+            android:buttonTint="@color/colorPrimary"
+            android:clickable="false"
+            android:focusable="false"
+            app:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:text="CheckBox" />
+
 
         <ImageView
             android:id="@+id/imageViewGal"

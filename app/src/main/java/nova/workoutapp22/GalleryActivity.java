@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -46,6 +48,7 @@ import static nova.workoutapp22.subSources.BasicInfo.CROP_FROM_IMAGE;
 import static nova.workoutapp22.subSources.BasicInfo.PICK_FROM_ALBUM;
 import static nova.workoutapp22.subSources.BasicInfo.PICK_FROM_CAMERA;
 import static nova.workoutapp22.subSources.KeySet.PREF_GAL;
+import static nova.workoutapp22.subSources.KeySet.key_uri;
 
 public class GalleryActivity extends AppCompatActivity {
 
@@ -78,6 +81,8 @@ public class GalleryActivity extends AppCompatActivity {
         gridViewForGal = (GridView) findViewById(gridViewGal);
         gridViewForGal.setAdapter(galAdapter);
 
+        setItemClick();
+
 
         String resDrawableUri = "android.resource://" + getApplicationContext().getPackageName() + "/drawable/basicimage";
 
@@ -88,12 +93,14 @@ public class GalleryActivity extends AppCompatActivity {
         }
 
 
+
         /////////////////////
 
 
     }
 
 
+    //region menu 관련 파트
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -193,8 +200,40 @@ public class GalleryActivity extends AppCompatActivity {
         }
 
     }
+    //endregion
+
+    public void setItemClick() {
+
+        gridViewForGal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+
+                GalItem item = (GalItem) galAdapter.getItem(position);
+
+                // 수정 -- 메모 보기 액티비티 띄우기
+                Intent intent = new Intent(getApplicationContext(), GalZoomActivity.class);
+//                intent.putExtra(BasicInfo.KEY_ZOOM_MODE, BasicInfo.MODE_ZOOM);
+
+                intent.putExtra(key_uri, item.getUri().toString() );
+
+                // 모든 선택 상태 초기화.
+                gridViewForGal.clearChoices();
+                galAdapter.notifyDataSetChanged();
+
+                startActivityForResult(intent, BasicInfo.REQ_ZOOM);
+                //////////////////
+
+            }
+        });
+    }
+
+
+
+
+    //region 이미지 프로세싱 관련 파트
     public void doTakePhotoAction() // 카메라 촬영 후 이미지 가져오기
     {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -331,6 +370,7 @@ public class GalleryActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    //endregion
 
 
 

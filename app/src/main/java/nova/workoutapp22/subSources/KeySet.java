@@ -17,6 +17,8 @@ public class KeySet {
     public static final String key_min = "min";
     public static final String key_sec = "sec";
 
+    public static final String key_uri = "uri";
+
     public static final String key_timerMode = "timerMode";
 
 

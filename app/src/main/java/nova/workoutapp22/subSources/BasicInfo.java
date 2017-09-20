@@ -50,6 +50,8 @@ public class BasicInfo {
     public static final int REQ_PHOTO_CAPTURE_ACTIVITY = 1501;
     public static final int REQ_PHOTO_SELECTION_ACTIVITY = 1502;
 
+    public static final int REQ_ZOOM = 3001;
+
 
     /// 메뉴 세팅 관련 값들 ///
 
@@ -59,4 +61,6 @@ public class BasicInfo {
 
     public static final String MENU_ADDWO_NORMAL = "ADDWO_NORMAL";
     public static final String MENU_ADDWO_EDIT = "ADDWO_EDIT";
+    public static final String MODE_ZOOM = "MODE_ZOOM" ;
+
 }

@@ -8,8 +8,6 @@ import android.net.Uri;
 
 public class GalItem {
 
-    public int pictureID;
-
 
     public int mID;
     Uri picturUri;
@@ -25,8 +23,8 @@ public class GalItem {
 
 
 
-    public int getPictureID(){ return pictureID; }
-    public void setPictureID(int mID){ this.pictureID = mID;}
+    public int getmID(){ return mID; }
+    public void setmID(int mID){ this.mID = mID;}
 
     public Uri getUri(){ return picturUri;}
     public void setUri(Uri uri) {this.picturUri = uri;}
