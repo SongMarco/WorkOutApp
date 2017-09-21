@@ -591,8 +591,6 @@ public class GalActivity extends AppCompatActivity {
 
             });
 
-
-            //todo 생명주기 적용하기
 //            saveState();
 
 
