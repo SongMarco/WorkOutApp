@@ -9,14 +9,16 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -44,6 +46,7 @@ import nova.workoutapp22.listviewSrcForWorkOut.WorkoutItem;
 import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.MainActivity.fadeIn;
+import static nova.workoutapp22.MainActivity.fadeOut;
 import static nova.workoutapp22.R.id.gridViewGal;
 import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 import static nova.workoutapp22.subSources.BasicInfo.CROP_FROM_IMAGE;
@@ -66,9 +69,9 @@ public class GalActivity extends AppCompatActivity {
     private Uri mImageCaptureUri, cropImageUri;
     private String absolutePath;
 
-
+    GalItem removeItem;
     boolean isMultMode = false;
-    String memoMenuState = MENU_WO_NORMAL;
+    String galMenuState = MENU_WO_NORMAL;
 
     boolean isItemAdded = false;
 
@@ -148,7 +151,7 @@ public class GalActivity extends AppCompatActivity {
 
         setItemClick();
 
-        memoMenuState = MENU_WO_NORMAL;
+        galMenuState = MENU_WO_NORMAL;
         isMultMode = false;
         invalidateOptionsMenu();
 
@@ -166,7 +169,7 @@ public class GalActivity extends AppCompatActivity {
         //아이템클릭리스너를 무효화한다.
         lv.setOnItemClickListener(null);
 
-        memoMenuState = BasicInfo.MENU_WO_MULT;
+        galMenuState = BasicInfo.MENU_WO_MULT;
         isMultMode = true;
         invalidateOptionsMenu();
     }
@@ -184,7 +187,7 @@ public class GalActivity extends AppCompatActivity {
 
 
         //멀미모드임
-        if (memoMenuState.equals(BasicInfo.MENU_WO_MULT)) {
+        if (galMenuState.equals(BasicInfo.MENU_WO_MULT)) {
 
           toolbarGallery.getChildAt(1).startAnimation(fadeIn);
             menu.findItem(R.id.action_addItem).setVisible(false);
@@ -281,7 +284,31 @@ public class GalActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_delete:
+                SparseBooleanArray checkedItems = gridViewForGal.getCheckedItemPositions();
 
+                Boolean okToDelete = false;
+
+                int count2 = galAdapter.getCount();
+
+                //아이템 선택을 하지 않았다면 토스트를 띄워주고 돌아간다.
+
+
+                for (int i = count2 - 1; i >= 0; i--) {
+
+                    //int i = count - 1;  0<=i; i--
+                    if (checkedItems.get(i)) {
+                        okToDelete = true;
+                    }
+                }
+                if (!okToDelete) {
+                    Toast.makeText(getApplicationContext(), "삭제할 아이템을 선택하지 않으셨네요!", Toast.LENGTH_SHORT).show();
+
+                }
+                // 제거할 아이템이 있다. 제거를 물어보자
+                else {
+                    askDelete();
+
+                }
 
                 return true;
 
@@ -303,7 +330,92 @@ public class GalActivity extends AppCompatActivity {
     //endregion
 
 
+    public void askDelete() {
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(GalActivity.this);
 
+        builder.setMessage("정말 삭제하시겠습니까?")
+                .setTitle("삭제 확인")
+                .setIcon(R.drawable.ic_warning_black_48dp);
+
+        // Add the buttons
+        builder.setPositiveButton("삭제합니다", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                SparseBooleanArray checkedItems = gridViewForGal.getCheckedItemPositions();
+                int count2 = galAdapter.getCount();
+
+                for (int i = count2 - 1; i >= 0; i--) {
+
+                    //int i = count - 1;  0<=i; i--
+
+                    //i번째 아이템을 겟 -> 체크되어있다. -> 삭제
+
+                    if (checkedItems.get(i)) {
+                        final GalItem itemToBeRemoved = galAdapter.items.get(i);
+
+
+                        Animation anim = fadeOut;
+                        getViewByPosition(i, gridViewForGal).startAnimation(anim);
+
+                        new Handler().postDelayed(new Runnable() {
+
+                            public void run() {
+
+                                galAdapter.removeItem(itemToBeRemoved);
+                                galAdapter.notifyDataSetChanged();
+
+                            }
+
+                        }, anim.getDuration());
+
+
+
+                    }
+                }
+
+
+
+                // 모든 선택 상태 초기화.
+                gridViewForGal.clearChoices();
+                galAdapter.notifyDataSetChanged();
+                galAdapter.setCheckBoxState(false);
+                setSingleChoice(gridViewForGal);
+
+                galMenuState = MENU_WO_NORMAL;
+                isMultMode = false;
+                invalidateOptionsMenu();
+
+
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                dialog.dismiss();
+            }
+        });
+
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+
+        // 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+    public View getViewByPosition(int pos, GridView gridView) {
+        final int firstListItemPosition = gridView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + gridView.getChildCount() - 1;
+
+        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
+            return gridView.getAdapter().getView(pos, null, gridView);
+        } else {
+            final int childIndex = pos - firstListItemPosition;
+            return gridView.getChildAt(childIndex);
+        }
+    }
 
 
 
@@ -343,13 +455,13 @@ public class GalActivity extends AppCompatActivity {
                 // 이후의 처리가 카메라와 같으므로 일단  break없이 진행합니다.
                 // 실제 코드에서는 좀더 합리적인 방법을 선택하시기 바랍니다.
                 mImageCaptureUri = data.getData();
+//
+//                galAdapter.addItem(new GalItem(mImageCaptureUri));
+//                galAdapter.notifyDataSetChanged();
 
-                galAdapter.addItem(new GalItem(mImageCaptureUri));
-                galAdapter.notifyDataSetChanged();
+
                 isItemAdded = true;
-                Log.d("SmartWheel", mImageCaptureUri.getPath().toString());
 
-                break;
             }
 
             case PICK_FROM_CAMERA: {
@@ -422,9 +534,15 @@ public class GalActivity extends AppCompatActivity {
 
             //////////////////// uri를 얻어 자른 이미지를 곧바로 추가한다.
 
-            galAdapter.addItem(new GalItem(cropImageUri));
+            GalItem newItem = new GalItem(cropImageUri);
+            galAdapter.addItem(newItem);
+
+
             isItemAdded = true;
             galAdapter.notifyDataSetChanged();
+
+
+
 
             //todo 생명주기 적용하기
 //            saveState();
