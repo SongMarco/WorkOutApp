@@ -43,6 +43,7 @@ import nova.workoutapp22.listviewSrcForGallery.GalItem;
 import nova.workoutapp22.listviewSrcForWorkOut.WorkoutItem;
 import nova.workoutapp22.subSources.BasicInfo;
 
+import static nova.workoutapp22.MainActivity.fadeIn;
 import static nova.workoutapp22.R.id.gridViewGal;
 import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 import static nova.workoutapp22.subSources.BasicInfo.CROP_FROM_IMAGE;
@@ -107,6 +108,7 @@ public class GalActivity extends AppCompatActivity {
 
 
 
+
     public void setItemClick() {
 
         gridViewForGal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -137,7 +139,7 @@ public class GalActivity extends AppCompatActivity {
 
     public void setSingleChoice(GridView lv) {
 
-        //  Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
         lv.clearChoices();
         lv.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
@@ -153,7 +155,7 @@ public class GalActivity extends AppCompatActivity {
     }
 
     public void setMultipleChoice(GridView lv) {
-        // Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
 
         lv.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
@@ -180,11 +182,11 @@ public class GalActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_workout, menu);
 
 
+
         //멀미모드임
-        if (woMenuState.equals(BasicInfo.MENU_WO_MULT)) {
+        if (memoMenuState.equals(BasicInfo.MENU_WO_MULT)) {
 
-
-//            toolbarWorkoutActivity.getChildAt(1).startAnimation(fadeIn);
+          toolbarGallery.getChildAt(1).startAnimation(fadeIn);
             menu.findItem(R.id.action_addItem).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_selectAll).setVisible(true);
@@ -196,13 +198,26 @@ public class GalActivity extends AppCompatActivity {
         else {
 
 
-//            toolbarWorkoutActivity.getChildAt(1).startAnimation(fadeIn);
+          toolbarGallery.getChildAt(1).startAnimation(fadeIn);
             menu.findItem(R.id.action_addItem).setVisible(true);
             menu.findItem(R.id.action_delete).setVisible(false);
             menu.findItem(R.id.action_selectAll).setVisible(false);
             menu.findItem(R.id.action_clearSelection).setVisible(false);
         }
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+//        Toast.makeText(this, "onPrep called", Toast.LENGTH_SHORT).show();
+
+
+        //        menu.findItem(R.id.start).setVisible(!isStarted);
+        //        menu.findItem(R.id.stop).setVisible(isStarted);
+
+        return true;
+
     }
 
 
