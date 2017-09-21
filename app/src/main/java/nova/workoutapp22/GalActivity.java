@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,6 +76,10 @@ public class GalActivity extends AppCompatActivity {
 
     boolean isItemAdded = false;
 
+
+
+    SparseBooleanArray checkedItems;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,13 +108,10 @@ public class GalActivity extends AppCompatActivity {
         }
 
 
-
         /////////////////////
 
 
     }
-
-
 
 
     public void setItemClick() {
@@ -127,7 +129,7 @@ public class GalActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), GalZoomActivity.class);
 //                intent.putExtra(BasicInfo.KEY_ZOOM_MODE, BasicInfo.MODE_ZOOM);
 
-                intent.putExtra(key_uri, item.getUri().toString() );
+                intent.putExtra(key_uri, item.getUri().toString());
 
                 // 모든 선택 상태 초기화.
                 gridViewForGal.clearChoices();
@@ -175,9 +177,6 @@ public class GalActivity extends AppCompatActivity {
     }
 
 
-
-
-
     //region menu 관련 파트
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -185,11 +184,10 @@ public class GalActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_workout, menu);
 
 
-
         //멀미모드임
         if (galMenuState.equals(BasicInfo.MENU_WO_MULT)) {
 
-          toolbarGallery.getChildAt(1).startAnimation(fadeIn);
+            toolbarGallery.getChildAt(1).startAnimation(fadeIn);
             menu.findItem(R.id.action_addItem).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_selectAll).setVisible(true);
@@ -201,7 +199,7 @@ public class GalActivity extends AppCompatActivity {
         else {
 
 
-          toolbarGallery.getChildAt(1).startAnimation(fadeIn);
+            toolbarGallery.getChildAt(1).startAnimation(fadeIn);
             menu.findItem(R.id.action_addItem).setVisible(true);
             menu.findItem(R.id.action_delete).setVisible(false);
             menu.findItem(R.id.action_selectAll).setVisible(false);
@@ -263,7 +261,6 @@ public class GalActivity extends AppCompatActivity {
 //                Toast.makeText(getApplicationContext(), "edit Flag = "+editFlag, Toast.LENGTH_SHORT).show();
 
 
-
                 return true;
 
             case R.id.action_selectMult:
@@ -284,7 +281,7 @@ public class GalActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_delete:
-                SparseBooleanArray checkedItems = gridViewForGal.getCheckedItemPositions();
+                checkedItems = gridViewForGal.getCheckedItemPositions();
 
                 Boolean okToDelete = false;
 
@@ -342,43 +339,63 @@ public class GalActivity extends AppCompatActivity {
         builder.setPositiveButton("삭제합니다", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
-                SparseBooleanArray checkedItems = gridViewForGal.getCheckedItemPositions();
+                checkedItems = gridViewForGal.getCheckedItemPositions();
+                Log.v("chk", ""+checkedItems);
                 int count2 = galAdapter.getCount();
 
+                final ArrayList<Integer> checkedArray = new ArrayList<Integer>();
+                int numChecked = 0;
+
+                //전체 어댑터를 훑는다.
+                //if 4번이 체크됨 -> 쳌아이템.겟4가 트루.
                 for (int i = count2 - 1; i >= 0; i--) {
 
-                    //int i = count - 1;  0<=i; i--
-
-                    //i번째 아이템을 겟 -> 체크되어있다. -> 삭제
-
                     if (checkedItems.get(i)) {
-                        final GalItem itemToBeRemoved = galAdapter.items.get(i);
 
+                        numChecked++;
+
+                        checkedArray.add(i);
+
+
+                        //애니메이션이 종료되면 삭제를 수행하여, 자연스러운 삭제 구현@@@@ 굿굿굿
 
                         Animation anim = fadeOut;
+
                         getViewByPosition(i, gridViewForGal).startAnimation(anim);
+                        getViewByPosition(i, gridViewForGal).setVisibility(View.GONE);
 
-                        new Handler().postDelayed(new Runnable() {
+                    }
+                    Log.v("chk", ""+checkedItems);
+                }
 
-                            public void run() {
 
-                                galAdapter.removeItem(itemToBeRemoved);
-                                galAdapter.notifyDataSetChanged();
+                final int finalNumChecked = numChecked;
 
-                            }
+                new Handler().postDelayed(new Runnable() {
 
-                        }, anim.getDuration());
+                    public void run() {
+
+                        for(int i = 0; i< finalNumChecked; i++ ){
+
+                            GalItem itemToBeRemoved = (GalItem)galAdapter.getItem( checkedArray.get(i) );
+                            galAdapter.removeItem( itemToBeRemoved );
+
+                            getViewByPosition(checkedArray.get(i), gridViewForGal).setVisibility(View.VISIBLE);
+                            galAdapter.notifyDataSetChanged();
+
+                        }
+
 
 
 
                     }
-                }
+                }, fadeOut.getDuration()+100);
 
 
 
                 // 모든 선택 상태 초기화.
-                gridViewForGal.clearChoices();
-                galAdapter.notifyDataSetChanged();
+
+
                 galAdapter.setCheckBoxState(false);
                 setSingleChoice(gridViewForGal);
 
@@ -405,20 +422,42 @@ public class GalActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    public void deleteCheckedItems() {
+        Toast.makeText(this, "delete called", Toast.LENGTH_SHORT).show();
+
+
+
+        Log.v("chk", ""+checkedItems);
+        int count2 = galAdapter.getCount();
+
+        for (int i = count2 - 1; i >= 0; i--) {
+
+            //int i = count - 1;  0<=i; i--
+
+            //i번째 아이템을 겟 -> 체크되어있다. -> 삭제
+
+
+            if (checkedItems.get(i)) {
+                GalItem item = galAdapter.items.get(i);
+                galAdapter.removeItem(item);
+                galAdapter.notifyDataSetChanged();
+
+            }
+        }
+    }
+
+
     public View getViewByPosition(int pos, GridView gridView) {
         final int firstListItemPosition = gridView.getFirstVisiblePosition();
         final int lastListItemPosition = firstListItemPosition + gridView.getChildCount() - 1;
 
-        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
+        if (pos < firstListItemPosition || pos > lastListItemPosition) {
             return gridView.getAdapter().getView(pos, null, gridView);
         } else {
             final int childIndex = pos - firstListItemPosition;
             return gridView.getChildAt(childIndex);
         }
     }
-
-
-
 
 
     //region 이미지 프로세싱 관련 파트
@@ -535,13 +574,22 @@ public class GalActivity extends AppCompatActivity {
             //////////////////// uri를 얻어 자른 이미지를 곧바로 추가한다.
 
             GalItem newItem = new GalItem(cropImageUri);
+
             galAdapter.addItem(newItem);
 
 
             isItemAdded = true;
             galAdapter.notifyDataSetChanged();
 
+            new Handler().post(new Runnable() {
 
+                public void run() {
+
+                    getViewByPosition(galAdapter.getCount() - 1, gridViewForGal).startAnimation(fadeIn);
+
+                }
+
+            });
 
 
             //todo 생명주기 적용하기
@@ -556,8 +604,6 @@ public class GalActivity extends AppCompatActivity {
                     Uri.fromFile(copyFile)));
 
 
-
-
             out.flush();
             out.close();
         } catch (Exception e) {
@@ -565,7 +611,6 @@ public class GalActivity extends AppCompatActivity {
         }
     }
     //endregion
-
 
 
     //region 생명주기 관련 파트 - 저장 등
@@ -582,7 +627,7 @@ public class GalActivity extends AppCompatActivity {
 
         super.onResume();
         //아이템이 추가되지 않았을 때에만 리스토어 해라.
-        if(!isItemAdded){
+        if (!isItemAdded) {
             restoreState();
 
         }
@@ -605,8 +650,6 @@ public class GalActivity extends AppCompatActivity {
 
 //        restoreStateWithJson();
     }
-
-
 
 
     public void saveStateWithGson() {
@@ -638,7 +681,7 @@ public class GalActivity extends AppCompatActivity {
 
 
     public void restoreStateWithGson() {
-          Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
 
 
         SharedPreferences prefForGal = getSharedPreferences(PREF_GAL, Activity.MODE_PRIVATE);
@@ -670,7 +713,6 @@ public class GalActivity extends AppCompatActivity {
                 ((GalItem) galAdapter.getItem(i)).mID = i;
             }
         }
-
 
 
     }
