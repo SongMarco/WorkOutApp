@@ -69,4 +69,9 @@ public class BasicInfo {
     public static final boolean BOX_GONE = false;
     public static final boolean BOX_VISIBLE = true;
 
+    // 어댑터 아이템 관련 상수 (겟뷰에서 사용)
+
+    public static final int keyInt_imageView = 1;
+    public static final int keyInt_checkBox = 2;
+
 }

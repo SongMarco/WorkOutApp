@@ -1,14 +1,16 @@
 package nova.workoutapp22.listviewSrcForGallery;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
 import nova.workoutapp22.R;
-import nova.workoutapp22.subSources.MyApplication;
 
 import static nova.workoutapp22.MainActivity.fadeIn;
 import static nova.workoutapp22.MainActivity.fadeOut;
@@ -18,40 +20,25 @@ import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
  * Created by Administrator on 2017-09-09.
  */
 
-public class GalAdapter extends BaseAdapter{
-
+public class GalAdapter extends BaseAdapter {
 
     private boolean mCheckBoxState = BOX_GONE;
 
 
-    public void setCheckBoxState(boolean pState){
+    public void setCheckBoxState(boolean pState) {
         mCheckBoxState = pState;
         notifyDataSetChanged();
     }
 
 
+    public ArrayList<nova.workoutapp22.listviewSrcForGallery.GalItem> items = new ArrayList<>();
 
-
-
-
-    public ArrayList<GalItem> items = new ArrayList<>();
-
-    public void addItem(GalItem item) {
+    public void addItem(nova.workoutapp22.listviewSrcForGallery.GalItem item) {
 
         items.add(item);
-        item.mID = getCount()-1;
+        item.mID = getCount() - 1;
 
     }
-
-
-
-
-
-
-
-
-
-
 
 
     @Override
@@ -71,28 +58,47 @@ public class GalAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        GalViewGridLayout view = new GalViewGridLayout(MyApplication.getAppContext());
 
-        GalItem item = items.get(position);
+        final Context context = parent.getContext();
 
-        view.setImageFromUri(item.getUri() );
+        ImageView imageViewGal;
+        CheckBox checkBox;
+
+        // "listview_item" Layout을 inflate하여 convertView 참조 획득.
+        if (convertView == null) {
+            // item1.xml 을 view object 에 넣어준다.
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            convertView = inflater.inflate(R.layout.gal_item, parent, false);
 
 
-        CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkBoxGal);
+        }
 
-        // 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
+// 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
+
+
+        checkBox = (CheckBox) convertView.findViewById(R.id.checkBoxGal);
+        imageViewGal = (ImageView) convertView.findViewById(R.id.imageViewGal);
+
+        // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
+        nova.workoutapp22.listviewSrcForGallery.GalItem galItem = items.get(position);
+
+        // 아이템 내 각 위젯에 데이터 반영
+        imageViewGal.setImageURI(items.get(position).getUri());
+
         if (mCheckBoxState == BOX_GONE) {
 
 
             checkBox.setVisibility(View.GONE);
             checkBox.startAnimation(fadeOut);
-        }
-        else {
+        } else {
 
             checkBox.setVisibility(View.VISIBLE);
             checkBox.startAnimation(fadeIn);
         }
 
-        return view;
+        return convertView;
+
+
     }
 }
