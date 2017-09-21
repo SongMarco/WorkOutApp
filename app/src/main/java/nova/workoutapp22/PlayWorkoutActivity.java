@@ -48,6 +48,8 @@ import static nova.workoutapp22.subSources.KeySet.key_workoutSet;
 
 public class PlayWorkoutActivity extends AppCompatActivity {
 
+
+    //다른 클래스에서 컨텍스트를 건져올 때 쓰이는 인스턴스!!! onCreate에서 개수작도 있음
     private static PlayWorkoutActivity instance;
 
     public static PlayWorkoutActivity getInstance() {

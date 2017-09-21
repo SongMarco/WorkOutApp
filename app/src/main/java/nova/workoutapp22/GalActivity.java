@@ -59,6 +59,17 @@ import static nova.workoutapp22.subSources.KeySet.key_uri;
 
 public class GalActivity extends AppCompatActivity {
 
+    //다른 클래스에서 컨텍스트를 건져올 때 쓰이는 인스턴스!!! onCreate에서 개수작도 있음
+    private static GalActivity instanceGal;
+
+    public static GalActivity getInstanceGal() {
+        return instanceGal;
+    }
+
+
+
+
+
     Toolbar toolbarGallery;
 
     String woMenuState = MENU_WO_NORMAL;
@@ -83,6 +94,7 @@ public class GalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instanceGal = this;
         setContentView(R.layout.activity_gallery);
 
 
@@ -494,12 +506,13 @@ public class GalActivity extends AppCompatActivity {
                 // 이후의 처리가 카메라와 같으므로 일단  break없이 진행합니다.
                 // 실제 코드에서는 좀더 합리적인 방법을 선택하시기 바랍니다.
                 mImageCaptureUri = data.getData();
-//
+
 //                galAdapter.addItem(new GalItem(mImageCaptureUri));
 //                galAdapter.notifyDataSetChanged();
 
 
                 isItemAdded = true;
+
 
             }
 
@@ -738,5 +751,7 @@ public class GalActivity extends AppCompatActivity {
         }
     }
     //endregion
+
+
 
 }

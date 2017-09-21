@@ -1,6 +1,8 @@
 package nova.workoutapp22.listviewSrcForGallery;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import nova.workoutapp22.R;
@@ -23,7 +26,7 @@ import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 public class GalAdapter extends BaseAdapter {
 
     private boolean mCheckBoxState = BOX_GONE;
-
+    Bitmap myBitmap = null;
 
     public void setCheckBoxState(boolean pState) {
         mCheckBoxState = pState;
@@ -39,15 +42,16 @@ public class GalAdapter extends BaseAdapter {
         item.mID = getCount() - 1;
 
     }
-    public void removeItem(GalItem item){ ///////리무브 코드 에러날 가능성 크다.
+
+    public void removeItem(GalItem item) { ///////리무브 코드 에러날 가능성 크다.
 
         /////// 1, 2, 3, 4, 5에서 3을 지우면 1, 2, 4, 5가 된다. -> 추후 어레이리스트 관리에 문제 발생
         /// 끝자락이 아니라면 무조건 mID를 재정렬해주어야 한다...
         items.remove(item);
-        if(item.mID != getCount() ){ // 3은 끝자락이 아니다. (4가 아님)
+        if (item.mID != getCount()) { // 3은 끝자락이 아니다. (4가 아님)
             //처음부터 끝(0부터 3까지 재정렬 해주면되겠네 .
-            for(int i = 0; i < getCount(); i++){
-                ((GalItem)getItem(i)).mID = i;
+            for (int i = 0; i < getCount(); i++) {
+                ((GalItem) getItem(i)).mID = i;
             }
         }
 
@@ -94,7 +98,29 @@ public class GalAdapter extends BaseAdapter {
         nova.workoutapp22.listviewSrcForGallery.GalItem galItem = items.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
-        imageViewGal.setImageURI(items.get(position).getUri());
+
+        Uri uri = items.get(position).getUri();
+
+        File myFile = new File(uri.getPath());
+        myFile.getAbsolutePath();
+
+        //TODO Uri에서 비트맵 가져오기 -> 비트맵을 이미지뷰로 쏴주기. 현재 getPath 경로가 달라져 문제 발생. 임시방편으로 크롭으로 해결.
+
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inSampleSize = 2;
+//        myBitmap = BitmapFactory.decodeFile(myFile.getAbsolutePath() , options);
+////        try {
+////
+//////            myBitmap = MediaStore.Images.Media.getBitmap(GalActivity.getInstanceGal().getContentResolver() , uri );
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
+//
+//       imageViewGal.setImageBitmap(myBitmap);
+////
+//
+////
+        imageViewGal.setImageURI(uri);
 
         if (mCheckBoxState == BOX_GONE) {
 
