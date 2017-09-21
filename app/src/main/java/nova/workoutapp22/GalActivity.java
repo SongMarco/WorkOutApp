@@ -44,17 +44,19 @@ import nova.workoutapp22.listviewSrcForWorkOut.WorkoutItem;
 import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.R.id.gridViewGal;
+import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 import static nova.workoutapp22.subSources.BasicInfo.CROP_FROM_IMAGE;
+import static nova.workoutapp22.subSources.BasicInfo.MENU_WO_NORMAL;
 import static nova.workoutapp22.subSources.BasicInfo.PICK_FROM_ALBUM;
 import static nova.workoutapp22.subSources.BasicInfo.PICK_FROM_CAMERA;
 import static nova.workoutapp22.subSources.KeySet.PREF_GAL;
 import static nova.workoutapp22.subSources.KeySet.key_uri;
 
-public class GalleryActivity extends AppCompatActivity {
+public class GalActivity extends AppCompatActivity {
 
     Toolbar toolbarGallery;
 
-    String woMenuState = BasicInfo.MENU_WO_NORMAL;
+    String woMenuState = MENU_WO_NORMAL;
 
     GalAdapter galAdapter;
 
@@ -64,7 +66,8 @@ public class GalleryActivity extends AppCompatActivity {
     private String absolutePath;
 
 
-
+    boolean isMultMode = false;
+    String memoMenuState = MENU_WO_NORMAL;
 
     boolean isItemAdded = false;
 
@@ -101,6 +104,73 @@ public class GalleryActivity extends AppCompatActivity {
 
 
     }
+
+
+
+    public void setItemClick() {
+
+        gridViewForGal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+
+                GalItem item = (GalItem) galAdapter.getItem(position);
+
+                // 수정 -- 메모 보기 액티비티 띄우기
+                Intent intent = new Intent(getApplicationContext(), GalZoomActivity.class);
+//                intent.putExtra(BasicInfo.KEY_ZOOM_MODE, BasicInfo.MODE_ZOOM);
+
+                intent.putExtra(key_uri, item.getUri().toString() );
+
+                // 모든 선택 상태 초기화.
+                gridViewForGal.clearChoices();
+                galAdapter.notifyDataSetChanged();
+
+                startActivityForResult(intent, BasicInfo.REQ_ZOOM);
+                //////////////////
+
+            }
+        });
+    }
+
+    public void setSingleChoice(GridView lv) {
+
+        //  Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+
+        lv.clearChoices();
+        lv.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
+
+        galAdapter.setCheckBoxState(BOX_GONE);
+
+        setItemClick();
+
+        memoMenuState = MENU_WO_NORMAL;
+        isMultMode = false;
+        invalidateOptionsMenu();
+
+    }
+
+    public void setMultipleChoice(GridView lv) {
+        // Toast.makeText(getApplicationContext(), "다중 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+
+
+        lv.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+
+        galAdapter.setCheckBoxState(true);
+
+
+        //아이템클릭리스너를 무효화한다.
+        lv.setOnItemClickListener(null);
+
+        memoMenuState = BasicInfo.MENU_WO_MULT;
+        isMultMode = true;
+        invalidateOptionsMenu();
+    }
+
+
+
 
 
     //region menu 관련 파트
@@ -180,6 +250,18 @@ public class GalleryActivity extends AppCompatActivity {
 
             case R.id.action_selectMult:
 
+//이미 멀티모드였다면 멀티모드를 비활성화하도록 할 것.
+                if (isMultMode == true) {
+
+                    setSingleChoice(gridViewForGal);
+
+                }
+                //멀티모드가 아니므로 멀티모드 활성화
+                else {
+
+
+                    setMultipleChoice(gridViewForGal);
+                }
 
                 return true;
 
@@ -205,33 +287,9 @@ public class GalleryActivity extends AppCompatActivity {
     }
     //endregion
 
-    public void setItemClick() {
-
-        gridViewForGal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-
-                GalItem item = (GalItem) galAdapter.getItem(position);
-
-                // 수정 -- 메모 보기 액티비티 띄우기
-                Intent intent = new Intent(getApplicationContext(), GalZoomActivity.class);
-//                intent.putExtra(BasicInfo.KEY_ZOOM_MODE, BasicInfo.MODE_ZOOM);
-
-                intent.putExtra(key_uri, item.getUri().toString() );
-
-                // 모든 선택 상태 초기화.
-                gridViewForGal.clearChoices();
-                galAdapter.notifyDataSetChanged();
-
-                startActivityForResult(intent, BasicInfo.REQ_ZOOM);
-                //////////////////
-
-            }
-        });
-    }
 
 
 
@@ -288,8 +346,8 @@ public class GalleryActivity extends AppCompatActivity {
                 intent.setDataAndType(mImageCaptureUri, "image/*");
 
                 // CROP할 이미지를 200*200 크기로 저장
-                intent.putExtra("outputX", 200); // CROP한 이미지의 x축 크기
-                intent.putExtra("outputY", 200); // CROP한 이미지의 y축 크기
+                intent.putExtra("outputX", 300); // CROP한 이미지의 x축 크기
+                intent.putExtra("outputY", 300); // CROP한 이미지의 y축 크기
                 intent.putExtra("aspectX", 1); // CROP 박스의 X축 비율
                 intent.putExtra("aspectY", 1); // CROP 박스의 Y축 비율
                 intent.putExtra("scale", true);
@@ -377,6 +435,7 @@ public class GalleryActivity extends AppCompatActivity {
 
 
 
+    //region 생명주기 관련 파트 - 저장 등
     @Override
     protected void onPause() {
         super.onPause();
@@ -505,5 +564,6 @@ public class GalleryActivity extends AppCompatActivity {
             return Uri.parse(src.getAsString());
         }
     }
+    //endregion
 
 }

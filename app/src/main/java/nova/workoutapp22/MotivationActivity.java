@@ -19,17 +19,14 @@ public class MotivationActivity extends AppCompatActivity {
         setSupportActionBar(toolbarMotivation);
 
 
-
         ImageButton buttonGal = (ImageButton) findViewById(R.id.buttonGallery);
-        ImageButton buttonVid = (ImageButton)findViewById(R.id.buttonVid);
+        ImageButton buttonVid = (ImageButton) findViewById(R.id.buttonVid);
 
         buttonGal.setOnClickListener(mClickListener);
         buttonVid.setOnClickListener(mClickListener);
 
 
-
     }
-
 
 
     Button.OnClickListener mClickListener = new View.OnClickListener() {
@@ -37,7 +34,7 @@ public class MotivationActivity extends AppCompatActivity {
             Intent intent;
             switch (v.getId()) {
                 case R.id.buttonGallery:
-                    intent = new Intent(getApplicationContext(), GalleryActivity.class);
+                    intent = new Intent(getApplicationContext(), GalActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.buttonVid:

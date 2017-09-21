@@ -63,4 +63,10 @@ public class BasicInfo {
     public static final String MENU_ADDWO_EDIT = "ADDWO_EDIT";
     public static final String MODE_ZOOM = "MODE_ZOOM" ;
 
+
+    ///체크박스 관련 상수
+
+    public static final boolean BOX_GONE = false;
+    public static final boolean BOX_VISIBLE = true;
+
 }

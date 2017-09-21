@@ -29,7 +29,7 @@
             android:name=".WorkoutActivity"
             android:label="운동 세팅하기" />
         <activity
-            android:name=".WorkoutMemoActivity"
+            android:name=".MemoActivity"
             android:label="운동 일지" />
         <activity
             android:name=".AddMemoActivity"
@@ -41,7 +41,7 @@
             android:name=".PlayWorkoutActivity"
             android:label="운동중!" />
         <activity
-            android:name=".GalleryActivity"
+            android:name=".GalActivity"
             android:label="동기부여 갤러리"></activity>
         <activity android:name=".GalZoomActivity"></activity>
     </application>

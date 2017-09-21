@@ -40,6 +40,7 @@ import nova.workoutapp22.listviewSrcForMemo.MemoItem;
 import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.MainActivity.fadeIn;
+import static nova.workoutapp22.subSources.BasicInfo.MENU_WO_NORMAL;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_ADD_MEMO;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_MODIFY_MEMO;
 import static nova.workoutapp22.subSources.KeySet.PREF_MEMO;
@@ -74,14 +75,14 @@ import static nova.workoutapp22.subSources.timeController.getTime;
 
  */
 
-public class WorkoutMemoActivity extends AppCompatActivity {
+public class MemoActivity extends AppCompatActivity {
 
     ListView listViewForMemo;
     MemoAdapter memoAdapter;
     Toolbar memoToolbar;
 
     boolean isMultMode = false;
-    String memoMenuState = BasicInfo.MENU_WO_NORMAL;
+    String memoMenuState = MENU_WO_NORMAL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -331,7 +332,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
     public void askDelete() {
         // 1. Instantiate an AlertDialog.Builder with its constructor
-        AlertDialog.Builder builder = new AlertDialog.Builder(WorkoutMemoActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MemoActivity.this);
 
         builder.setMessage("정말 삭제하시겠습니까?")
                 .setTitle("삭제 확인")
@@ -358,7 +359,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
                 memoAdapter.setCheckBoxState(false);
                 setSingleChoice(listViewForMemo);
 
-                memoMenuState = BasicInfo.MENU_WO_NORMAL;
+                memoMenuState = MENU_WO_NORMAL;
                 isMultMode = false;
                 invalidateOptionsMenu();
 
@@ -393,7 +394,7 @@ public class WorkoutMemoActivity extends AppCompatActivity {
 
         setItemClick();
 
-        memoMenuState = BasicInfo.MENU_WO_NORMAL;
+        memoMenuState = MENU_WO_NORMAL;
         isMultMode = false;
         invalidateOptionsMenu();
 

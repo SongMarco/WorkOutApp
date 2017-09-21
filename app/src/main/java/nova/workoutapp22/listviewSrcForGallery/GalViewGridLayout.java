@@ -3,6 +3,7 @@ package nova.workoutapp22.listviewSrcForGallery;
 import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
+import android.widget.CheckBox;
 import android.widget.Checkable;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ public class GalViewGridLayout extends GridLayout implements Checkable {
     ImageView imageView;
 
 
+    CheckBox checkBox;
 
 
 
@@ -41,6 +43,8 @@ public class GalViewGridLayout extends GridLayout implements Checkable {
 
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
+        checkBox = (CheckBox) findViewById(R.id.checkBoxGal);
+
 
 
     }
@@ -54,17 +58,29 @@ public class GalViewGridLayout extends GridLayout implements Checkable {
 
     @Override
     public void setChecked(boolean checked) {
+        CheckBox cb = (CheckBox) findViewById(R.id.checkBoxGal) ;
+
+        if (cb.isChecked() != checked) {
+            cb.setChecked(checked) ;
+        }
+
 
     }
 
     @Override
     public boolean isChecked() {
-        return false;
+        CheckBox cb = (CheckBox) findViewById(R.id.checkBoxGal) ;
+
+        return cb.isChecked() ;
+        // return mIsChecked ;
     }
 
     @Override
     public void toggle() {
+        CheckBox cb = (CheckBox) findViewById(R.id.checkBoxGal) ;
 
+        setChecked(!cb.isChecked()) ;
+        // setChecked(mIsChecked ? false : true) ;
     }
 
     public void setImageFromUri(Uri uri) {

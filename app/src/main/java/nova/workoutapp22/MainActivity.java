@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(intent, REQUEST_CODE_WORKOUT);
                     break;
                 case R.id.mainToDiaryButton:
-                    intent = new Intent(getApplicationContext(), WorkoutMemoActivity.class);
+                    intent = new Intent(getApplicationContext(), MemoActivity.class);
                     startActivityForResult(intent, REQUEST_CODE_DIARY);
                     break;
             }

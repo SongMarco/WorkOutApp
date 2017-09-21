@@ -12,6 +12,7 @@ import nova.workoutapp22.subSources.MyApplication;
 
 import static nova.workoutapp22.MainActivity.fadeIn;
 import static nova.workoutapp22.MainActivity.fadeOut;
+import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 
 
 /**
@@ -25,9 +26,9 @@ public class MemoAdapter extends BaseAdapter {
     public void MemoAdapter(){   }
 
     boolean visibleBox = true;
-    boolean goneBox = false;
 
-    private boolean mCheckBoxState = goneBox;
+
+    private boolean mCheckBoxState = BOX_GONE;
 
     public void setCheckBoxState(boolean pState){
         mCheckBoxState = pState;
@@ -100,10 +101,10 @@ public class MemoAdapter extends BaseAdapter {
         view.SetDateInLayout(item.getDate());
         view.setImageFromUri(item.getUri());
 
-        CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkBox);
+        CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkBoxMemo);
 
         // 시작 상태, 삭제한 상태, 다중->단일로 갈때는 체크박스를 gone으로. 아니면 보이게!
-        if (mCheckBoxState == goneBox) {
+        if (mCheckBoxState == BOX_GONE) {
 
 
             checkBox.setVisibility(View.GONE);
