@@ -38,7 +38,8 @@ public class MotivationActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case R.id.buttonVid:
-
+                    intent = new Intent(getApplicationContext(), VidActivity.class);
+                    startActivity(intent);
                     break;
 
             }

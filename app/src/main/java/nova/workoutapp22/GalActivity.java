@@ -57,6 +57,19 @@ import static nova.workoutapp22.subSources.BasicInfo.PICK_FROM_CAMERA;
 import static nova.workoutapp22.subSources.KeySet.PREF_GAL;
 import static nova.workoutapp22.subSources.KeySet.key_uri;
 
+/////////// 툴바 만들기 :
+
+
+
+
+
+
+
+
+
+
+
+
 public class GalActivity extends AppCompatActivity {
 
     //다른 클래스에서 컨텍스트를 건져올 때 쓰이는 인스턴스!!! onCreate에서 개수작도 있음
@@ -99,6 +112,7 @@ public class GalActivity extends AppCompatActivity {
 
 
         ///////////////////////툴바를 만듭니다
+
         toolbarGallery = (Toolbar) findViewById(R.id.toolbarGallery);
         setSupportActionBar(toolbarGallery);
         /////////////////////////////////////////

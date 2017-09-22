@@ -15,7 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="nova.workoutapp22.fileprovider"
@@ -23,10 +22,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
-
-
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -55,8 +52,14 @@
             android:label="운동중!" />
         <activity
             android:name=".GalActivity"
-            android:label="동기부여 갤러리"></activity>
-        <activity android:name=".GalZoomActivity"></activity>
+            android:label="동기부여 갤러리" />
+        <activity android:name=".GalZoomActivity" />
+
+        <activity
+            android:name=".VidActivity"
+            android:label="동기부여 영상"
+
+            ></activity>
     </application>
 
 </manifest>
