@@ -461,7 +461,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                     buttonPause.setVisibility(View.VISIBLE);
 
-                    buttonReset.setVisibility(View.GONE);
+                    buttonReset.setVisibility(View.INVISIBLE);
                     buttonResume.setVisibility(View.INVISIBLE);
 
 //                    Toast.makeText(PlayWorkoutActivity.this, "운동이 재개됩니다.", Toast.LENGTH_SHORT).show();
@@ -625,7 +625,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
         buttonStart.setVisibility(View.VISIBLE);
         buttonSetDone.setVisibility(View.INVISIBLE);
-        buttonReset.setVisibility(View.GONE);
+        buttonReset.setVisibility(View.INVISIBLE);
         buttonPause.setVisibility(View.GONE);
         buttonResume.setVisibility(View.GONE);
 

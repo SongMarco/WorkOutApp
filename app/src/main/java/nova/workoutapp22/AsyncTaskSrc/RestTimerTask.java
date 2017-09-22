@@ -212,7 +212,7 @@ public class RestTimerTask extends AsyncTask<Void, Void, String> {
 
         buttonResume.setVisibility(View.GONE);
         buttonPause.setVisibility(View.GONE);
-        buttonReset.setVisibility(View.GONE);
+        buttonReset.setVisibility(View.INVISIBLE);
 
         if (timerSetting.equals(KeySet.STRING_NOTIMER)) {
 

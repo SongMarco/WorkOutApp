@@ -140,6 +140,51 @@
         android:layout_height="wrap_content"
         >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonResetPl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:text="초기화"
+                android:visibility="invisible" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/buttonResumePl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Resume" />
+
+                <Button
+                    android:id="@+id/buttonPausePl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="일시정지" />
+
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/buttonRecordPl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="기록하기"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/buttonStartWoPl"
             android:layout_width="wrap_content"
@@ -156,51 +201,6 @@
             android:visibility="invisible" />
 
     </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/buttonResetPl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-
-            android:text="초기화"
-            android:visibility="gone" />
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/buttonResumePl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Resume" />
-
-            <Button
-                android:id="@+id/buttonPausePl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="일시정지" />
-
-        </FrameLayout>
-
-        <Button
-            android:id="@+id/buttonRecordPl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="기록하기"
-            android:visibility="gone" />
-
-    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
