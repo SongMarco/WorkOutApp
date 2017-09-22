@@ -250,7 +250,7 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
 
 
         //분:초:0.몇초
-        String sEll = String.format("%02d:%02d:%02d", time/1000/60, time/1000, (time%1000)/10  );
+        String sEll = String.format("%02d:%02d:%02d", time/1000/60, (time/1000)%60, (time%1000)/10  );
         return sEll;
 
     }
