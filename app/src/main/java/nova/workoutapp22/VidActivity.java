@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.GridView;
 import android.widget.ListView;
 
@@ -17,17 +19,23 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
+import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
+
+import java.net.URL;
+
 import nova.workoutapp22.listviewSrcForVid.VidAdapter;
 import nova.workoutapp22.listviewSrcForVid.VidItem;
 import nova.workoutapp22.subSources.BasicInfo;
 import nova.workoutapp22.subSources.DeveloperKey;
 
-import static nova.workoutapp22.MainActivity.fadeIn;
 import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 import static nova.workoutapp22.subSources.BasicInfo.MENU_WO_NORMAL;
 
 public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnInitializedListener {
 
+    private static Animation fadeIn2;
+    private static Animation fadeOut2;
 
     private static VidActivity instanceVid;
 
@@ -46,25 +54,45 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
 
     String gotUrl;
 
+    Intent youtubeIntent;
+    private YouTubePlayer youTubePlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         instanceVid = this;
         setContentView(R.layout.activity_vid);
 
+
+
+
+
+
+
+
+
+
+
+
+        /// 유튜브 공유시 타이틀, 영상링크 가져오기
         Bundle extras = getIntent().getExtras();
-        //유투브 공유를 받았을 때 아이템을 추가한다.
+
+
+
         if(extras!=null) {
-
             gotUrl = extras.getString(Intent.EXTRA_TEXT);
-            Log.v("all", extras.getString(Intent.EXTRA_TEXT) );
-
-
-
-
+            Log.v("ttbaby",gotUrl);
+            Log.v("ttbaby", ""+getTitle(gotUrl));
 
 
         }
+        fadeIn2= AnimationUtils.loadAnimation(this, R.anim.fadein);
+        fadeOut2 = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+
+
+
+
+
 
 
         ///////////////////////툴바를 만듭니다
@@ -94,6 +122,12 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
             vidAdapter.addItem(new VidItem("영상 예시"+(i+1), Uri.parse(resDrawableUri) ) );
         }
 
+
+
+        youtubeIntent = new Intent(Intent.ACTION_SEARCH);
+        youtubeIntent.setPackage("com.google.android.youtube");
+        youtubeIntent.putExtra("query", "미식축구선수");
+        youtubeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
 
@@ -110,6 +144,7 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
             //I assume the below String value is your video id
             player.cueVideo("nCgQDjiotG0");
         }
+        youTubePlayer = player;
     }
 
 
@@ -130,7 +165,7 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
         //멀미모드임
         if (menuState.equals(BasicInfo.MENU_WO_MULT)) {
 
-            toolbarVid.getChildAt(1).startAnimation(fadeIn);
+            toolbarVid.getChildAt(1).startAnimation(fadeIn2);
             menu.findItem(R.id.action_addItem).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_selectAll).setVisible(true);
@@ -142,7 +177,7 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
         else {
 
 
-            toolbarVid.getChildAt(1).startAnimation(fadeIn);
+            toolbarVid.getChildAt(1).startAnimation(fadeIn2);
             menu.findItem(R.id.action_addItem).setVisible(true);
             menu.findItem(R.id.action_delete).setVisible(false);
             menu.findItem(R.id.action_selectAll).setVisible(false);
@@ -174,17 +209,7 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
 
             case R.id.action_addItem:
 
-                Intent intent = new Intent(Intent.ACTION_SEARCH);
-                intent.setPackage("com.google.android.youtube");
-                intent.putExtra("query", "미식축구선수");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-
-                dialogLoading= ProgressDialog.show(VidActivity.this, "",
-                        "유투브 검색창을 불러오는 중입니다 ...", true);
-                dialogLoading.show();
-
-
+                startActivity(youtubeIntent);
 
 
 
@@ -267,14 +292,22 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
 
 
 
-
+    //region 생명주기 관련 파트 - 저장 등
     @Override
-    protected void onStop() {
-        super.onStop();
-        if(dialogLoading != null && dialogLoading.isShowing()){
-            dialogLoading.dismiss();
-        }
+    protected void onPause() {
+        super.onPause();
+
+
+
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        if (youTubePlayer != null) {
+//            Toast.makeText(instanceVid, "loaded", Toast.LENGTH_SHORT).show();
+//            youTubePlayer.cueVideo("0fHaQdacCmM");
+//        }
+    }
 }

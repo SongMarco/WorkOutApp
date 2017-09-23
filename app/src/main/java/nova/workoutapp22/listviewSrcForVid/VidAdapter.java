@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -13,15 +15,17 @@ import java.util.ArrayList;
 
 import nova.workoutapp22.R;
 
-import static nova.workoutapp22.MainActivity.fadeIn;
-import static nova.workoutapp22.MainActivity.fadeOut;
 import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 
 /**
  * Created by Administrator on 2017-09-23.
  */
 
+
 public class VidAdapter extends BaseAdapter{
+
+    private static Animation fadeIn2;
+    private static Animation fadeOut2;
 
     private boolean mCheckBoxState = BOX_GONE;
 
@@ -103,16 +107,18 @@ public class VidAdapter extends BaseAdapter{
         imageView.setImageURI( item.getUri() );
         textView.setText( item.getVidTitle() );
 
+        fadeIn2= AnimationUtils.loadAnimation(context, R.anim.fadein);
+        fadeOut2 = AnimationUtils.loadAnimation(context, R.anim.fadeout);
 
         if (mCheckBoxState == BOX_GONE) {
 
 
             checkBox.setVisibility(View.GONE);
-            checkBox.startAnimation(fadeOut);
+            checkBox.startAnimation(fadeOut2);
         } else {
 
             checkBox.setVisibility(View.VISIBLE);
-            checkBox.startAnimation(fadeIn);
+            checkBox.startAnimation(fadeIn2);
         }
 
         return convertView;
