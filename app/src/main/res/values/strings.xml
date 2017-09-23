@@ -9,4 +9,6 @@
     <string name="action_add_workout">운동 추가하기</string>
     <string name="action_editWorkout">운동 편집</string>
     <string name="action_editDone">운동 편집완료</string>
+
+    <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
 </resources>

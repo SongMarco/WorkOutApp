@@ -18,9 +18,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -38,13 +36,12 @@ import java.util.ArrayList;
 import nova.workoutapp22.listviewSrcForVid.VidAdapter;
 import nova.workoutapp22.listviewSrcForVid.VidItem;
 import nova.workoutapp22.subSources.BasicInfo;
-import nova.workoutapp22.subSources.DeveloperKey;
 
 import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 import static nova.workoutapp22.subSources.BasicInfo.MENU_WO_NORMAL;
 import static nova.workoutapp22.subSources.KeySet.PREF_VID;
 
-public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnInitializedListener {
+public class VidActivity extends AppCompatActivity  {
 
     private static Animation fadeIn2;
     private static Animation fadeOut2;
@@ -72,17 +69,19 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
 
     boolean isItemAdded = false;
 
-
+    String resDrawableUri;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         instanceVid = this;
         setContentView(R.layout.activity_vid);
 
-
+        Toast.makeText(instanceVid, "onCreateCalled", Toast.LENGTH_SHORT).show();
         fadeIn2 = AnimationUtils.loadAnimation(this, R.anim.fadein);
         fadeOut2 = AnimationUtils.loadAnimation(this, R.anim.fadeout);
 
@@ -99,25 +98,48 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
 
         //////////////////유투브 프래그먼트 세팅하기
 
-        YouTubePlayerSupportFragment frag =
-                (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
-        frag.initialize(DeveloperKey.DEVELOPER_KEY, this);
 
 
-        String resDrawableUri = "android.resource://" + getApplicationContext().getPackageName() + "/drawable/basicimage";
-
-        for (int i = 0; i < 5; i++) {
-            vidAdapter.addItem(new VidItem("영상 예시" + (i + 1), Uri.parse(resDrawableUri)));
-        }
+//
+//       resDrawableUri = "android.resource://" + getApplicationContext().getPackageName() + "/drawable/basicimage";
+//
+//
+//
+//        for (int i = 0; i < 5; i++) {
+//            vidAdapter.addItem(new VidItem("영상 예시" + (i + 1), Uri.parse(resDrawableUri)));
+//            vidAdapter.notifyDataSetChanged();
+//        }
 
 
         /// 유튜브 공유시 타이틀, 영상링크 가져오기
-        Bundle extras = getIntent().getExtras();
+
 
 
 //url :: https://youtu.be/9sbRbVxGcsA
 
+        addItemFromIntent(getIntent());
+
+
+
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+
+        addItemFromIntent(intent);
+
+    }
+
+    public void addItemFromIntent(Intent intent){
+        Bundle extras = intent.getExtras();
+        //엑스트라 존재 -> 아이템을 공유한 것임.
+
+        Toast.makeText(instanceVid, "ext ="+extras, Toast.LENGTH_SHORT).show();
         if (extras != null) {
+            isItemAdded = true;
             gotUrl = extras.getString(Intent.EXTRA_TEXT);
             Log.v("ttbaby", gotUrl);
 
@@ -130,34 +152,8 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
             String url = "https://img.youtube.com/vi/" + youtubeID + "/0.jpg";
             vidAdapter.addItem(new VidItem("예시예시", url));
 
+            vidAdapter.notifyDataSetChanged();
         }
-
-
-    }
-
-
-    @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player,
-                                        boolean wasRestored) {
-        if (!wasRestored) {
-            //I assume the below String value is your video id
-            player.cueVideo("nCgQDjiotG0");
-        }
-        youTubePlayer = player;
-    }
-
-    @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult error) {
-        Log.v("init failed", "init");
-
-        if (error.isUserRecoverableError()) {
-            error.getErrorDialog(this, 0).show();
-        } else {
-            String errorMessage = String.format(
-                    "There was an error initializing the YouTubePlayer",
-                    error.toString());
-        }
-
     }
 
     //region menu 관련 파트
@@ -212,14 +208,19 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
         switch (item.getItemId()) {
 
             case R.id.action_addItem:
+
                 isItemAdded = true;
-                Toast.makeText(instanceVid, "add clicked", Toast.LENGTH_SHORT).show();
+//
+//                vidAdapter.addItem(new VidItem("영상 예시", Uri.parse(resDrawableUri)));
+//                vidAdapter.notifyDataSetChanged();
+
                 youtubeIntent = new Intent(Intent.ACTION_SEARCH);
                 youtubeIntent.setPackage("com.google.android.youtube");
                 youtubeIntent.putExtra("query", "미식축구선수");
 
 
-                startActivity(youtubeIntent);
+
+                startActivityForResult(youtubeIntent, 2);
 
 
 
@@ -263,6 +264,8 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
 
     }
     //endregion
+
+
 
 
     public void setSingleChoice(ListView lv) {
@@ -312,8 +315,9 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
     @Override
     protected void onResume() {
 
-
+        Toast.makeText(instanceVid, "onresume", Toast.LENGTH_SHORT).show();
         super.onResume();
+
         //아이템이 추가되지 않았을 때에만 리스토어 해라.
         if (!isItemAdded) {
             restoreState();

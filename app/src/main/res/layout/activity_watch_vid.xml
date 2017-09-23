@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="운동 영상 감상하기"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        android:textColor="@color/colorBlack" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/youtube_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
