@@ -495,9 +495,12 @@ public class MemoActivity extends AppCompatActivity {
 
                 MemoItem newmit = setItemFromIntent(data);
 
+
+
                 memoAdapter.addItem(newmit);
 
                 memoAdapter.notifyDataSetChanged();
+                saveState();
             }
         }
 
@@ -527,6 +530,8 @@ public class MemoActivity extends AppCompatActivity {
 
                 memoAdapter.notifyDataSetChanged();
                 Log.v("순서추적", "데이타 변경 완료");
+
+                saveState();
             }
         }
     }
@@ -581,8 +586,6 @@ public class MemoActivity extends AppCompatActivity {
     }
 
     public void restoreState() {
-        Toast.makeText(getApplicationContext(), "restore Called", Toast.LENGTH_SHORT).show();
-
         SharedPreferences pref = getSharedPreferences(PREF_MEMO, Activity.MODE_PRIVATE);
 
         if ((pref != null) && (pref.contains("arrayList"))) {

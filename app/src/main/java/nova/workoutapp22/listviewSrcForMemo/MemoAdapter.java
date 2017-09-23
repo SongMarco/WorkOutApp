@@ -1,5 +1,6 @@
 package nova.workoutapp22.listviewSrcForMemo;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -42,6 +43,7 @@ public class MemoAdapter extends BaseAdapter {
     ////////////////////////////////////////////////////////////
     public void addItem(MemoItem item) {
 
+        Log.v("add", "add called");
         items.add(item);
         item.mID = getCount()-1;
 
