@@ -3,6 +3,7 @@ package nova.workoutapp22.listviewSrcForGallery;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,13 +101,19 @@ public class GalAdapter extends BaseAdapter {
         imageViewGal = (ImageView) convertView.findViewById(R.id.imageViewGal);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
-        nova.workoutapp22.listviewSrcForGallery.GalItem galItem = itemArrayList.get(position);
+        GalItem galItem = itemArrayList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
 
-        Uri uri = itemArrayList.get(position).getUri();
+        Uri uri = galItem.getUri();
+        Log.v("uritg","uri = "+uri);
 
-        Glide.with(context).load(uri).into(imageViewGal);
+
+
+            Glide.with(context).
+                    load(uri).
+                    into(imageViewGal);
+
 
 
         if (mCheckBoxState == BOX_GONE) {

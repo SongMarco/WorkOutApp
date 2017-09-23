@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -89,7 +90,7 @@ public class GalActivity extends AppCompatActivity {
 
     GridView gridViewForGal;
 
-    private Uri mImageCaptureUri, cropImageUri;
+    private Uri mImageCaptureUri, cropImageUri, CameraUri;
     private String absolutePath;
 
     GalItem removeItem;
@@ -99,6 +100,8 @@ public class GalActivity extends AppCompatActivity {
     boolean isItemAdded = false;
 
 
+    File imgFile;
+    public String imgPath="";
 
     SparseBooleanArray checkedItems;
 
@@ -256,7 +259,7 @@ public class GalActivity extends AppCompatActivity {
                 DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        doTakePhotoAction();
+                        showCamera();
                     }
                 };
                 DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
@@ -462,17 +465,30 @@ public class GalActivity extends AppCompatActivity {
 
 
     //region 이미지 프로세싱 관련 파트
-    public void doTakePhotoAction() // 카메라 촬영 후 이미지 가져오기
-    {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    private void showCamera() {
+        Intent itt = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
 
         // 임시로 사용할 파일의 경로를 생성
         String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
         mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
 
+        itt.putExtra( MediaStore.EXTRA_OUTPUT, mImageCaptureUri );
+        startActivityForResult( itt, PICK_FROM_CAMERA );
+    }
 
-        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-        startActivityForResult(intent, PICK_FROM_CAMERA);
+    private Uri getFileUri() {
+        File dir = new File( getFilesDir(), "img" );
+        if ( !dir.exists() ) {
+            dir.mkdirs();
+        }
+        File file = new File( dir, System.currentTimeMillis() + ".png" );
+        imgPath = file.getAbsolutePath();
+
+        Log.v("dd",getApplicationContext().getPackageName()+".fileprovider");
+
+
+
+        return FileProvider.getUriForFile( GalActivity.this, getApplicationContext().getPackageName()+".fileprovider", file );
     }
 
     public void doTakeAlbumAction() // 앨범에서 이미지 가져오기
@@ -509,21 +525,27 @@ public class GalActivity extends AppCompatActivity {
 
             case PICK_FROM_CAMERA: {
 
-                galAdapter.addItem(new GalItem(mImageCaptureUri));
-                galAdapter.notifyDataSetChanged();
-                // 이미지를 가져온 이후의 리사이즈할 이미지 크기를 결정합니다.
-                // 이후에 이미지 크롭 어플리케이션을 호출하게 됩니다.
-                Intent intent = new Intent("com.android.camera.action.CROP");
-                intent.setDataAndType(mImageCaptureUri, "image/*");
 
-                // CROP할 이미지를 200*200 크기로 저장
-                intent.putExtra("outputX", 300); // CROP한 이미지의 x축 크기
-                intent.putExtra("outputY", 300); // CROP한 이미지의 y축 크기
-                intent.putExtra("aspectX", 1); // CROP 박스의 X축 비율
-                intent.putExtra("aspectY", 1); // CROP 박스의 Y축 비율
-                intent.putExtra("scale", true);
-                intent.putExtra("return-data", true);
-                startActivityForResult(intent, CROP_FROM_IMAGE); // CROP_FROM_CAMERA case문 이동
+                Log.v("ppap", "path="+mImageCaptureUri);
+                galAdapter.addItem( new GalItem(mImageCaptureUri) );
+
+                galAdapter.notifyDataSetChanged();
+                isItemAdded= true;
+//                // 이미지를 가져온 이후의 리사이즈할 이미지 크기를 결정합니다.
+////                // 이후에 이미지 크롭 어플리케이션을 호출하게 됩니다.
+//                Intent intent = new Intent("com.android.camera.action.CROP");
+//                intent.setDataAndType(mImageCaptureUri, "image/*");
+//
+//
+//
+//                // CROP할 이미지를 200*200 크기로 저장
+//                intent.putExtra("outputX", 300); // CROP한 이미지의 x축 크기
+//                intent.putExtra("outputY", 300); // CROP한 이미지의 y축 크기
+//                intent.putExtra("aspectX", 1); // CROP 박스의 X축 비율
+//                intent.putExtra("aspectY", 1); // CROP 박스의 Y축 비율
+//                intent.putExtra("scale", true);
+//                intent.putExtra("return-data", true);
+//                startActivityForResult(intent, CROP_FROM_IMAGE); // CROP_FROM_CAMERA case문 이동
                 break;
             }
 

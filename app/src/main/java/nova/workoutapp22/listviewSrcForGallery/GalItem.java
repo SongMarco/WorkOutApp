@@ -10,23 +10,33 @@ public class GalItem {
 
 
     public int mID;
-    Uri picturUri;
+    Uri uri;
 
+    String imgPath;
 
 
 
     public GalItem(Uri uri){
 
-        this.picturUri = uri;
+        this.uri = uri;
+
+    }
+
+    public GalItem(String imgPath){
+
+        this.imgPath = imgPath;
 
     }
 
 
 
+    public String getImgPath(){return imgPath;}
+    public void setImgPath(String imgPath){this.imgPath = imgPath;}
+
     public int getmID(){ return mID; }
     public void setmID(int mID){ this.mID = mID;}
 
-    public Uri getUri(){ return picturUri;}
-    public void setUri(Uri uri) {this.picturUri = uri;}
+    public Uri getUri(){ return uri;}
+    public void setUri(Uri uri) {this.uri = uri;}
 
 }
