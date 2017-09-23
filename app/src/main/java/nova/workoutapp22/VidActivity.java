@@ -41,7 +41,7 @@ import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 import static nova.workoutapp22.subSources.BasicInfo.MENU_WO_NORMAL;
 import static nova.workoutapp22.subSources.KeySet.PREF_VID;
 
-public class VidActivity extends AppCompatActivity  {
+public class VidActivity extends AppCompatActivity {
 
     private static Animation fadeIn2;
     private static Animation fadeOut2;
@@ -72,7 +72,6 @@ public class VidActivity extends AppCompatActivity  {
     String resDrawableUri;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +98,6 @@ public class VidActivity extends AppCompatActivity  {
         //////////////////유투브 프래그먼트 세팅하기
 
 
-
 //
 //       resDrawableUri = "android.resource://" + getApplicationContext().getPackageName() + "/drawable/basicimage";
 //
@@ -114,47 +112,19 @@ public class VidActivity extends AppCompatActivity  {
         /// 유튜브 공유시 타이틀, 영상링크 가져오기
 
 
-
 //url :: https://youtu.be/9sbRbVxGcsA
 
-        addItemFromIntent(getIntent());
 
+        restoreState();
 
-
-
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-
-        addItemFromIntent(intent);
-
-    }
-
-    public void addItemFromIntent(Intent intent){
-        Bundle extras = intent.getExtras();
-        //엑스트라 존재 -> 아이템을 공유한 것임.
-
-        Toast.makeText(instanceVid, "ext ="+extras, Toast.LENGTH_SHORT).show();
-        if (extras != null) {
-            isItemAdded = true;
-            gotUrl = extras.getString(Intent.EXTRA_TEXT);
-            Log.v("ttbaby", gotUrl);
-
-
-            if (gotUrl.contains("https://youtu.be/")) {
-                String[] str = gotUrl.split("/");
-
-                youtubeID = str[3];
-            }
-            String url = "https://img.youtube.com/vi/" + youtubeID + "/0.jpg";
-            vidAdapter.addItem(new VidItem("예시예시", url));
-
-            vidAdapter.notifyDataSetChanged();
+        Log.v("ggwp", "intent = " + getIntent());
+        if (getIntent() != null) {
+            addItemFromIntent(getIntent());
         }
+
+
     }
+
 
     //region menu 관련 파트
     @Override
@@ -219,10 +189,7 @@ public class VidActivity extends AppCompatActivity  {
                 youtubeIntent.putExtra("query", "미식축구선수");
 
 
-
                 startActivityForResult(youtubeIntent, 2);
-
-
 
 
                 return true;
@@ -266,8 +233,6 @@ public class VidActivity extends AppCompatActivity  {
     //endregion
 
 
-
-
     public void setSingleChoice(ListView lv) {
 
 //        Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
@@ -302,9 +267,47 @@ public class VidActivity extends AppCompatActivity  {
     }
 
 
-
-
     //region 생명주기 관련 파트 - 저장 등
+
+
+    public void addItemFromIntent(Intent intent) {
+        Bundle extras = intent.getExtras();
+        //엑스트라 존재 -> 아이템을 공유한 것임.
+
+        Toast.makeText(instanceVid, "addFromIntent", Toast.LENGTH_SHORT).show();
+        if (extras != null) {
+            isItemAdded = true;
+            gotUrl = extras.getString(Intent.EXTRA_TEXT);
+            Log.v("ttbaby", gotUrl);
+
+
+            if (gotUrl.contains("https://youtu.be/")) {
+                String[] str = gotUrl.split("/");
+
+                youtubeID = str[3];
+            }
+            String url = "https://img.youtube.com/vi/" + youtubeID + "/0.jpg";
+            vidAdapter.addItem(new VidItem("예시예시", url, youtubeID));
+
+            saveState();
+            vidAdapter.notifyDataSetChanged();
+        }
+
+        isItemAdded = true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        Toast.makeText(instanceVid, "onNew", Toast.LENGTH_SHORT).show();
+        setIntent(intent);
+
+        addItemFromIntent(intent);
+
+    }
+
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -318,11 +321,10 @@ public class VidActivity extends AppCompatActivity  {
         Toast.makeText(instanceVid, "onresume", Toast.LENGTH_SHORT).show();
         super.onResume();
 
-        //아이템이 추가되지 않았을 때에만 리스토어 해라.
-        if (!isItemAdded) {
-            restoreState();
+        // 아이템이 추가되지 않았을 때에만 리스토어 해라.
 
-        }
+        restoreState();
+
         isItemAdded = false;
     }
 
@@ -346,7 +348,7 @@ public class VidActivity extends AppCompatActivity  {
 
     public void saveStateWithGson() {
 
-        Toast.makeText(this, "saveCalled", Toast.LENGTH_SHORT).show();
+
         SharedPreferences prefVid = getSharedPreferences(PREF_VID, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefVid.edit();
 

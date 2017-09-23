@@ -13,7 +13,7 @@ public class VidItem {
     Uri uri;
     String url;
     String vidTitle;
-
+    String youtubeID;
 
 
 
@@ -24,6 +24,12 @@ public class VidItem {
     public VidItem(String vidTitle, String url){
         this.vidTitle = vidTitle;
         this.url= url;
+    }
+
+    public VidItem(String vidTitle, String url, String youtubeID){
+        this.vidTitle = vidTitle;
+        this.url= url;
+        this.youtubeID = youtubeID;
     }
 
 
