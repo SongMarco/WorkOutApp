@@ -61,6 +61,11 @@ public class VidAdapter extends BaseAdapter{
     }
 
 
+    public void setItem(int mID, VidItem item) {
+
+        itemArrayList.set(mID, item);
+
+    }
 
     @Override
     public int getCount() {
@@ -108,9 +113,10 @@ public class VidAdapter extends BaseAdapter{
 
 //        imageView.setImageURI( item.getUri() );
 
+        textView.setText( item.getVidTitle() );
 
-        if(item.getUrl() != null) {
-            Glide.with(context).load(item.getUrl() ).into(imageView);
+        if(item.getThumbUrl() != null) {
+            Glide.with(context).load(item.getThumbUrl() ).into(imageView);
         }
         else{
            Glide.with(context).load(item.getUri()).into(imageView);
@@ -118,7 +124,7 @@ public class VidAdapter extends BaseAdapter{
         }
 
 
-        textView.setText( item.getVidTitle() );
+
 
         fadeIn2= AnimationUtils.loadAnimation(context, R.anim.fadein);
         fadeOut2 = AnimationUtils.loadAnimation(context, R.anim.fadeout);

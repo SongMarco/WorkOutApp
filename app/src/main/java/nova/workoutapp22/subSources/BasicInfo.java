@@ -51,6 +51,7 @@ public class BasicInfo {
     public static final int REQ_PHOTO_SELECTION_ACTIVITY = 1502;
 
     public static final int REQ_ZOOM = 3001;
+    public static final int REQ_WATCH = 4001;
 
 
     /// 메뉴 세팅 관련 값들 ///

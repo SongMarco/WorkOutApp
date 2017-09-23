@@ -3,6 +3,9 @@ package nova.workoutapp22;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeApiServiceUtil;
@@ -12,6 +15,11 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
 import nova.workoutapp22.subSources.DeveloperKey;
+import nova.workoutapp22.subSources.KeySet;
+
+import static nova.workoutapp22.subSources.KeySet.key_mID;
+import static nova.workoutapp22.subSources.KeySet.key_vidTitle;
+import static nova.workoutapp22.subSources.KeySet.key_youtubeID;
 
 public class WatchVidActivity extends YouTubeBaseActivity implements
         YouTubePlayer.OnInitializedListener {
@@ -26,14 +34,19 @@ public class WatchVidActivity extends YouTubeBaseActivity implements
 
     String vidKey;
 
+    EditText etTitle;
+
+    Button buttonSaveWatch;
+    YouTubePlayer.Provider provider;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_watch_vid);
 
 
-        vidKey = getIntent().getStringExtra("vidKey");
 
+
+        Log.v("keykey","key="+vidKey);
         Log.d("youtube Test",
                 "사용가능여부:" + YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this)); //SUCCSESS
 
@@ -45,10 +58,57 @@ public class WatchVidActivity extends YouTubeBaseActivity implements
         //YouTubePlayerView youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         //youTubeView.initialize(DeveloperKey.DEVELOPER_KEY, this);
 
-        getYouTubePlayerProvider().initialize(DeveloperKey.DEVELOPER_KEY, this);
+        etTitle = (EditText)findViewById(R.id.editTextWatch);
+
+        buttonSaveWatch = (Button)findViewById(R.id.buttonSaveWatch);
+
+
+
+        buttonSaveWatch.setOnClickListener(mClickListener);
+
+
+
+
+        vidKey = getIntent().getStringExtra(KeySet.key_youtubeID);
+
+        Log.v("et","et = "+getIntent().getStringExtra(key_vidTitle));
+        etTitle.setText( getIntent().getStringExtra(key_vidTitle) );
+
+        provider = getYouTubePlayerProvider();
+        provider.initialize(DeveloperKey.DEVELOPER_KEY, this);
 
     }
 
+
+    Button.OnClickListener mClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent intent;
+            switch (v.getId()) {
+                case R.id.buttonSaveWatch:
+
+                    saveAndSetResult();
+                    finish();
+
+                    break;
+
+            }
+        }
+    };
+
+
+    public void saveAndSetResult() {
+
+
+        //  Toast.makeText(getApplicationContext(), "입력 내용이 저장됩니다.",Toast.LENGTH_SHORT).show();
+
+        Intent intentForSave = new Intent();
+
+        intentForSave.putExtra(key_vidTitle, etTitle.getText().toString() );
+        intentForSave.putExtra(key_mID, getIntent().getIntExtra(key_mID, 0) );
+        intentForSave.putExtra(key_youtubeID, vidKey);
+
+        setResult(RESULT_OK, intentForSave);
+    }
     /**
      * 플레이어가 초기화될 때 호출됩니다.
      * 매개변수

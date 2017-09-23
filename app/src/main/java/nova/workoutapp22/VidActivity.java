@@ -12,8 +12,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -39,7 +41,11 @@ import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 import static nova.workoutapp22.subSources.BasicInfo.MENU_WO_NORMAL;
+import static nova.workoutapp22.subSources.BasicInfo.REQ_WATCH;
 import static nova.workoutapp22.subSources.KeySet.PREF_VID;
+import static nova.workoutapp22.subSources.KeySet.key_mID;
+import static nova.workoutapp22.subSources.KeySet.key_vidTitle;
+import static nova.workoutapp22.subSources.KeySet.key_youtubeID;
 
 public class VidActivity extends AppCompatActivity {
 
@@ -95,21 +101,7 @@ public class VidActivity extends AppCompatActivity {
         listViewVid = (ListView) findViewById(R.id.listViewVid);
         listViewVid.setAdapter(vidAdapter);
 
-        //////////////////유투브 프래그먼트 세팅하기
-
-
-//
-//       resDrawableUri = "android.resource://" + getApplicationContext().getPackageName() + "/drawable/basicimage";
-//
-//
-//
-//        for (int i = 0; i < 5; i++) {
-//            vidAdapter.addItem(new VidItem("영상 예시" + (i + 1), Uri.parse(resDrawableUri)));
-//            vidAdapter.notifyDataSetChanged();
-//        }
-
-
-        /// 유튜브 공유시 타이틀, 영상링크 가져오기
+        setItemClick();
 
 
 //url :: https://youtu.be/9sbRbVxGcsA
@@ -125,6 +117,99 @@ public class VidActivity extends AppCompatActivity {
 
     }
 
+    public void setItemClick() {
+        listViewVid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+
+                VidItem item = (VidItem) vidAdapter.getItem(position);
+
+                // 수정 -- 메모 보기 액티비티 띄우기
+                Intent intent = new Intent(getApplicationContext(), WatchVidActivity.class);
+
+
+
+                intent.putExtra(key_youtubeID, item.getYoutubeID());
+
+                intent.putExtra(key_vidTitle, item.getVidTitle() );
+
+                intent.putExtra(key_mID, item.getmID() );
+
+
+                // 모든 선택 상태 초기화.
+                listViewVid.clearChoices();
+                vidAdapter.notifyDataSetChanged();
+
+
+                startActivityForResult(intent, REQ_WATCH);
+                //////////////////
+
+            }
+        });
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        //새로운 메모 작성이 완료되었다.
+
+        if (requestCode == REQ_WATCH) {
+            // Toast.makeText(getApplicationContext(),"onActivResult 호출됨, 요청 코드 : "+requestCode+
+            //        ", 결과 코드 : " +resultCode, Toast.LENGTH_SHORT).show();
+
+            if (resultCode == RESULT_OK) {
+
+                VidItem newmit = setItemFromIntent(data);
+
+                Toast.makeText(instanceVid, "newurl ="+newmit.getThumbUrl(), Toast.LENGTH_SHORT).show();
+
+
+                int mmID = data.getExtras().getInt(key_mID);
+
+                ////////////////////////////
+                ////////////////////////////
+                ////////////////////////////
+
+                //////////////////////주의 주의 3시간 이상 삽질한 문제 : new 아이템 만들고 ID를 초기화 안함
+                // -> 계쏙해서 잘못된 mID를 전달하게 됨.
+                // 인텐트의 전달이 계속 잘못되면 인텐트 관련 메소드를 살피자. 이것도 인텐트 관련 메소드다.
+
+                newmit.setmID(mmID); //////////////ㄹㅇ 정신나간 코드임;
+
+
+                vidAdapter.setItem(mmID, newmit);
+                Toast.makeText(instanceVid, "mid="+ newmit.getmID()+", title="+newmit.getVidTitle(), Toast.LENGTH_SHORT).show();
+
+
+                vidAdapter.notifyDataSetChanged();
+                Log.v("순서추적", "데이타 변경 완료");
+
+                saveState();
+
+
+            }
+        }
+    }
+
+
+    public VidItem setItemFromIntent(Intent data) {
+        String youtubeID = data.getStringExtra(key_youtubeID);
+        String vidTitle = data.getStringExtra(key_vidTitle);
+
+
+        return new VidItem(vidTitle, (youtubeID));
+
+    }
+//
+//    public String IDtoThumb(String youtubeID){
+//        return "https://img.youtube.com/vi/" + youtubeID + "/0.jpg";
+//
+//
+//    }
 
     //region menu 관련 파트
     @Override
@@ -278,7 +363,7 @@ public class VidActivity extends AppCompatActivity {
         if (extras != null) {
             isItemAdded = true;
             gotUrl = extras.getString(Intent.EXTRA_TEXT);
-            Log.v("ttbaby", gotUrl);
+
 
 
             if (gotUrl.contains("https://youtu.be/")) {
@@ -287,7 +372,7 @@ public class VidActivity extends AppCompatActivity {
                 youtubeID = str[3];
             }
             String url = "https://img.youtube.com/vi/" + youtubeID + "/0.jpg";
-            vidAdapter.addItem(new VidItem("예시예시", url, youtubeID));
+            vidAdapter.addItem(new VidItem("제목을 입력하세요.", url, youtubeID));
 
             saveState();
             vidAdapter.notifyDataSetChanged();
@@ -318,7 +403,7 @@ public class VidActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
-        Toast.makeText(instanceVid, "onresume", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(instanceVid, "onresume", Toast.LENGTH_SHORT).show();
         super.onResume();
 
         // 아이템이 추가되지 않았을 때에만 리스토어 해라.
@@ -375,7 +460,7 @@ public class VidActivity extends AppCompatActivity {
 
 
     public void restoreStateWithGson() {
-        Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
 
 
         SharedPreferences prefVid = getSharedPreferences(PREF_VID, Activity.MODE_PRIVATE);

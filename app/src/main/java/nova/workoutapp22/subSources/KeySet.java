@@ -22,6 +22,8 @@ public class KeySet {
     public static final String key_timerMode = "timerMode";
 
 
+    public static final String key_youtubeID = "youtubeID";
+    public static final String key_vidTitle = "vidTitle";
 
     public static final String key_restMin = "restMin";
     public static final String key_restSec = "restSec";

@@ -17,36 +17,28 @@
         android:textAppearance="@android:style/TextAppearance.Small"
         android:textColor="@color/colorBlack" />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textAppearance="@android:style/TextAppearance.Small"
-        android:textColor="@color/colorAccent"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/youtube_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="2" />
 
-    <TextView
-        android:id="@+id/textView6"
+    <EditText
+        android:id="@+id/editTextWatch"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textAppearance="@android:style/TextAppearance.Small"
-        android:textColor="@color/colorAccent"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:ems="10"
+        android:hint="제목을 입력하세요"
+        android:textColorHint="@color/colorPrimary"
+        android:inputType="textPersonName"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/buttonSaveWatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="제목 저장 후 나가기" />
 
 </LinearLayout>

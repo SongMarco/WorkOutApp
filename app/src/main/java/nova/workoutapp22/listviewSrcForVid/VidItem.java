@@ -11,7 +11,7 @@ public class VidItem {
     public int mID;
 
     Uri uri;
-    String url;
+    String thumbUrl;
     String vidTitle;
     String youtubeID;
 
@@ -21,14 +21,18 @@ public class VidItem {
         this.vidTitle = vidTitle;
         this.uri = uri;
     }
-    public VidItem(String vidTitle, String url){
-        this.vidTitle = vidTitle;
-        this.url= url;
-    }
+
 
     public VidItem(String vidTitle, String url, String youtubeID){
         this.vidTitle = vidTitle;
-        this.url= url;
+        this.thumbUrl = url;
+        this.youtubeID = youtubeID;
+    }
+
+
+    public VidItem(String vidTitle, String youtubeID){
+        this.vidTitle = vidTitle;
+        this.thumbUrl = "https://img.youtube.com/vi/" + youtubeID + "/0.jpg";
         this.youtubeID = youtubeID;
     }
 
@@ -39,9 +43,12 @@ public class VidItem {
     public Uri getUri(){ return uri;}
     public void setUri(Uri uri) {this.uri = uri;}
 
-    public String getUrl(){ return url;}
-    public void setUrl(String url){this.url = url;}
+    public String getThumbUrl(){ return thumbUrl;}
+    public void setThumbUrl(String thumbUrl){this.thumbUrl = thumbUrl;}
 
+
+    public String getYoutubeID(){ return youtubeID;}
+    public void setYoutubeID(String youtubeID){this.youtubeID = youtubeID;}
 
 
     public String getVidTitle(){ return vidTitle;}
