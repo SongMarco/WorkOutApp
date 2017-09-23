@@ -27,6 +27,10 @@ public class VidActivity extends AppCompatActivity {
 
     String menuState = MENU_WO_NORMAL;
 
+
+    ListView listViewVid;
+
+
     boolean isMultMode = false;
 
 
