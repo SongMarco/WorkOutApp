@@ -92,7 +92,6 @@ public class VidActivity extends AppCompatActivity {
         instanceVid = this;
         setContentView(R.layout.activity_vid);
 
-        Toast.makeText(instanceVid, "onCreateCalled", Toast.LENGTH_SHORT).show();
         fadeIn2 = AnimationUtils.loadAnimation(this, R.anim.fadein);
         fadeOut2 = AnimationUtils.loadAnimation(this, R.anim.fadeout);
 
@@ -171,7 +170,6 @@ public class VidActivity extends AppCompatActivity {
 
                 VidItem newmit = setItemFromIntent(data);
 
-                Toast.makeText(instanceVid, "newurl ="+newmit.getThumbUrl(), Toast.LENGTH_SHORT).show();
 
 
                 int mmID = data.getExtras().getInt(key_mID);
@@ -188,7 +186,6 @@ public class VidActivity extends AppCompatActivity {
 
 
                 vidAdapter.setItem(mmID, newmit);
-                Toast.makeText(instanceVid, "mid="+ newmit.getmID()+", title="+newmit.getVidTitle(), Toast.LENGTH_SHORT).show();
 
 
                 vidAdapter.notifyDataSetChanged();
@@ -501,7 +498,6 @@ public class VidActivity extends AppCompatActivity {
         Bundle extras = intent.getExtras();
         //엑스트라 존재 -> 아이템을 공유한 것임.
 
-        Toast.makeText(instanceVid, "addFromIntent", Toast.LENGTH_SHORT).show();
         if (extras != null) {
             isItemAdded = true;
             gotUrl = extras.getString(Intent.EXTRA_TEXT);
@@ -527,7 +523,6 @@ public class VidActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        Toast.makeText(instanceVid, "onNew", Toast.LENGTH_SHORT).show();
         setIntent(intent);
 
         addItemFromIntent(intent);

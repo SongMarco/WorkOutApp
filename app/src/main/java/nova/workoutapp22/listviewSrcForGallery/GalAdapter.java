@@ -116,6 +116,7 @@ public class GalAdapter extends BaseAdapter {
 
 
 
+
         if (mCheckBoxState == BOX_GONE) {
 
             
@@ -127,6 +128,7 @@ public class GalAdapter extends BaseAdapter {
             checkBox.startAnimation(fadeIn);
         }
 
+            checkBox.bringToFront();
         return convertView;
 
 

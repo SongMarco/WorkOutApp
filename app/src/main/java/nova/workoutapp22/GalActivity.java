@@ -679,7 +679,6 @@ public class GalActivity extends AppCompatActivity {
 
     public void saveStateWithGson() {
 
-        Toast.makeText(this, "saveCalled", Toast.LENGTH_SHORT).show();
         SharedPreferences prefForGal = getSharedPreferences(PREF_GAL, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefForGal.edit();
 
@@ -706,8 +705,6 @@ public class GalActivity extends AppCompatActivity {
 
 
     public void restoreStateWithGson() {
-        Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
-
 
         SharedPreferences prefForGal = getSharedPreferences(PREF_GAL, Activity.MODE_PRIVATE);
 
