@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 import nova.workoutapp22.R;
@@ -104,7 +106,18 @@ public class VidAdapter extends BaseAdapter{
 
         // 아이템 내 각 위젯에 데이터 반영
 
-        imageView.setImageURI( item.getUri() );
+//        imageView.setImageURI( item.getUri() );
+
+
+        if(item.getUrl() != null) {
+            Glide.with(context).load(item.getUrl() ).into(imageView);
+        }
+        else{
+           Glide.with(context).load(item.getUri()).into(imageView);
+
+        }
+
+
         textView.setText( item.getVidTitle() );
 
         fadeIn2= AnimationUtils.loadAnimation(context, R.anim.fadein);

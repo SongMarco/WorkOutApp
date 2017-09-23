@@ -128,7 +128,7 @@ public class GalAdapter extends BaseAdapter {
 
         if (mCheckBoxState == BOX_GONE) {
 
-
+            
             checkBox.setVisibility(View.GONE);
             checkBox.startAnimation(fadeOut);
         } else {

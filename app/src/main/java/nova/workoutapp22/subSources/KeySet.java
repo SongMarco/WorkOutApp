@@ -73,6 +73,7 @@ public class KeySet {
     public static final String PREF_MEMO = "PREF_MEMO";
     public static final String PREF_WORKOUT = "PREF_WORKOUT";
     public static final String PREF_GAL = "PREF_GAL";
+    public static final String PREF_VID = "PREF_VID";
 
 
 

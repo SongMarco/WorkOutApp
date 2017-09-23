@@ -1,7 +1,9 @@
 package nova.workoutapp22;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,15 +16,24 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
 
-import org.apache.commons.io.IOUtils;
-import org.json.JSONObject;
-
-import java.net.URL;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import nova.workoutapp22.listviewSrcForVid.VidAdapter;
 import nova.workoutapp22.listviewSrcForVid.VidItem;
@@ -31,6 +42,7 @@ import nova.workoutapp22.subSources.DeveloperKey;
 
 import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 import static nova.workoutapp22.subSources.BasicInfo.MENU_WO_NORMAL;
+import static nova.workoutapp22.subSources.KeySet.PREF_VID;
 
 public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnInitializedListener {
 
@@ -53,9 +65,16 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
     String menuState = MENU_WO_NORMAL;
 
     String gotUrl;
+    String youtubeID;
 
     Intent youtubeIntent;
     private YouTubePlayer youTubePlayer;
+
+    boolean isItemAdded = false;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,35 +83,8 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
         setContentView(R.layout.activity_vid);
 
 
-
-
-
-
-
-
-
-
-
-
-        /// 유튜브 공유시 타이틀, 영상링크 가져오기
-        Bundle extras = getIntent().getExtras();
-
-
-
-        if(extras!=null) {
-            gotUrl = extras.getString(Intent.EXTRA_TEXT);
-            Log.v("ttbaby",gotUrl);
-            Log.v("ttbaby", ""+getTitle(gotUrl));
-
-
-        }
-        fadeIn2= AnimationUtils.loadAnimation(this, R.anim.fadein);
+        fadeIn2 = AnimationUtils.loadAnimation(this, R.anim.fadein);
         fadeOut2 = AnimationUtils.loadAnimation(this, R.anim.fadeout);
-
-
-
-
-
 
 
         ///////////////////////툴바를 만듭니다
@@ -112,29 +104,36 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
         frag.initialize(DeveloperKey.DEVELOPER_KEY, this);
 
 
-
-
-
-
         String resDrawableUri = "android.resource://" + getApplicationContext().getPackageName() + "/drawable/basicimage";
 
         for (int i = 0; i < 5; i++) {
-            vidAdapter.addItem(new VidItem("영상 예시"+(i+1), Uri.parse(resDrawableUri) ) );
+            vidAdapter.addItem(new VidItem("영상 예시" + (i + 1), Uri.parse(resDrawableUri)));
         }
 
 
+        /// 유튜브 공유시 타이틀, 영상링크 가져오기
+        Bundle extras = getIntent().getExtras();
 
-        youtubeIntent = new Intent(Intent.ACTION_SEARCH);
-        youtubeIntent.setPackage("com.google.android.youtube");
-        youtubeIntent.putExtra("query", "미식축구선수");
-        youtubeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+//url :: https://youtu.be/9sbRbVxGcsA
+
+        if (extras != null) {
+            gotUrl = extras.getString(Intent.EXTRA_TEXT);
+            Log.v("ttbaby", gotUrl);
+
+
+            if (gotUrl.contains("https://youtu.be/")) {
+                String[] str = gotUrl.split("/");
+
+                youtubeID = str[3];
+            }
+            String url = "https://img.youtube.com/vi/" + youtubeID + "/0.jpg";
+            vidAdapter.addItem(new VidItem("예시예시", url));
+
+        }
+
+
     }
-
-
-
-
-
-
 
 
     @Override
@@ -147,19 +146,25 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
         youTubePlayer = player;
     }
 
-
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult error) {
+        Log.v("init failed", "init");
+
+        if (error.isUserRecoverableError()) {
+            error.getErrorDialog(this, 0).show();
+        } else {
+            String errorMessage = String.format(
+                    "There was an error initializing the YouTubePlayer",
+                    error.toString());
+        }
 
     }
-
 
     //region menu 관련 파트
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_workout, menu);
-
 
 
         //멀미모드임
@@ -201,16 +206,20 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
 
             case R.id.action_addItem:
+                isItemAdded = true;
+                Toast.makeText(instanceVid, "add clicked", Toast.LENGTH_SHORT).show();
+                youtubeIntent = new Intent(Intent.ACTION_SEARCH);
+                youtubeIntent.setPackage("com.google.android.youtube");
+                youtubeIntent.putExtra("query", "미식축구선수");
+
 
                 startActivity(youtubeIntent);
-
 
 
 
@@ -296,18 +305,128 @@ public class VidActivity extends AppCompatActivity implements YouTubePlayer.OnIn
     @Override
     protected void onPause() {
         super.onPause();
-
-
+        saveState();
 
     }
-
 
     @Override
     protected void onResume() {
+
+
         super.onResume();
-//        if (youTubePlayer != null) {
-//            Toast.makeText(instanceVid, "loaded", Toast.LENGTH_SHORT).show();
-//            youTubePlayer.cueVideo("0fHaQdacCmM");
-//        }
+        //아이템이 추가되지 않았을 때에만 리스토어 해라.
+        if (!isItemAdded) {
+            restoreState();
+
+        }
+        isItemAdded = false;
     }
+
+
+    public void saveState() {
+        saveStateWithGson();
+//        saveStateWithJson();
+    }
+
+    public void restoreState() {
+
+        restoreStateWithGson();
+
+
+        // 주의 !! restore에서 오류가 많이 나는데,
+        // 아이템을 추가할 경우 toJson도 손보아야 한다.
+
+//        restoreStateWithJson();
+    }
+
+
+    public void saveStateWithGson() {
+
+        Toast.makeText(this, "saveCalled", Toast.LENGTH_SHORT).show();
+        SharedPreferences prefVid = getSharedPreferences(PREF_VID, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefVid.edit();
+
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Uri.class, new UriSerializer())
+                .create();
+
+        ArrayList<VidItem> saveArray;
+        saveArray = (ArrayList<VidItem>) vidAdapter.itemArrayList.clone();
+
+
+        String json = gson.toJson(saveArray);
+
+        editor.putString("arrayList", json);
+        //apply vs commit
+
+        //void apply () : API 9(2.3) 에서 추가. 호출만 하고 다음코드를 실행하므로 스레드가 block 되지 않는다. 함수가 곧바로 실행되지 않고 비동기 처리된다.
+        // boolean commit () : 호출시 스레드는 block 되고 함수 종료시 처리결과를 true/false 로 반환한다.
+        // 굳이 결과값이 필요 없다면 비동기로 처리하는 apply 를 사용하는게 반응성면에서 좋다.
+
+        editor.apply();
+
+    }
+
+
+    public void restoreStateWithGson() {
+        Toast.makeText(getApplicationContext(), "restore state Called", Toast.LENGTH_SHORT).show();
+
+
+        SharedPreferences prefVid = getSharedPreferences(PREF_VID, Activity.MODE_PRIVATE);
+
+
+        if ((prefVid != null) && (prefVid.contains("arrayList"))) {
+
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Uri.class, new UriDeserializer())
+                    .create();
+
+
+            String json = prefVid.getString("arrayList", null);
+
+            //Type type = TypeToken.getParameterized( (ArrayList<MemoItem>) , ).getType();
+
+            ArrayList<VidItem> loadArray = null;
+
+            loadArray = gson.fromJson(json, new TypeToken<ArrayList<VidItem>>() {
+            }.getType());
+
+
+            vidAdapter.itemArrayList = (ArrayList<VidItem>) loadArray.clone();
+
+
+            // mID를 세팅해줘야 아이템클릭(수정에 사용)이 제대로된다.
+            for (int i = 0; i < vidAdapter.getCount(); i++) {
+                ((VidItem) vidAdapter.getItem(i)).mID = i;
+            }
+        }
+
+
+    }
+
+//    protected void clearMyPrefs() {
+//        //    Toast.makeText(getApplicationContext(), "pref cleared", Toast.LENGTH_SHORT).show();
+//
+//        SharedPreferences prefForGal = getSharedPreferences(PREF_GAL, Activity.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = prefForGal.edit();
+//        editor.clear();
+//        editor.commit();
+//    }
+
+    public class UriSerializer implements JsonSerializer<Uri> {
+        public JsonElement serialize(Uri src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.toString());
+        }
+    }
+
+    public class UriDeserializer implements JsonDeserializer<Uri> {
+        @Override
+        public Uri deserialize(final JsonElement src, final Type srcType,
+                               final JsonDeserializationContext context) throws JsonParseException {
+            return Uri.parse(src.getAsString());
+        }
+    }
+    //endregion
+
 }

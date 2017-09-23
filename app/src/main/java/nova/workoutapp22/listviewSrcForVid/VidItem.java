@@ -11,6 +11,7 @@ public class VidItem {
     public int mID;
 
     Uri uri;
+    String url;
     String vidTitle;
 
 
@@ -20,12 +21,22 @@ public class VidItem {
         this.vidTitle = vidTitle;
         this.uri = uri;
     }
+    public VidItem(String vidTitle, String url){
+        this.vidTitle = vidTitle;
+        this.url= url;
+    }
+
 
     public int getmID(){ return mID; }
     public void setmID(int mID){ this.mID = mID;}
 
     public Uri getUri(){ return uri;}
     public void setUri(Uri uri) {this.uri = uri;}
+
+    public String getUrl(){ return url;}
+    public void setUrl(String url){this.url = url;}
+
+
 
     public String getVidTitle(){ return vidTitle;}
     public void setVidTitle(String vidTitle){this.vidTitle = vidTitle;}
