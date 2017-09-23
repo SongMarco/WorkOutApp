@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".subSources.MyApplication"
         android:allowBackup="true"
@@ -56,10 +56,18 @@
         <activity android:name=".GalZoomActivity" />
 
         <activity
-            android:name=".VidActivity"
-            android:label="동기부여 영상"
 
-            ></activity>
+            android:name=".VidActivity"
+            android:label="동기부여 영상">
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="www.youtube.com" android:mimeType="text/*"
+                    android:scheme="http" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>

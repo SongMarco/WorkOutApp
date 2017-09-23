@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="nova.workoutapp22.VidActivity">
 
     <android.support.v7.widget.Toolbar
@@ -24,5 +25,19 @@
 
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp" />
+
+    <fragment
+        android:id="@+id/youtube_fragment"
+        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <ListView
+        android:id="@+id/listViewVid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
 
 </LinearLayout>

@@ -48,7 +48,6 @@ import nova.workoutapp22.subSources.BasicInfo;
 
 import static nova.workoutapp22.MainActivity.fadeIn;
 import static nova.workoutapp22.MainActivity.fadeOut;
-import static nova.workoutapp22.R.id.gridViewGal;
 import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 import static nova.workoutapp22.subSources.BasicInfo.CROP_FROM_IMAGE;
 import static nova.workoutapp22.subSources.BasicInfo.MENU_WO_NORMAL;
@@ -78,7 +77,6 @@ public class GalActivity extends AppCompatActivity {
     public static GalActivity getInstanceGal() {
         return instanceGal;
     }
-
 
 
 
@@ -119,7 +117,7 @@ public class GalActivity extends AppCompatActivity {
 
         ///리스트뷰의 어댑터 세팅하기.
         galAdapter = new GalAdapter();
-        gridViewForGal = (GridView) findViewById(gridViewGal);
+        gridViewForGal = (GridView) findViewById(R.id.gridViewGal);
         gridViewForGal.setAdapter(galAdapter);
 
         setItemClick();
@@ -464,7 +462,7 @@ public class GalActivity extends AppCompatActivity {
 
 
             if (checkedItems.get(i)) {
-                GalItem item = galAdapter.items.get(i);
+                GalItem item = galAdapter.itemArrayList.get(i);
                 galAdapter.removeItem(item);
                 galAdapter.notifyDataSetChanged();
 
@@ -688,7 +686,7 @@ public class GalActivity extends AppCompatActivity {
                 .create();
 
         ArrayList<WorkoutItem> saveArray;
-        saveArray = (ArrayList<WorkoutItem>) galAdapter.items.clone();
+        saveArray = (ArrayList<WorkoutItem>) galAdapter.itemArrayList.clone();
 
 
         String json = gson.toJson(saveArray);
@@ -730,7 +728,7 @@ public class GalActivity extends AppCompatActivity {
             }.getType());
 
 
-            galAdapter.items = (ArrayList<GalItem>) loadArray.clone();
+            galAdapter.itemArrayList = (ArrayList<GalItem>) loadArray.clone();
 
 
             // mID를 세팅해줘야 아이템클릭(수정에 사용)이 제대로된다.

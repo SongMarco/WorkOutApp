@@ -34,11 +34,13 @@ public class GalAdapter extends BaseAdapter {
     }
 
 
-    public ArrayList<nova.workoutapp22.listviewSrcForGallery.GalItem> items = new ArrayList<>();
+    //todo GalItem 수정함. 버그 확인
 
-    public void addItem(nova.workoutapp22.listviewSrcForGallery.GalItem item) {
+    public ArrayList<GalItem> itemArrayList = new ArrayList<>();
 
-        items.add(item);
+    public void addItem(GalItem item) {
+
+        itemArrayList.add(item);
         item.mID = getCount() - 1;
 
     }
@@ -47,7 +49,7 @@ public class GalAdapter extends BaseAdapter {
 
         /////// 1, 2, 3, 4, 5에서 3을 지우면 1, 2, 4, 5가 된다. -> 추후 어레이리스트 관리에 문제 발생
         /// 끝자락이 아니라면 무조건 mID를 재정렬해주어야 한다...
-        items.remove(item);
+        itemArrayList.remove(item);
         if (item.mID != getCount()) { // 3은 끝자락이 아니다. (4가 아님)
             //처음부터 끝(0부터 3까지 재정렬 해주면되겠네 .
             for (int i = 0; i < getCount(); i++) {
@@ -59,16 +61,18 @@ public class GalAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return items.size();
+        return itemArrayList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return items.get(position);
+
+        return itemArrayList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
+
         return position;
     }
 
@@ -95,11 +99,11 @@ public class GalAdapter extends BaseAdapter {
         imageViewGal = (ImageView) convertView.findViewById(R.id.imageViewGal);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
-        nova.workoutapp22.listviewSrcForGallery.GalItem galItem = items.get(position);
+        nova.workoutapp22.listviewSrcForGallery.GalItem galItem = itemArrayList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
 
-        Uri uri = items.get(position).getUri();
+        Uri uri = itemArrayList.get(position).getUri();
 
         File myFile = new File(uri.getPath());
         myFile.getAbsolutePath();
