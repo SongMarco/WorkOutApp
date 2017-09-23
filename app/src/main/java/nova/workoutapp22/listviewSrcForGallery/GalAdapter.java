@@ -10,7 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
-import java.io.File;
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 import nova.workoutapp22.R;
@@ -105,26 +106,8 @@ public class GalAdapter extends BaseAdapter {
 
         Uri uri = itemArrayList.get(position).getUri();
 
-        File myFile = new File(uri.getPath());
-        myFile.getAbsolutePath();
+        Glide.with(context).load(uri).into(imageViewGal);
 
-        //TODO Uri에서 비트맵 가져오기 -> 비트맵을 이미지뷰로 쏴주기. 현재 getPath 경로가 달라져 문제 발생. 임시방편으로 크롭으로 해결.
-
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inSampleSize = 2;
-//        myBitmap = BitmapFactory.decodeFile(myFile.getAbsolutePath() , options);
-////        try {
-////
-//////            myBitmap = MediaStore.Images.Media.getBitmap(GalActivity.getInstanceGal().getContentResolver() , uri );
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
-//
-//       imageViewGal.setImageBitmap(myBitmap);
-////
-//
-////
-        imageViewGal.setImageURI(uri);
 
         if (mCheckBoxState == BOX_GONE) {
 

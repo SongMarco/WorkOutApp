@@ -470,6 +470,7 @@ public class GalActivity extends AppCompatActivity {
         String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
         mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
 
+
         intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
         startActivityForResult(intent, PICK_FROM_CAMERA);
     }
@@ -496,18 +497,20 @@ public class GalActivity extends AppCompatActivity {
                 // 실제 코드에서는 좀더 합리적인 방법을 선택하시기 바랍니다.
                 mImageCaptureUri = data.getData();
 
-//                galAdapter.addItem(new GalItem(mImageCaptureUri));
-//                galAdapter.notifyDataSetChanged();
+                galAdapter.addItem(new GalItem(mImageCaptureUri));
+                galAdapter.notifyDataSetChanged();
 
 
                 isItemAdded = true;
+                break;
 
 
             }
 
             case PICK_FROM_CAMERA: {
 
-
+                galAdapter.addItem(new GalItem(mImageCaptureUri));
+                galAdapter.notifyDataSetChanged();
                 // 이미지를 가져온 이후의 리사이즈할 이미지 크기를 결정합니다.
                 // 이후에 이미지 크롭 어플리케이션을 호출하게 됩니다.
                 Intent intent = new Intent("com.android.camera.action.CROP");

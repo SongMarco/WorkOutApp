@@ -33,7 +33,7 @@ public class GalGridLayout extends FrameLayout implements Checkable {
     public void toggle() {
         CheckBox cb = (CheckBox) findViewById(R.id.checkBoxGal) ;
 
-        setChecked(cb.isChecked() ? false : true) ;
+        setChecked(!cb.isChecked()) ;
         // setChecked(mIsChecked ? false : true) ;
     }
 
