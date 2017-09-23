@@ -305,6 +305,7 @@ public class GalActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_delete:
+
                 checkedItems = gridViewForGal.getCheckedItemPositions();
 
                 Boolean okToDelete = false;
@@ -444,30 +445,6 @@ public class GalActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
 
         dialog.show();
-    }
-
-    public void deleteCheckedItems() {
-        Toast.makeText(this, "delete called", Toast.LENGTH_SHORT).show();
-
-
-
-        Log.v("chk", ""+checkedItems);
-        int count2 = galAdapter.getCount();
-
-        for (int i = count2 - 1; i >= 0; i--) {
-
-            //int i = count - 1;  0<=i; i--
-
-            //i번째 아이템을 겟 -> 체크되어있다. -> 삭제
-
-
-            if (checkedItems.get(i)) {
-                GalItem item = galAdapter.itemArrayList.get(i);
-                galAdapter.removeItem(item);
-                galAdapter.notifyDataSetChanged();
-
-            }
-        }
     }
 
 

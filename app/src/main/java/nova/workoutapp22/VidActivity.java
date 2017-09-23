@@ -1,14 +1,18 @@
 package nova.workoutapp22;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -39,6 +43,7 @@ import nova.workoutapp22.listviewSrcForVid.VidAdapter;
 import nova.workoutapp22.listviewSrcForVid.VidItem;
 import nova.workoutapp22.subSources.BasicInfo;
 
+import static nova.workoutapp22.MainActivity.fadeOut;
 import static nova.workoutapp22.subSources.BasicInfo.BOX_GONE;
 import static nova.workoutapp22.subSources.BasicInfo.MENU_WO_NORMAL;
 import static nova.workoutapp22.subSources.BasicInfo.REQ_WATCH;
@@ -77,6 +82,7 @@ public class VidActivity extends AppCompatActivity {
 
     String resDrawableUri;
 
+    SparseBooleanArray checkedItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -300,6 +306,32 @@ public class VidActivity extends AppCompatActivity {
 
             case R.id.action_delete:
 
+                checkedItems = listViewVid.getCheckedItemPositions();
+
+                Boolean okToDelete = false;
+
+                int count2 = vidAdapter.getCount();
+
+                //아이템 선택을 하지 않았다면 토스트를 띄워주고 돌아간다.
+
+
+                for (int i = count2 - 1; i >= 0; i--) {
+
+                    //int i = count - 1;  0<=i; i--
+                    if (checkedItems.get(i)) {
+                        okToDelete = true;
+                    }
+                }
+                if (!okToDelete) {
+                    Toast.makeText(getApplicationContext(), "삭제할 아이템을 선택하지 않으셨네요!", Toast.LENGTH_SHORT).show();
+
+                }
+                // 제거할 아이템이 있다. 제거를 물어보자
+                else {
+                    askDelete();
+
+                }
+
                 return true;
 
             case R.id.action_selectAll:
@@ -318,6 +350,115 @@ public class VidActivity extends AppCompatActivity {
     //endregion
 
 
+
+    public void askDelete() {
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(VidActivity.this);
+
+        builder.setMessage("정말 삭제하시겠습니까?")
+                .setTitle("삭제 확인")
+                .setIcon(R.drawable.ic_warning_black_48dp);
+
+        // Add the buttons
+        builder.setPositiveButton("삭제합니다", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                checkedItems = listViewVid.getCheckedItemPositions();
+                Log.v("chk", ""+checkedItems);
+                int count2 = vidAdapter.getCount();
+
+                final ArrayList<Integer> checkedArray = new ArrayList<Integer>();
+                int numChecked = 0;
+
+                //전체 어댑터를 훑는다.
+                //if 4번이 체크됨 -> 쳌아이템.겟4가 트루.
+                for (int i = count2 - 1; i >= 0; i--) {
+
+                    if (checkedItems.get(i)) {
+
+                        numChecked++;
+
+                        checkedArray.add(i);
+
+
+                        //애니메이션이 종료되면 삭제를 수행하여, 자연스러운 삭제 구현@@@@ 굿굿굿
+
+                        Animation anim = fadeOut;
+
+                        getViewByPosition(i, listViewVid).startAnimation(anim);
+                        getViewByPosition(i, listViewVid).setVisibility(View.GONE);
+
+                    }
+                    Log.v("chk", ""+checkedItems);
+                }
+
+
+                final int finalNumChecked = numChecked;
+
+                new Handler().postDelayed(new Runnable() {
+
+                    public void run() {
+
+                        for(int i = 0; i< finalNumChecked; i++ ){
+
+                            VidItem itemToBeRemoved = (VidItem) vidAdapter.getItem( checkedArray.get(i) );
+                            vidAdapter.removeItem( itemToBeRemoved );
+
+                            getViewByPosition(checkedArray.get(i), listViewVid).setVisibility(View.VISIBLE);
+                            vidAdapter.notifyDataSetChanged();
+
+                        }
+
+
+
+
+                    }
+                }, fadeOut.getDuration()+100);
+
+
+
+                // 모든 선택 상태 초기화.
+
+
+                vidAdapter.setCheckBoxState(false);
+                setSingleChoice(listViewVid);
+
+                menuState = MENU_WO_NORMAL;
+                isMultMode = false;
+                invalidateOptionsMenu();
+
+
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                dialog.dismiss();
+            }
+        });
+
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+
+        // 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+
+    public View getViewByPosition(int pos, ListView view) {
+        final int firstListItemPosition = view.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + view.getChildCount() - 1;
+
+        if (pos < firstListItemPosition || pos > lastListItemPosition) {
+            return view.getAdapter().getView(pos, null, view);
+        } else {
+            final int childIndex = pos - firstListItemPosition;
+            return view.getChildAt(childIndex);
+        }
+    }
+
     public void setSingleChoice(ListView lv) {
 
 //        Toast.makeText(getApplicationContext(), "단일 선택 모드로 변경되었습니다.", Toast.LENGTH_SHORT).show();
@@ -327,6 +468,7 @@ public class VidActivity extends AppCompatActivity {
 
         vidAdapter.setCheckBoxState(BOX_GONE);
 
+        setItemClick();
 
         menuState = MENU_WO_NORMAL;
         isMultMode = false;
