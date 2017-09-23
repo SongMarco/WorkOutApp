@@ -590,7 +590,6 @@ public class MemoActivity extends AppCompatActivity {
 
         if ((pref != null) && (pref.contains("arrayList"))) {
 
-            Toast.makeText(getApplicationContext(), "restore executed", Toast.LENGTH_SHORT).show();
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Uri.class, new UriDeserializer())
                     .create();
@@ -617,7 +616,6 @@ public class MemoActivity extends AppCompatActivity {
 
 
     protected void clearMyPrefs() {
-        Toast.makeText(getApplicationContext(), "pref cleared", Toast.LENGTH_SHORT).show();
 
         SharedPreferences pref = getSharedPreferences(PREF_MEMO, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
