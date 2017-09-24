@@ -91,6 +91,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
     String beforeRecord = "";
     String timerSetting;
+    String outputTime;
 
 
     Boolean isTimeSet;
@@ -181,9 +182,6 @@ public class PlayWorkoutActivity extends AppCompatActivity {
             hour = intentReceived.getIntExtra(key_hour, 0);
             min = intentReceived.getIntExtra(key_min, 0);
             sec = intentReceived.getIntExtra(key_sec, 0);
-
-            String outputTime = "";
-
             if (hour != 0) {
                 outputTime = outputTime + hour + "시간";
             }
@@ -195,10 +193,14 @@ public class PlayWorkoutActivity extends AppCompatActivity {
             if (sec != 0) {
                 outputTime = outputTime + sec + "초";
             }
+            outputTime = "";
+
+
 
             totalWorkoutTime = 3600 * hour + 60 * min + sec;
 
-            String sEll = String.format("%02d:%02d:%02d", totalWorkoutTime / 3600, totalWorkoutTime / 60, totalWorkoutTime % 60);
+
+            String sEll = formatTime(totalWorkoutTime);
             tvTimer.setText(sEll);
 
             woNumTimePl.setText("세트 당 " + outputTime + " 운동");
@@ -215,8 +217,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 sec = intentReceived.getIntExtra(key_sec, 0);
 
                 totalWorkoutTime = 3600 * hour + 60 * min + sec;
-
-                String sEll = String.format("%02d:%02d:%02d", totalWorkoutTime / 3600, totalWorkoutTime / 60, totalWorkoutTime % 60);
+                String sEll = formatTime(totalWorkoutTime);
                 tvTimer.setText(sEll);
 
             } else if (timerSetting.equals(STRING_STOPWATCH)) {
@@ -304,7 +305,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
                     //아직 운동이 진행중이다. -> 스톱워치 운동
-                    else if (timerSetting.equals(STRING_STOPWATCH)) {
+                    else if (  timerSetting.equals(STRING_STOPWATCH)  ) {
 
                         clearTask();
 
@@ -331,6 +332,24 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                             restTimerTask.execute();
 
                         }
+                        else{
+
+                            buttonReset.setVisibility(View.INVISIBLE);
+                            buttonPause.setVisibility(View.INVISIBLE);
+
+                            currentSet++;
+                            woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
+
+
+
+                            stopWatchTask = new StopWatchTask();
+                            stopWatchTask.setView();
+                            stopWatchTask.execute();
+
+
+
+
+                        }
 
 
                     }
@@ -353,6 +372,16 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                             restTimerTask.setTime(totalRestSec);
 
                             restTimerTask.execute();
+
+                        }
+                        else{
+                            currentSet++;
+                            woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
+
+                            tvTitle.setText(currentSet+"세트입니다. 쉬는 시간 없이 계속하세요!");
+                            buttonSetDone.setVisibility(View.VISIBLE);
+
+
 
                         }
 
@@ -600,7 +629,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         //타이머를 사용한 횟수운동
         if (timerSetting.equals(STRING_TIMER)) {
 
-            String sEll = String.format("%02d:%02d:%02d", totalWorkoutTime / 3600, totalWorkoutTime / 60, totalWorkoutTime % 60);
+            String sEll = formatTime(totalWorkoutTime*1000);
             tvTimer.setText(sEll);
 
         }
@@ -770,5 +799,14 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
     public String getTimerSetting() {
         return timerSetting;
+    }
+
+    String formatTime(int time) {
+
+
+        //분:초:0.몇초
+        String sEll = String.format("%02d:%02d:%02d", time/1000/60, (time/1000)%60, (time%1000)/10  );
+        return sEll;
+
     }
 }
