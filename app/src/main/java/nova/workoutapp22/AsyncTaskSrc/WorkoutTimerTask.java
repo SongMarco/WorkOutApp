@@ -216,7 +216,6 @@ public class WorkoutTimerTask extends AsyncTask<Void, Void, String> {
             buttonSetDone.setVisibility(View.INVISIBLE);
 
 
-            Toast.makeText(PlayWorkoutActivity.getInstance(), "rest start", Toast.LENGTH_SHORT).show();
             restTimerTask = new RestTimerTask();
             restTimerTask.setViewAndTimerSetting();
             totalRestSec = PlayWorkoutActivity.getInstance().getTotalRestSec();

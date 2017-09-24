@@ -31,6 +31,7 @@ import static nova.workoutapp22.subSources.KeySet.MODE_NULL;
 import static nova.workoutapp22.subSources.KeySet.MODE_REST_TIMER;
 import static nova.workoutapp22.subSources.KeySet.MODE_STOPWATCH;
 import static nova.workoutapp22.subSources.KeySet.MODE_TIMER;
+import static nova.workoutapp22.subSources.KeySet.STRING_NOTIMER;
 import static nova.workoutapp22.subSources.KeySet.STRING_STOPWATCH;
 import static nova.workoutapp22.subSources.KeySet.STRING_TIMER;
 import static nova.workoutapp22.subSources.KeySet.key_boolTimeSet;
@@ -136,7 +137,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         currentSet = intentReceived.getIntExtra(key_currentSet, 0);
         totalSet = Integer.valueOf(intentReceived.getStringExtra(key_workoutSet));
 
-        donutProgress = (DonutProgress)findViewById(R.id.donut_progress);
+        donutProgress = (DonutProgress) findViewById(R.id.donut_progress);
 
 
         woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
@@ -147,7 +148,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         timerMode = intentReceived.getIntExtra(key_timerMode, MODE_NULL);
         timerSetting = intentReceived.getStringExtra(key_timerSetting);
 
-        tvRecord = (TextView)findViewById(R.id.textViewRecordPl);
+        tvRecord = (TextView) findViewById(R.id.textViewRecordPl);
 
 //        Toast.makeText(instance, "timermode = "+timerMode, Toast.LENGTH_SHORT).show();
 
@@ -156,7 +157,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         restMin = intentReceived.getIntExtra(key_restMin, 0);
         restSec = intentReceived.getIntExtra(key_restSec, 0);
         totalRestSec = 60 * restMin + restSec;
-        Log.v("restSec", "restsec = "+totalRestSec);
+        Log.v("restSec", "restsec = " + totalRestSec);
 
 
         String outputRestTime = "";
@@ -194,7 +195,6 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 outputTime = outputTime + sec + "초";
             }
             outputTime = "";
-
 
 
             totalWorkoutTime = 3600 * hour + 60 * min + sec;
@@ -236,7 +236,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         buttonReset = (Button) findViewById(R.id.buttonResetPl);
         buttonPause = (Button) findViewById(R.id.buttonPausePl);
         buttonResume = (Button) findViewById(R.id.buttonResumePl);
-        buttonRecord = (Button)findViewById(R.id.buttonRecordPl);
+        buttonRecord = (Button) findViewById(R.id.buttonRecordPl);
 
 
         findViewById(R.id.buttonStartWoPl).setOnClickListener(plClickListener);
@@ -287,12 +287,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                         clearTask();
 
 
-
                         buttonSetDone.setVisibility(View.INVISIBLE);
-
-
-
-
 
 
                         Toast.makeText(PlayWorkoutActivity.this, getIntent().getStringExtra(key_workoutName) + " 운동 프로그램이 끝났습니다.", Toast.LENGTH_LONG).show();
@@ -305,7 +300,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
                     //아직 운동이 진행중이다. -> 스톱워치 운동
-                    else if (  timerSetting.equals(STRING_STOPWATCH)  ) {
+                    else if (timerSetting.equals(STRING_STOPWATCH)) {
 
                         clearTask();
 
@@ -331,8 +326,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                             restTimerTask.execute();
 
-                        }
-                        else{
+                        } else {
 
                             buttonReset.setVisibility(View.INVISIBLE);
                             buttonPause.setVisibility(View.INVISIBLE);
@@ -341,12 +335,9 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                             woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
 
 
-
                             stopWatchTask = new StopWatchTask();
                             stopWatchTask.setView();
                             stopWatchTask.execute();
-
-
 
 
                         }
@@ -374,14 +365,33 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                             restTimerTask.execute();
 
                         }
-                        else{
+                        //타이머 세팅이없는 경우
+                        else if (timerSetting.equals(STRING_NOTIMER)) {
                             currentSet++;
                             woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
 
-                            tvTitle.setText(currentSet+"세트입니다. 쉬는 시간 없이 계속하세요!");
+                            tvTitle.setText(currentSet + "세트입니다. 쉬는 시간 없이 계속하세요!");
                             buttonSetDone.setVisibility(View.VISIBLE);
 
 
+                        }
+                        //타이머 세팅의 경우
+                        else { //아직 운동중이다!
+
+                            tvTimer.setText("GO!!!");
+
+                            woSetPl.setText("세트 : " + currentSet + "/" + totalSet);
+                            tvTitle.setText(currentSet + "세트를 수행하세요!");
+//            buttonStart.setText(currentSet + "세트 운동 시작!");
+
+
+                            buttonSetDone.setVisibility(View.GONE);
+
+
+                            workoutTimerTask = new WorkoutTimerTask();
+                            workoutTimerTask.setView();
+                            workoutTimerTask.setWorkoutTime(totalWorkoutTime);
+                            workoutTimerTask.execute();
 
                         }
 
@@ -403,7 +413,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     startTask.cancel(true);
 
                     //타이머 세팅일 때의 퍼즈
-                    if(timerSetting.equals(STRING_TIMER)){
+                    if (timerSetting.equals(STRING_TIMER)) {
                         //
                         if (taskMode == MODE_TIMER) {
 
@@ -413,7 +423,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                         }
 
-                        if ( taskMode == MODE_REST_TIMER) {
+                        if (taskMode == MODE_REST_TIMER) {
                             pauseRestTime = restTimerTask.getTime();
 
 
@@ -427,10 +437,10 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                     }
                     //스톱워치 세팅일때의 퍼즈
-                    else if(timerSetting.equals(STRING_STOPWATCH)){
+                    else if (timerSetting.equals(STRING_STOPWATCH)) {
 
                         //쉬는시간이 캔슬되지 않았다 -> 쉬는 시간이다.
-                        if ( taskMode == MODE_REST_TIMER ) {
+                        if (taskMode == MODE_REST_TIMER) {
 
                             pauseRestTime = restTimerTask.getTime();
 
@@ -443,7 +453,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
                         //스톱워치 정지
-                        if (  taskMode == MODE_STOPWATCH ) {
+                        if (taskMode == MODE_STOPWATCH) {
 
 
                             pauseSwTime = stopWatchTask.getTime();
@@ -454,8 +464,8 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                     }
                     //노 타임 세팅일때의 퍼즈 : 쉬는 시간만 퍼즈 가능
-                    else{
-                        if ( taskMode == MODE_REST_TIMER ) {
+                    else {
+                        if (taskMode == MODE_REST_TIMER) {
 
                             pauseRestTime = restTimerTask.getTime();
 
@@ -469,19 +479,13 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     }
 
                     ///애니메이션을 pause한다
-                    if(animatorWorkout!=null && animatorWorkout.isRunning()){
+                    if (animatorWorkout != null && animatorWorkout.isRunning()) {
 
                         animatorWorkout.pause();
                     }
-                    if(animatorRest!=null &&animatorRest.isRunning()){
+                    if (animatorRest != null && animatorRest.isRunning()) {
                         animatorRest.pause();
                     }
-
-
-
-
-
-
 
 
                     break;
@@ -512,7 +516,6 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
                         pauseWoTime = -1;
                     } else if (pauseRestTime != -1) {
-
 
 
                         //resume시에 restTimerTask때문에 현재 세트가 1개 늘어나버리므로 여기서 감소시키고 출발한다.
@@ -547,14 +550,13 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                     }
 
 
-
                     break;
 
                 case R.id.buttonResetPl:
-                    if(animatorWorkout != null && animatorWorkout.isRunning()){
+                    if (animatorWorkout != null && animatorWorkout.isRunning()) {
                         animatorWorkout.end();
                     }
-                    if(animatorRest != null && animatorRest.isRunning()){
+                    if (animatorRest != null && animatorRest.isRunning()) {
                         animatorRest.end();
                     }
 //                    Toast.makeText(PlayWorkoutActivity.this, "운동이 리셋되었습니다.", Toast.LENGTH_SHORT).show();
@@ -578,26 +580,22 @@ public class PlayWorkoutActivity extends AppCompatActivity {
                 case R.id.buttonRecordPl:
 
 
-
                     String record = stopWatchTask.formatTime(stopWatchTask.getTime());
-                    record = record+"\n\n"+beforeRecord;
+                    record = record + "\n\n" + beforeRecord;
                     tvRecord.setText(record);
 
                     beforeRecord = record;
-                    recordNum ++;
-
+                    recordNum++;
 
 
                     break;
             }
 
 
-
-
         }
     };
 
-    public void clearTask(){
+    public void clearTask() {
         if (workoutTimerTask != null) workoutTimerTask.cancel(true);
 
         if (restTimerTask != null) {
@@ -629,7 +627,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
         //타이머를 사용한 횟수운동
         if (timerSetting.equals(STRING_TIMER)) {
 
-            String sEll = formatTime(totalWorkoutTime*1000);
+            String sEll = formatTime(totalWorkoutTime * 1000);
             tvTimer.setText(sEll);
 
         }
@@ -697,7 +695,6 @@ public class PlayWorkoutActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             tvTimer.setText("GO!!!");
-
 
 
             //여기서 타이머 모드 / 스탑워치 모드에 따라 다르게 뿌려줄 것이다.
@@ -805,7 +802,7 @@ public class PlayWorkoutActivity extends AppCompatActivity {
 
 
         //분:초:0.몇초
-        String sEll = String.format("%02d:%02d:%02d", time/1000/60, (time/1000)%60, (time%1000)/10  );
+        String sEll = String.format("%02d:%02d:%02d", time / 1000 / 60, (time / 1000) % 60, (time % 1000) / 10);
         return sEll;
 
     }
