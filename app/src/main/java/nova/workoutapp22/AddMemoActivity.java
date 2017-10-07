@@ -126,7 +126,7 @@ public class AddMemoActivity extends AppCompatActivity {
                 .show();
 
         editFlag = true;
-        Toast.makeText(getApplicationContext(), "edit Flag = "+editFlag, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "edit Flag = "+editFlag, Toast.LENGTH_SHORT).show();
 
 
     }
