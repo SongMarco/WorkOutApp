@@ -374,8 +374,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
 //
-//                        workoutAdapter.removeItem(item);
-//                        workoutAdapter.notifyDataSetChanged();
+                        workoutAdapter.removeItem(item);
+                        workoutAdapter.notifyDataSetChanged();
                         Animation anim = AnimationUtils.loadAnimation(
                                 getApplicationContext(), android.R.anim.fade_in
                         );
